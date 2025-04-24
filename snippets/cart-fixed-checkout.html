@@ -1,0 +1,73 @@
+{{assign "scene" (append scene '-fixed')}}
+
+<div class="{{#if cart.empty}}cart-empty{{/if}} cart-fixed-checkout {{className}} {{#if cart.total_discount > 0}}collapsed{{/if}}">
+  <div class="cart-fixed-checkout__container">
+    {{#if cart.total_discount > 0}}
+    <div class="cart-fixed-checkout__dropdown-button">
+      <a href="javascript:;">
+        {{snippet "icon-caret-down"}}
+      </a>
+    </div>
+    {{/if}}
+    <div class="cart-fixed-checkout__wrapper">
+      {{#if cart.total_discount > 0}}
+      <div class="cart-fixed-checkout__prices">
+        <ul class="cart-fixed-checkout__amount">
+          {{#if cart.items_subtotal_price != cart.total_price}}
+            <li class="cart__subtotal">
+              <em class="body3">{{t "cart.checkout_proceeding.subtotal"}}</em>
+              <span class="body2 fw-bold">{{money_with_currency cart.items_subtotal_price}}</span>
+            </li>
+          {{/if}}
+          {{snippet "cart-level-discount-applications" cart=cart}}
+        </ul>
+        <div class="cart-fixed-checkout__desc body4 rte">
+          {{#if cart.taxes_included and shop.shipping_policy.body}}
+            {{{t "cart.next_step.taxes_included_and_shipping_policy_html" link=shop.shipping_policy.url}}}
+          {{else if cart.taxes_included}}
+            {{t "cart.next_step.taxes_included_but_shipping_at_checkout"}}
+          {{else if shop.shipping_policy.body}}
+            {{{t "cart.next_step.taxes_and_shipping_policy_at_checkout_html" link=shop.shipping_policy.url}}}
+          {{else}}
+            {{t "cart.next_step.calculated_taxes_fees"}}
+          {{/if}}
+        </div>
+      </div>
+      {{/if}}
+
+      <div class="cart-fixed-checkout__footer">
+        <a href="javascript:;" class="cart__total {{#if cart.total_discount > 0}}cart-drawer__dropdown-toggle{{else}}cart-drawer__dropdown-toggle-normal{{/if}}">
+          <b class="body3 fw-bold cart__total-text">{{t "cart.payment.total_sum"}}</b>
+          <div class="cart__price-zone">
+            {{#if cart.total_discount > 0}}
+            <div class="cart__saved-price">
+              <span class="body3">{{t "transaction.payment.saved"}} {{money_with_currency cart.total_discount}}</span>
+            </div>
+            {{/if}}
+            <div class="cart__total-price">
+              <span class="body2 fw-bold">{{money_with_currency cart.total_price}}</span>
+              {{#if cart.total_discount > 0}}
+              <span class="cart__toggle-icon">
+                {{snippet "icon-arrow"}}
+              </span>
+              {{/if}}
+            </div>
+          </div>
+        </a>
+
+        <div class="cart-fixed-checkout__buttons">
+          {{#if additional_checkout_buttons}}
+            {{{content_for_additional_checkout_buttons}}}
+          {{/if}}
+
+          {{assign "form_id" (append 'cart-form--' scene)}}
+          {{#form "cart" id=form_id}}
+            <button type="submit" id="checkout" class="cart-drawer__checkout-button button" name="checkout">
+              {{t "cart.checkout_proceeding.checkout"}}
+            </button>
+          {{/form}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

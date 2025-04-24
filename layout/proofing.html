@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="{{request.locale.iso_code}}">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {{snippet "title-tag"}}
+    {{#if page_description}}
+      <meta name="description" content="{{page_description}}" />
+    {{/if}}
+
+    {{#if page_keyword}}
+      <meta name="keywords" content="{{page_keyword}}" />
+    {{/if}}
+
+    {{snippet "meta-tags"}}
+    {{content_for_header}}
+  </head>
+
+  <body data-button-hover-animation="{{settings.btn_hover_animation}}">
+    {{content_for_layout}}
+    {{content_for_footer}}
+  </body>
+
+</html>

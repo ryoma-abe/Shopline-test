@@ -1,0 +1,23 @@
+{{assign 'muted' (ternary (if muted) 1 0)}}
+
+{{#if (isFalsey video) and (isTruthy external_video)}}
+  {{#if external_video.host == 'youtube' }}
+    <iframe
+      src="https://www.youtube.com/embed/{{external_video.external_id}}?enablejsapi=1&autoplay=1&mute={{muted}}&playlist={{external_video.external_id}}"
+      class="js-youtube"
+      allow="autoplay; encrypted-media"
+      allowfullscreen
+      title="{{ video_alt }}"
+    ></iframe>
+  {{else if external_video.host == 'vimeo' }}
+    <iframe
+      src="https://player.vimeo.com/video/{{external_video.external_id}}?autoplay=1&muted={{muted}}"
+      class="js-vimeo"
+      allow="autoplay; encrypted-media"
+      allowfullscreen
+      title="{{ video_alt }}"
+    ></iframe>
+  {{/if}}
+{{else}}
+  {{ video_tag video autoplay=true muted=(ternary (if muted == 1) true false) controls=true controlslist="nodownload"}}
+{{/if}}

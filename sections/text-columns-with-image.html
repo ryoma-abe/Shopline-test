@@ -1,0 +1,418 @@
+{{assign "image_width" section.settings.image_width}}
+{{assign "image_ratio" section.settings.image_ratio}}
+{{assign "text_align" section.settings.text_align}}
+{{assign "color_scheme" section.settings.color_scheme}}
+{{assign "button_text" section.settings.button_text}}
+{{assign "jump_link" section.settings.jump_link}}
+{{assign "show_touch" section.settings.show_touch}}
+{{assign "show_block_bg" section.settings.show_block_bg}}
+
+{{assign "no_spacing" "false"}}
+
+{{assign "pc_cols" section.settings.pc_cols}}
+
+{{#if (if (length section.blocks) == 1)}}
+  {{assign "pc_cols" 1}}
+{{/if}}
+{{assign "image_style" "square"}}
+{{#if image_ratio == "circle"}}
+  {{assign "image_style" "round"}}
+  {{assign "image_ratio" "100%"}}
+{{/if}}
+
+{{#if color_scheme == "none" and (isFalsey show_block_bg)}}
+  {{assign "no_spacing" "true"}}
+{{/if}}
+
+{{#if settings.content_border_thickness >= 1}}
+  {{assign "no_spacing" "false"}}
+{{/if}}
+
+{{#if (if settings.content_shadow_opacity >= 1)}}
+  {{assign "no_spacing" "false"}}
+{{/if}}
+<script src="{{asset_url 'component-slider.js'}}" defer></script>
+<script src="{{asset_url 'section-text-columns-with-image.js'}}" defer></script>
+{{#if request.design_mode}}
+  <script src="{{asset_url 'theme-editor.js'}}" defer="defer"></script>
+{{/if}}
+{{snippet "stylesheet" href=(asset_url "section-text-columns-with-image.css")}}
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+<div
+  class="section section-padding text-columns-with-images
+    color-scheme-{{color_scheme}}
+    section-gap{{#if color_scheme != 'none'}}--padding{{/if}}
+    "
+>
+  <div class="page-width color-scheme-{{color_scheme}}">
+    {{#if section.settings.title}}
+      <h2 class="text-columns-with-images__title section-title {{section.settings.title_font_size}} text-center">
+        {{section.settings.title}}
+      </h2>
+    {{/if}}
+    {{assign "container-wrapper-cls" ""}}
+    {{#if (isFalsey show_block_bg)}}
+      {{assign "container-wrapper-cls" "mobile-rows-no-mask"}}
+    {{/if}}
+    <div
+      class="{{#if show_touch}}display-none display-flex-desktop{{/if}}
+        text-columns-with-images__wrapper grid grid-cols-1
+        grid-cols-{{pc_cols}}-desktop"
+      style="{{#if (if pc_cols == 1)}}justify-content:center;{{/if}}"
+    >
+      {{#for section.blocks as |block|}}
+        <div class="text-columns-with-images__inner {{container-wrapper-cls}}">
+          {{snippet
+            "text-columns-with-image-card"
+            image_style=image_style
+            image_width=image_width
+            image_ratio=image_ratio
+            no_spacing=no_spacing
+            show_mask=show_block_bg
+            color_scheme=color_scheme
+            text_align=text_align
+            pc_cols=pc_cols
+            jump_link=jump_link
+            shopline_attributes=block.shopline_attributes
+            theme_settings=settings
+            block=block
+          }}
+        </div>
+      {{/for}}
+    </div>
+
+    {{#if show_touch}}
+      <div class="display-none-desktop">
+        <text-image-slide-section
+          class="text-columns-images-swiper-container"
+          data-no-spacing="{{noSpacing}}"
+          style="width: 100%;"
+        >
+          <ul id="Slider-{{section.id}}" class="text-columns-images-swiper-box slider list-unstyled">
+            {{#for section.blocks as |block|}}
+              <li id="Slide-{{block.id}}" class="slider__slide">
+                {{snippet
+                  "text-columns-with-image-card"
+                  image_style=image_style
+                  image_width=image_width
+                  image_ratio=image_ratio
+                  no_spacing=no_spacing
+                  show_mask=show_block_bg
+                  color_scheme=color_scheme
+                  text_align=text_align
+                  jump_link=jump_link
+                  pc_cols=pc_cols
+                  shopline_attributes=block.shopline_attributes
+                  theme_settings=settings
+                  block=block
+                }}
+              </li>
+            {{/for}}
+          </ul>
+          <div class="text-image-pagination-box body4">
+            <button class="ctr-button prev" name="previous">
+              {{snippet "icon-arrow"}}
+            </button>
+            <div class="text-image-pagination-slider-counter">
+              <span class="slider-counter--current"></span>/<span class="slider-counter--total"></span>
+            </div>
+            <button class="ctr-button next" name="next">
+              {{snippet "icon-arrow"}}
+            </button>
+          </div>
+        </text-image-slide-section>
+
+      </div>
+    {{/if}}
+
+    {{#if (trim button_text)}}
+      <div class="text-columns-with-images__control">
+        <a href="{{#if jump_link}}{{jump_link}}{{else}}javascript:;{{/if}}" class="button fw-bold">
+          {{button_text}}
+        </a>
+      </div>
+    {{/if}}
+  </div>
+</div>
+{{#schema}}
+{
+  "name": "t:sections.text-columns-with-image.name",
+  "max_blocks": 16,
+  "class": "section",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "t:sections.text-columns-with-image.settings.title.label",
+      "default": "Text columns with images"
+    },
+    {
+      "type": "select",
+      "id": "title_font_size",
+      "label": "t:sections.text-columns-with-image.settings.title_font_size.label",
+      "default": "title3",
+      "options": [
+        {
+          "value": "title2",
+          "label": "t:sections.text-columns-with-image.settings.title_font_size.options__0.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.text-columns-with-image.settings.title_font_size.options__1.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.text-columns-with-image.settings.title_font_size.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_width",
+      "label": "t:sections.text-columns-with-image.settings.image_width.label",
+      "options": [
+        {
+          "label": "t:sections.text-columns-with-image.settings.image_width.options__0.label",
+          "value": "100%"
+        },
+        {
+          "label": "t:sections.text-columns-with-image.settings.image_width.options__1.label",
+          "value": "50%"
+        },
+        {
+          "label": "t:sections.text-columns-with-image.settings.image_width.options__2.label",
+          "value": "33.33%"
+        }
+      ],
+      "default": "50%"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "default": "0",
+      "label": "t:sections.text-columns-with-image.settings.image_ratio.label",
+      "options": [
+        {
+          "value": "auto",
+          "label": "t:sections.text-columns-with-image.settings.image_ratio.options__0.label"
+        },
+        {
+          "value": "100%",
+          "label": "t:sections.text-columns-with-image.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "133.33%",
+          "label": "3:4"
+        },
+        {
+          "value": "circle",
+          "label": "t:sections.text-columns-with-image.settings.image_ratio.options__3.label"
+        }
+      ]
+    },
+    {
+      "id": "pc_cols",
+      "type": "range",
+      "label": "t:sections.text-columns-with-image.settings.pc_cols.label",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "id": "text_align",
+      "type": "text_align",
+      "label": "t:sections.text-columns-with-image.settings.text_align.label",
+      "options": [
+        {
+          "value": "left"
+        },
+        {
+          "value": "center"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "id": "show_block_bg",
+      "type": "select",
+      "label": "t:sections.text-columns-with-image.settings.show_block_bg.label",
+      "options": [
+        {
+          "label": "t:sections.text-columns-with-image.settings.show_block_bg.options__0.label",
+          "value": false
+        },
+        {
+          "label": "t:sections.text-columns-with-image.settings.show_block_bg.options__1.label",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "button_text",
+      "type": "text",
+      "label": "t:sections.text-columns-with-image.settings.button_text.label",
+      "default": "Button"
+    },
+    {
+      "id": "jump_link",
+      "type": "url",
+      "label": "t:sections.text-columns-with-image.settings.jump_link.label"
+    },
+    {
+      "id": "show_touch",
+      "type": "switch",
+      "label": "t:sections.text-columns-with-image.settings.show_touch.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.text-columns-with-image.settings.color_scheme.label",
+      "default": "2",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.text-columns-with-image.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.text-columns-with-image.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.text-columns-with-image.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.text-columns-with-image.settings.color_scheme.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.text-columns-with-image.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.text-columns-with-image.settings.padding_top.label",
+      "default": 80,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.text-columns-with-image.settings.padding_bottom.label",
+      "default": 80,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "icon": "normal",
+      "name": "t:sections.text-columns-with-image.blocks.item.name",
+      "settings": [
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "t:sections.text-columns-with-image.blocks.item.settings.image.label",
+          "default": ""
+        },
+        {
+          "id": "title",
+          "type": "text",
+          "label": "t:sections.text-columns-with-image.blocks.item.settings.title.label",
+          "default": "Example title"
+        },
+        {
+          "id": "description",
+          "type": "richtext",
+          "label": "t:sections.text-columns-with-image.blocks.item.settings.description.label",
+          "default": "Use this section to explain a set of product features, to link to a series of pages, or to answer common questions about your products. Add images for emphasis."
+        },
+        {
+          "id": "button_text",
+          "type": "text",
+          "label": "t:sections.text-columns-with-image.blocks.item.settings.button_text.label",
+          "default": "Optional button"
+        },
+        {
+          "id": "jump_link",
+          "type": "url",
+          "label": "t:sections.text-columns-with-image.blocks.item.settings.jump_link.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 1,
+      "category": "t:sections.text-columns-with-image.presets.presets__0.category",
+      "name": "t:sections.text-columns-with-image.presets.presets__0.name",
+      "blocks": [
+        {
+          "type": "item",
+          "name": "Title",
+          "settings": {
+            "image": {},
+            "title": "Example title",
+            "title_font_size": "title3",
+            "description": "Use this section to explain a set of product features, to link to a series of pages, or to answer common questions about your products. Add images for emphasis.",
+            "button_text": "Optional button",
+            "jump_link": ""
+          }
+        },
+        {
+          "type": "item",
+          "name": "Title",
+          "settings": {
+            "image": {},
+            "title": "Example title",
+            "description": "Use this section to explain a set of product features, to link to a series of pages, or to answer common questions about your products. Add images for emphasis.",
+            "button_text": "Optional button",
+            "jump_link": ""
+          }
+        },
+        {
+          "type": "item",
+          "name": "Title",
+          "settings": {
+            "image": {},
+            "title": "Example title",
+            "description": "Use this section to explain a set of product features, to link to a series of pages, or to answer common questions about your products. Add images for emphasis.",
+            "button_text": "Optional button",
+            "jump_link": ""
+          }
+        }
+      ],
+      "settings": {
+        "title": "Text columns with images",
+        "image_width": "50%",
+        "image_ratio": "auto",
+        "text_align": "left",
+        "show_block_bg": false,
+        "button_text": "Button",
+        "jump_link": "",
+        "show_touch": false,
+        "color_scheme": "2",
+        "pc_cols": 3,
+        "padding_bottom": 80,
+        "padding_top": 80
+      }
+    }
+  ]
+}
+{{/schema}}

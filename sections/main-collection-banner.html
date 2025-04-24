@@ -1,0 +1,220 @@
+{{snippet "stylesheet" href=(asset_url "section-collections-hero.css")}}
+
+{{assign "pc_cover_image" collection.banner_image}}
+{{assign
+  "mobile_cover_image"
+  (ternary (if section.settings.banner_image_mobile) section.settings.banner_image_mobile pc_cover_image)
+}}
+
+{{assign "has_pc_cover" false}}
+{{assign "has_mobile_cover" false}}
+
+{{#if section.settings.show_collection_cover}}
+  {{#if pc_cover_image}}
+    {{assign "has_pc_cover" true}}
+  {{/if}}
+  {{#if mobile_cover_image}}
+    {{assign "has_mobile_cover" true}}
+  {{/if}}
+{{/if}}
+
+{{#if has_pc_cover or has_mobile_cover}}
+  <div
+    class="collection-hero display-flex has-collection-image
+      {{#if (not has_pc_cover)}}display-none-desktop{{/if}}
+      {{#if (not has_mobile_cover)}}display-none-tablet{{/if}}"
+    style="
+      --collection-hero-cover-area: {{section.settings.collection_cover_area}};
+      --collection-hero-mask-color: {{section.settings.mask_color}};
+      --collection-hero-mask-color-opacity: {{section.settings.mask_color_opacity}}%;
+      --pc-collection-img-height: {{section.settings.pc_collection_img_height}}px;
+      --md-collection-img-height: {{section.settings.md_collection_img_height}}px;
+    "
+  >
+
+    <div
+      class="collection-hero__image-wrapper {{#if section.settings.parallax_scroll}}global-parallax-container{{/if}}"
+    >
+      {{#if collection.title}}
+        <div class="collection-hero__inner">
+          <div class="page-width collection-hero__text-wrapper">
+            {{snippet "breadcrumb" class="text-center" settings=settings}}
+            {{#if section.settings.show_collection_name}}
+              <h1 class="title4 collection-hero__title">
+                {{collection.title}}
+              </h1>
+            {{/if}}
+          </div>
+        </div>
+      {{/if}}
+      {{assign "image_class" "collection-hero__image"}}
+      {{#if section.settings.parallax_scroll}}
+        {{assign "image_class" (append image_class " global-parallax")}}
+      {{/if}}
+
+      {{#if has_mobile_cover}}
+        {{assign "mobile_image_class" (append image_class " display-none-desktop")}}
+        {{image_tag
+          (image_url mobile_cover_image width=3840)
+          sizes="100vw"
+          class=mobile_image_class
+          fetchpriority="high"
+        }}
+      {{/if}}
+
+      {{#if has_pc_cover}}
+        {{assign "pc_image_class" (append image_class " display-none-tablet")}}
+        {{image_tag (image_url pc_cover_image width=3840) sizes="100vw" class=pc_image_class fetchpriority="high"}}
+      {{/if}}
+
+      <div class="collection-hero__image-mask"></div>
+    </div>
+
+    {{#if section.settings.show_collection_description and collection.description}}
+      <div class="page-width collection-hero__description body3 rte">
+        {{{collection.description}}}
+      </div>
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if (not has_pc_cover) or (not has_mobile_cover)}}
+  <div
+    class="collection-hero display-flex page-width
+      {{#if has_pc_cover}}display-none-desktop{{/if}}
+      {{#if has_mobile_cover}}display-none-tablet{{/if}}"
+    style="
+      --collection-hero-cover-area: {{section.settings.collection_cover_area}};
+      --collection-hero-mask-color: {{section.settings.mask_color}};
+      --collection-hero-mask-color-opacity: {{section.settings.mask_color_opacity}}%;
+      --pc-collection-img-height: {{section.settings.pc_collection_img_height}}px;
+      --md-collection-img-height: {{section.settings.md_collection_img_height}}px;
+    "
+  >
+    
+    <div
+      class="collection-hero__no-cover
+        {{#unless section.settings.show_collection_name}}collection-hero__no-title{{/unless}}"
+    >
+      {{snippet "breadcrumb" class="text-left" settings=settings}}
+      {{#if section.settings.show_collection_name}}
+        <h1 class="title4 collection-hero__title">
+          {{default collection.title (t "products.product_list.products")}}
+        </h1>
+      {{/if}}
+    </div>
+
+    {{#if section.settings.show_collection_description and collection.description}}
+      <div class="collection-hero__description body3 rte">
+        {{{collection.description}}}
+      </div>
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:sections.main-collection-banner.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "show_collection_description",
+      "label": "t:sections.main-collection-banner.settings.show_collection_description.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "show_collection_name",
+      "label": "t:sections.main-collection-banner.settings.show_collection_name.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "show_collection_cover",
+      "label": "t:sections.main-collection-banner.settings.show_collection_cover.label",
+      "info": "t:sections.main-collection-banner.settings.show_collection_cover.info",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_mobile",
+      "label": "t:sections.main-collection-banner.settings.banner_image_mobile.label"
+    },
+    {
+      "type": "range",
+      "id": "pc_collection_img_height",
+      "label": "t:sections.main-collection-banner.settings.pc_collection_img_height.label",
+      "default": 470,
+      "min": 100,
+      "max": 500,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "md_collection_img_height",
+      "label": "t:sections.main-collection-banner.settings.md_collection_img_height.label",
+      "default": 250,
+      "min": 80,
+      "max": 300,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "collection_cover_area",
+      "label": "t:sections.main-collection-banner.settings.collection_cover_area.label",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.main-collection-banner.settings.collection_cover_area.options__0.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.main-collection-banner.settings.collection_cover_area.options__1.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.main-collection-banner.settings.collection_cover_area.options__2.label"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "mask_color",
+      "label": "t:sections.main-collection-banner.settings.mask_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "mask_color_opacity",
+      "label": "t:sections.main-collection-banner.settings.mask_color_opacity.label",
+      "default": 20,
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "switch",
+      "id": "parallax_scroll",
+      "label": "t:sections.main-collection-banner.settings.parallax_scroll.label",
+      "default": false
+    }
+  ],
+  "default": {
+    "settings": {
+      "show_collection_description": true,
+      "show_collection_cover": true,
+      "pc_collection_img_height": "470",
+      "md_collection_img_height": "250",
+      "collection_cover_area": "center",
+      "mask_color": "#000000",
+      "mask_color_opacity": 20,
+      "parallax_scroll": false
+    }
+  }
+}
+{{/schema}}

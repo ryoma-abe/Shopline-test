@@ -1,0 +1,110 @@
+<div class="cart-item" data-key="{{item.key}}">
+  <div class="cart-item__media">
+    <a href="{{item.url}}" class="cart-item__image-container">
+      {{#if item.image.src}}
+        <img
+          src="{{image_url item.image width=300}}"
+          loading="lazy"
+          width="150"
+          height="{{ceil (divide 150 item.image.aspect_ratio)}}"
+          alt="{{item.image.alt}}"
+        />
+      {{else}}
+        {{placeholder_svg_tag "image" "placeholder"}}
+      {{/if}}
+    </a>
+  </div>
+  <div class="cart-item__details__wrapper">
+    <div class="cart-item__details">
+      <a href="{{item.url}}" class="cart-item__name body2">{{item.product.title}}</a>
+      {{#if (isFalsey item.product.has_only_default_variant)}}
+        {{#for item.options_with_values as |option|}}
+          <div class="product-option body4">
+            <span class="fw-bold">{{option.name}}: </span>
+            <span>{{option.value}}</span>
+          </div>
+        {{/for}}
+      {{/if}}
+
+      {{#if item.properties.length > 0}}
+        {{#for item.properties as |property|}}
+          <div class="product-property body4">
+            <span class="product-property__name fw-bold">{{property.name}}:&nbsp;</span>
+            {{#if property.type == "text"}}
+              <span>{{property.value}}</span>
+            {{else if property.type == "link"}}
+              <a class="button button--link" href="{{property.urls.[0]}}" target="_blank">
+                {{#if property.value}}
+                  {{property.value}}
+                {{else}}
+                  {{t 'cart.item.click_to_view'}}
+                {{/if}}
+              </a>
+            {{else if property.type == "picture"}}
+              <div class="product-property__value">
+                {{#for property.urls as |url|}}
+                  <a class="product-property__link" href="{{url}}" target="_blank">
+                    {{snippet "image" class="product-property__image" data=url lazy=true}}
+                  </a>
+                {{/for}}
+              </div>
+            {{/if}}
+          </div>
+        {{/for}}
+      {{/if}}
+
+      {{#if item.line_level_discount_allocations.length > 0}}
+        <ul class="cart-item__discounts body4">
+          {{#for item.line_level_discount_allocations as |discount|}}
+            <li>
+              {{snippet "icon-discount-tag"}}
+              <span>{{discount.discount_application.title}} (-{{money_with_currency discount.amount}})</span>
+            </li>
+          {{/for}}
+        </ul>
+      {{/if}}
+    </div>
+    <div class="cart-item__totals display-none-desktop">
+      <div class="loading-overlay">
+        {{snippet "loading-overlay-spinner"}}
+      </div>
+      <div class="cart-item__price-wrapper">
+        {{#if item.original_line_price != item.final_line_price}}
+          <div class="original__price original__price__desktop body2">
+            {{money_with_currency item.original_line_price}}
+          </div>
+          <div class="final__price body2 fw-bold">{{money_with_currency item.final_line_price}}</div>
+          <div class="original__price original__price__mobile body2">
+            {{money_with_currency item.original_line_price}}
+          </div>
+        {{else}}
+          <div class="final__price body2 fw-bold">{{money_with_currency item.final_line_price}}</div>
+        {{/if}}
+      </div>
+    </div>
+    {{#if type != 'drawer'}}
+      {{snippet 'cart-item-quantity' item=item namespace=namespace}}
+    {{/if}}
+    <div class="cart-item__totals display-none-tablet">
+      <div class="loading-overlay">
+        {{snippet "loading-overlay-spinner"}}
+      </div>
+      <div class="cart-item__price-wrapper">
+        {{#if item.original_line_price != item.final_line_price}}
+          <div class="original__price original__price__desktop body2">
+            {{money_with_currency item.original_line_price}}
+          </div>
+          <div class="final__price body2 fw-bold">{{money_with_currency item.final_line_price}}</div>
+          <div class="original__price original__price__mobile body2">
+            {{money_with_currency item.original_line_price}}
+          </div>
+        {{else}}
+          <div class="final__price body2 fw-bold">{{money_with_currency item.final_line_price}}</div>
+        {{/if}}
+      </div>
+    </div>
+    {{#if type == 'drawer'}}
+      {{snippet 'cart-item-quantity' item=item namespace=namespace}}
+    {{/if}}
+  </div>
+</div>

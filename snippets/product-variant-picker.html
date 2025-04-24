@@ -1,0 +1,158 @@
+{{assign "variant_strings_addToCart" (t "products.product_list.add_to_cart")}}
+{{assign "variant_strings_soldOut" (t "products.general.sold_out")}}
+{{assign "variant_strings_unavailable" (t "products.general.unavailable")}}
+{{#capture "section_template"}}{{ternary template.directory (append template.directory "/") ""}}{{template.name}}{{ternary template.suffix (append "." template.suffix) ""}}{{/capture}}
+
+{{assign "color_regex" (toRegex (t "products.general.variant_property_color") flags="i")}}
+
+{{assign "default_selected_variant" (default section.settings.default_selected_variant true)}}
+{{assign "is_selected_variant" product.selected_variant}}
+
+{{assign "featured_variant" ""}}
+{{#if default_selected_variant or is_selected_variant}}
+  {{assign "featured_variant" product.selected_or_first_available_variant}}
+{{/if}}
+
+
+{{#if block.settings.picker_type == "flatten" or (isTruthy block.settings.enabled_color_swatch)}}
+  <variant-radios
+    data-section="{{section.id}}"
+    data-url="{{product.url}}"
+    data-update-url="{{default update_url true}}"
+    data-section-template="{{section_template}}"
+    data-default-selected-variant="{{default_selected_variant}}"
+  >
+    {{#for product.options_with_values as |option|}}
+      <fieldset
+        class="product-form__input variant-input-wrapper
+          {{block.settings.layout_direction}}
+          {{block.settings.sizes}}"
+        data-option-index="option{{plus forloop.index0 1}}"
+      >
+        <div class="product-form__input--left">
+          <legend class="form__label body3 fw-bold">{{option.name}}</legend>
+        </div>
+        <div class="product-form__input--right">
+          {{assign "variant_index" (append "" forloop.index0)}}
+          {{#for option.values_images as |item|}}
+            <input
+              type="radio"
+              id="{{section.id}}-{{option.position}}-{{forloop.index0}}"
+              name="{{option.name}}"
+              data-option-value="{{item.value}}"
+              value="{{item.value}}"
+              form="{{product_form_id}}"
+              {{#if featured_variant}}
+                {{#if (get variant_index featured_variant.options) == item.value}}
+                  checked
+                {{else if (isFalsey product.available) and forloop.index0 == 0}}
+                  
+                  checked
+                {{/if}}
+              {{/if}}
+            />
+            {{#if (test option.name color_regex) and (isTruthy block.settings.enabled_color_swatch)}}
+              <label
+                class="product-form--color-swatch
+                  color-swatch-{{block.settings.color_swatch_type}}
+                  {{block.settings.sizes}}"
+                for="{{section.id}}-{{option.position}}-{{forloop.index0}}"
+              >
+                <div class="product-form--color-swatch-inner" style="--swatch-background-color: {{item.value}}"></div>
+              </label>
+            {{else}}
+              <label
+                class="body3 {{#if item.image}}variant-image__wrapper{{/if}} {{block.settings.sizes}}"
+                for="{{section.id}}-{{option.position}}-{{forloop.index0}}"
+              >
+                {{#if item.image}}
+                  <tool-tip class="display-none-tablet" tip-position="top">{{item.value}}</tool-tip>
+                  {{snippet "image" class="variant-image__image" data=item.image}}
+                {{else}}
+                  {{item.value}}
+                {{/if}}
+              </label>
+            {{/if}}
+          {{/for}}
+        </div>
+      </fieldset>
+    {{/for}}
+
+    <script class="variant-data" type="application/json">
+      {{{json product.variants}}}
+    </script>
+    <script class="variant-strings" type="application/json">
+      {
+        "addToCart": "{{{variant_strings_addToCart}}}",
+        "soldOut": "{{{variant_strings_soldOut}}}",
+        "unavailable": "{{{variant_strings_unavailable}}}"
+      }
+    </script>
+  </variant-radios>
+{{else}}
+  <variant-selects
+    data-section="{{section.id}}"
+    data-url="{{product.url}}"
+    data-update-url="{{default update_url true}}"
+    data-section-template="{{section_template}}"
+    data-default-selected-variant="{{default_selected_variant}}"
+  >
+    {{#for product.options_with_values as |option|}}
+      <div
+        class="variant-input-wrapper {{block.settings.layout_direction}}"
+        data-option-index="option{{plus forloop.index0 1}}"
+      >
+        <label class="form__label body3 fw-bold" for="Option-{{section.id}}-{{forloop.index0}}">
+          {{option.name}}
+        </label>
+        <div class="field {{block.settings.sizes}}">
+          <select
+            id="Option-{{section.id}}-{{forloop.index0}}"
+            class="field__input--classic"
+            name="options[{{option.name}}]"
+            form="{{product_form_id}}"
+          >
+            {{assign "variant_index" (append "" forloop.index0)}}
+            {{#if (isFalsey featured_variant)}}
+              <option class="body3" selected disabled value="{{value}}" data-option-value="{{value}}">{{t
+                  "products.product_details.default_placeholder"
+                  attrName=option.name
+                }}</option>
+            {{/if}}
+            {{#for option.values as |value|}}
+              <option
+                class="body3"
+                value="{{value}}"
+                data-option-value="{{value}}"
+                {{#if featured_variant}}
+                  {{#if (get variant_index featured_variant.options) == value}}
+                    selected="selected"
+                  {{else if (isFalsey product.available) and (eq forloop.index0 0)}}
+                    
+                    selected="selected"
+                  {{/if}}
+                {{/if}}
+              >
+                {{value}}
+              </option>
+            {{/for}}
+          </select>
+          <div class="field__suffix">
+            {{snippet "icon-arrow"}}
+          </div>
+        </div>
+      </div>
+    {{/for}}
+
+    <script class="variant-data" type="application/json">
+      {{{json product.variants}}}
+    </script>
+    <script class="variant-strings" type="application/json">
+      {
+        "addToCart": "{{{variant_strings_addToCart}}}",
+        "soldOut": "{{{variant_strings_soldOut}}}",
+        "unavailable": "{{{variant_strings_unavailable}}}"
+      }
+    </script>
+  </variant-selects>
+{{/if}}

@@ -1,0 +1,119 @@
+.cart-fixed-checkout {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+.cart-fixed-checkout.cart-empty {
+  display: none;
+}
+.cart-fixed-checkout__container {
+  background-color: rgb(var(--color-page-background));
+  box-shadow: 0px -4px 20px 0px rgba(var(--color-text), 0.05);
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 1;
+  transform: translateY(0);
+}
+.cart-fixed-checkout__dropdown-button {
+  text-align: center;
+  opacity: 1;
+  max-height: 50px;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+}
+.cart-fixed-checkout__amount {
+  margin: 0;
+  padding: 0;
+}
+.cart-fixed-checkout__amount li {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgb(var(--color-text));
+  margin-bottom: 8px;
+}
+.cart-fixed-checkout__amount li em {
+  font-style: normal;
+  margin-right: 12px;
+}
+.cart-fixed-checkout__amount li.cart__discount span {
+  color: rgb(var(--color-discount));
+}
+.cart-fixed-checkout__prices {
+  padding: 0 12px 12px;
+  max-height: 200px;
+  opacity: 1;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  overflow: hidden;
+  overflow-y: auto;
+}
+.cart-fixed-checkout__desc {
+  font-size: 12px;
+  color: rgb(var(--color-light-text));
+}
+.cart-fixed-checkout .cart__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.cart-fixed-checkout__buttons {
+  margin-top: 10px;
+}
+.cart-fixed-checkout__footer {
+  border-top: 1px solid rgb(var(--color-entry-line));
+  padding: 12px;
+}
+.cart-fixed-checkout .cart__saved-price {
+  color: rgb(var(--color-discount));
+}
+.cart-fixed-checkout .cart__price-zone {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  column-gap: 8px;
+  align-items: center;
+}
+.cart-fixed-checkout .cart__total-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cart-fixed-checkout .cart__toggle-icon svg {
+  transition: transform 0.3s ease-out;
+}
+.cart-fixed-checkout .cart-drawer__dropdown-toggle-normal {
+  cursor: default;
+}
+.cart-fixed-checkout.collapsed .cart-fixed-checkout__prices {
+  max-height: 0;
+  opacity: 0.01;
+  padding: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+}
+.cart-fixed-checkout.collapsed .cart-fixed-checkout__dropdown-button {
+  opacity: 0.01;
+  max-height: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+}
+.cart-fixed-checkout.collapsed .cart__toggle-icon svg {
+  transform: rotate(180deg);
+}
+.cart-fixed-checkout.invisible {
+  /* animation: cart-drawer-hide ; */
+  transform: translateY(100px);
+  transition: transform 0.3s ease-out;
+}
+.cart-fixed-checkout.invisible .cart-fixed-checkout__container {
+  opacity: 0.01;
+  transform: translateY(100%);
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

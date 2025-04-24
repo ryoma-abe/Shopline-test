@@ -1,0 +1,88 @@
+
+{{assign "color_regex" (toRegex (t "products.general.variant_property_color") flags="i")}}
+{{assign "product_form_id" (append "item-card-quick-add__" product.id)}}
+
+
+{{snippet "price" product=product.selected_or_first_available_variant}}
+
+
+<div class="card__button {{#equalsLength product.options 2}}is-expanded{{/equalsLength}}">
+  <div class="card__button-inner">
+    <product-form data-on-error-show-toast="true">
+      {{#form "product" product id=product_form_id}}
+        <input type="hidden" name="id" value="{{product.selected_or_first_available_variant.id}}" />
+        <input type="hidden" required name="quantity" value="1" />
+        <button
+          id="{{product_form_id}}__submit"
+          type="submit"
+          class="swatch__submit swatch__quick-add button button--full-width
+            {{#equalsLength product.options 2}}display-none{{/equalsLength}}"
+          data-sold-out-message="true"
+          {{#unless product.selected_or_first_available_variant.available}}
+            disabled
+          {{/unless}}
+        >
+          {{#if product.selected_or_first_available_variant.available}}
+            {{t "products.product_list.add_to_cart"}}
+          {{else}}
+            {{t "products.general.sold_out"}}
+          {{/if}}
+          {{snippet "loading-overlay-spinner"}}
+        </button>
+      {{/form}}
+    </product-form>
+
+    {{#equalsLength product.options 2}}
+      <color-swatch-radios class="card__swatch-radios">
+        {{#for product.options_with_values as |option_info|}}
+          <fieldset
+            class="variant-input-wrapper {{#if (test option_info.name color_regex)}}display-none{{/if}}"
+            data-option-index="option{{plus option_info.position 1}}"
+            data-option-slug="{{option_info.name}}"
+          >
+              {{#for option_info.values as |value|}}
+                {{#if forloop.index0 < 8}}
+                  <label class="swatch body3">
+                    {{snippet "loading-overlay-spinner"}}
+                    <input
+                      type="radio"
+                      value="{{value}}"
+                      name="{{option_info.name}}-{{product.id}}"
+                      {{#if
+                        (get (append "option" (plus forloop.parentloop.index0 1)) product.selected_or_first_available_variant)
+                        ==
+                        value
+                      }}checked="checked"{{/if}}
+                      class="visibility-hidden"
+                    />
+                    <span>{{value}}</span>
+                  </label>
+                {{/if}}
+              {{/for}}
+              {{#gt (length option_info.values) 8}}
+                <modal-opener data-modal="#QuickAdd-{{product.id}}">
+                  <button class="color-swatch-radio__remain body3" data-product-url="{{product.url}}">
+                    <span class="loading-hidden">+{{minus (length option_info.values) 8}}</span>
+                    {{snippet "loading-overlay-spinner"}}
+                  </button>
+                </modal-opener>
+              {{/gt}}
+          </fieldset>
+        {{/for}}
+
+        <script type="application/json">
+        {{{json product.variants}}}
+        </script>
+        {{#equalsLength product.options 2}}
+          <div class="variants-price display-none">
+            {{#for product.variants as |variant|}}
+              <div class="variant-item-price" data-variants-id="{{variant.id}}">
+                {{snippet "price" product=variant}}
+              </div>
+            {{/for}}
+          </div>
+        {{/equalsLength}}
+      </color-swatch-radios>
+    {{/equalsLength}}
+  </div>
+</div>

@@ -1,0 +1,192 @@
+.picture-floating-container {
+  display: flex;
+}
+
+.picture-floating__text-wrapper {
+  flex-shrink: 0;
+  width: 38.5%;
+  height: var(--picture-floating-height);
+  background: var(--picture-floating-font-background);
+  color: var(--picture-floating-font-color);
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  padding: 0 6.25%;
+}
+
+.picture-floating__text-wrapper .picture-floating__text-box {
+  height: 57.5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.picture-floating__text-wrapper .picture-floating__title {
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: inherit;
+  font-family: var(--title-font);
+  font-style: var(--title-font-style);
+  font-weight: var(--title-font-weight);
+}
+
+@media (min-width: 960px) {
+  .picture-floating__text-wrapper .picture-floating__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.picture-floating__text-wrapper .picture-floating__title--small {
+  font-size: 36px;
+}
+
+@media (max-width: 959px) {
+  .picture-floating__text-wrapper .picture-floating__title--small {
+    font-size: 20px;
+  }
+}
+
+.picture-floating__text-wrapper .picture-floating__title--medium {
+  font-size: 50px;
+}
+
+@media (max-width: 959px) {
+  .picture-floating__text-wrapper .picture-floating__title--medium {
+    font-size: 25px;
+  }
+}
+
+.picture-floating__text-wrapper .picture-floating__title--large {
+  font-size: 70px;
+}
+
+@media (max-width: 959px) {
+  .picture-floating__text-wrapper .picture-floating__title--large {
+    font-size: 30px;
+  }
+}
+
+.picture-floating__text-wrapper .picture-floating__icon {
+  width: 176px;
+  height: 176px;
+  line-height: 0;
+  border-radius: 50%;
+  background-color: var(--picture-floating-icon-border-color);
+}
+
+.picture-floating__text-wrapper .picture-floating__icon img {
+  width: 100%;
+  height: 100%;
+}
+
+.picture-floating__text-wrapper .picture-floating__desc {
+  color: inherit;
+}
+
+.picture-floating__text-wrapper .picture-floating__desc a {
+  text-decoration: underline;
+}
+
+@media (min-width: 960px) {
+  .picture-floating__text-wrapper .picture-floating__desc {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+}
+
+@media (max-width: 959px) {
+  .picture-floating-container {
+    display: block;
+  }
+  .picture-floating__text-wrapper {
+    width: 100%;
+    padding: 40px 20px;
+    height: auto;
+    position: relative;
+    z-index: 1;
+  }
+  .picture-floating__text-wrapper .picture-floating__text-box {
+    display: block;
+    height: auto;
+  }
+  .picture-floating__text-wrapper .picture-floating__title {
+    margin-bottom: 4px;
+  }
+  .picture-floating__text-wrapper .picture-floating__icon {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    bottom: -25px;
+    right: 30px;
+  }
+  .picture-floating__text-wrapper a {
+    text-decoration: underline;
+  }
+}
+
+picture-floating {
+  display: block;
+  position: relative;
+  flex-grow: 1;
+}
+
+.picture-floating__splide-container .splide {
+  height: var(--picture-floating-height);
+}
+
+.picture-floating__splide-container .splide .splide__track {
+  height: 100%;
+}
+
+.picture-floating__splide-container .splide .splide__list {
+  height: 100%;
+}
+
+.picture-floating__splide-container .splide__slide-image > a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.picture-floating__splide-container .splide__slide-image .placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(var(--color-image-background));
+}
+
+.picture-floating__splide-container .splide__slide-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (min-width: 960px) {
+  .picture-floating__splide-container .splide__list {
+    display: flex !important;
+  }
+  .picture-floating__splide-container .splide__list .splide__slide {
+    flex: 1;
+    will-change: flex;
+    transition: flex 1s cubic-bezier(0.29, 0, 0.2, 1);
+  }
+  .picture-floating__splide-container .splide__list .splide__slide.active {
+    flex: 5;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

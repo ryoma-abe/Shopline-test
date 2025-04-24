@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="{{request.locale.iso_code}}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="canonical" href="{{canonical_url}}" />
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+
+    {{#if settings.favicon_image}}
+      <link rel="icon" type="image/png" href="{{settings.favicon_image}}" />
+    {{/if}}
+
+    {{snippet "title-tag"}}
+
+    {{#if page_description}}
+      <meta name="description" content="{{page_description}}" />
+    {{/if}}
+
+    {{#if page_keyword}}
+      <meta name="keywords" content="{{page_keyword}}" />
+    {{/if}}
+
+    {{snippet "meta-tags"}}
+
+    {{snippet "theme-css-var"}}
+
+    {{snippet "stylesheet" href=(asset_url "base.css")}}
+
+    <script src="{{asset_url 'global.js'}}" defer="defer"></script>
+
+    {{content_for_header}}
+  </head>
+  <body data-template="{{template.name}}" data-button-hover-animation="{{settings.btn_hover_animation}}">
+    {{section "announcement-bar"}}
+    {{section "header"}}
+
+    {{#if settings.cart_type == "drawer" and template.name != "cart"}}
+      <cart-drawer-entry class="cart-drawer-entry">
+        {{snippet "cart-drawer"}}
+      </cart-drawer-entry>
+    {{/if}}
+
+    <main id="MainContent" class="content-for-layout" tabindex="-1">
+      {{content_for_layout}}
+    </main>
+
+    {{section "footer"}}
+
+    {{content_for_footer}}
+
+    <script>
+      window.shopUrl = '{{ request.origin }}';
+      window.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        cart_count_url: '{{ routes.cart_count_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}',
+        account_url: '{{ routes.account_url }}',
+        account_login_url: '{{ routes.account_login_url }}',
+        address_url: '{{ routes.address_url }}',
+        cart_discount_code_apply_url: '{{ routes.cart_discount_code_apply_url }}',
+        cart_discount_code_remove_url: '{{ routes.cart_discount_code_remove_url }}',
+        address_countries_url: '{{ routes.address_countries_url }}',
+        address_country_template_url: '{{ routes.address_country_template_url }}',
+        address_next_url: '{{ routes.address_next_url }}',
+      };
+      window.__I18N__ = window.__I18N__ || {};
+      window.__I18N__['unvisiable'] = {{{ json (t 'unvisiable') }}};
+      window.__I18N__['cart'] = {{{ json (t 'cart') }}};
+      window.__I18N__['products'] = {{{ json (t 'products') }}};
+      window.__I18N__['general'] = window.__I18N__['general'] || {};
+      window.__I18N__['general']['general'] = {{{ json (t 'general.general') }}};
+    </script>
+  </body>
+</html>

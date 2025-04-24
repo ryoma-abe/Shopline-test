@@ -1,0 +1,32 @@
+<div class="footer__conact-block">
+  {{#if icon or image}}
+    <div class="footer__conact-icon">
+      {{#if image}}
+        <img src="{{image}}" class="logo-list-icon" alt="{{alt}}"/>
+      {{else}}
+        {{#if icon == "checkbox"}}
+          {{snippet "icon-logo-list-checkbox"}}
+        {{/if}}
+        {{#if icon == "van"}}
+          {{snippet "icon-logo-list-van"}}
+        {{/if}}
+        {{#if icon == "earth"}}
+          {{snippet "icon-logo-list-earth"}}
+        {{/if}}
+        {{#if icon == "green"}}
+          {{snippet "icon-logo-list-green"}}
+        {{/if}}
+        {{#if icon == "package"}}
+          {{snippet "icon-logo-list-package"}}
+        {{/if}}
+        {{#if icon == "safe"}}
+          {{snippet "icon-logo-list-safe"}}
+        {{/if}}
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if text}}
+    <div class="footer__conact-text rte body5">{{{text}}}</div>
+  {{/if}}
+</div>

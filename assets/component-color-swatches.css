@@ -1,0 +1,262 @@
+.card__colors {
+  z-index: 2;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 28px);
+  align-items: center;
+  pointer-events: visible;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+.card__colors.card__colors--center {
+  display: flex !important;
+  column-gap: calc(var(--swatch-gap) + 4px) !important;
+}
+.card__colors.card__colors--center:not(.slider) {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+@media (max-width: 959px) {
+  .card__colors {
+    grid-template-columns: repeat(auto-fill, 16px);
+    margin-bottom: 8px;
+  }
+}
+.card__swatch-radios .variant-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin: 0;
+  padding: 0;
+  margin: -5px;
+  min-width: 100%;
+}
+.card__swatch-radios .swatch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 8px 15px;
+  margin: 5px;
+  box-shadow: inset 0 0 0 1px rgb(var(--color-entry-line));
+  color: rgb(var(--color-text));
+  background-color: rgb(var(--color-page-background));
+  max-width: 100%;
+}
+.card__swatch-radios .swatch input {
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+  position: absolute;
+  height: 1px;
+  width: 1px;
+}
+.card__swatch-radios .swatch span {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card__swatch-radios .swatch:hover {
+  background-color: rgb(var(--color-button-background));
+  color: rgb(var(--color-button-text));
+}
+.card__swatch-radios .swatch.disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  background-color: rgb(var(--color-page-background));
+  color: rgb(var(--color-button-background));
+}
+.card__swatch-radios .swatch.loading span {
+  visibility: hidden;
+}
+.card__swatch-radios .swatch.loading .loading-overlay__spinner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.color-swatch {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  width: 22px;
+  height: 22px;
+  background: var(--swatch-background-color);
+}
+.color-swatch .color-swatch__inner {
+  width: 100%;
+}
+.color-swatch::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  background-image: var(--swatch-background-default-image);
+  background-position: center;
+  background-size: 22px;
+  background-clip: content-box;
+}
+.color-swatch::after {
+  content: "";
+  position: absolute;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  top: -1px;
+  left: -1px;
+  bottom: -1px;
+  right: -1px;
+  background: rgb(var(--color-entry-line));
+  z-index: -2;
+}
+.color-swatch.is-active::after,
+.color-swatch:hover::after {
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  top: -3px;
+  left: -3px;
+  border: 1px solid #000;
+  padding: 2px;
+  background: none;
+}
+@media (max-width: 959px) {
+  .color-swatch {
+    width: 12px;
+    height: 12px;
+  }
+  .color-swatch::before {
+    background-size: 12px;
+  }
+}
+.color-swatch__inner span {
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+  position: absolute;
+  height: 1px;
+  width: 1px;
+}
+.card__colors.circle .color-swatch,
+.card__colors.circle .color-swatch::before,
+.card__colors.circle .color-swatch::after {
+  border-radius: 50%;
+}
+.card__colors.circle_square,
+.card__colors.circle_square .color-swatch,
+.card__colors.circle_square .color-swatch::before,
+.card__colors.circle_square .color-swatch::after {
+  border-radius: 2px;
+}
+.color-swatch__remain {
+  justify-self: start;
+  grid-column-start: span 2;
+  height: var(--swatch-size);
+  line-height: var(--swatch-size);
+}
+.color-swatch-radio__remain {
+  border: none;
+  background: none;
+  padding: 8px 15px;
+  margin: 5px;
+  cursor: pointer;
+  color: rgb(var(--color-text));
+}
+.product-card-wrapper .control__arrow-button-bg {
+  width: 22px;
+  height: calc(var(--swatch-size) + 8px);
+  position: absolute;
+  left: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-page-background)) 60%,
+    rgba(var(--color-page-background), 0) 100%,
+    rgba(var(--color-page-background), 0.2) 100%
+  );
+  z-index: 8;
+}
+.product-card-wrapper .control__arrow-button[disabled="disabled"] {
+  opacity: 0;
+  pointer-events: none;
+}
+.product-card-wrapper .control__arrow-button {
+  padding: 0;
+  background-color: unset;
+  border: none;
+  position: absolute;
+  z-index: 9;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.product-card-wrapper .control__arrow-button svg {
+  width: 12px;
+  height: 12px;
+  position: relative;
+  z-index: 9;
+  color: rgb(var(--color-text));
+}
+.product-card-wrapper .control__arrow-button[name="previous"] {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.product-card-wrapper .control__arrow-button[name="previous"] svg {
+  transform: rotate(90deg);
+}
+.product-card-wrapper .control__arrow-button[name="next"] {
+  transform: translateY(-50%);
+  right: 0;
+  top: 50%;
+}
+.product-card-wrapper .control__arrow-button[name="next"] svg {
+  transform: rotate(-90deg);
+}
+.product-card-wrapper
+  .control__arrow-button[name="next"]
+  .control__arrow-button-bg {
+  left: unset;
+  right: -1px;
+  background: linear-gradient(
+    270deg,
+    rgb(var(--color-page-background)) 60%,
+    rgba(var(--color-page-background), 0) 100%,
+    rgba(var(--color-page-background), 0.2) 100%
+  );
+}
+.product-card-wrapper .card__colors {
+  grid-template-columns: repeat(
+    auto-fill,
+    calc(var(--swatch-size) + var(--swatch-gap))
+  );
+  padding-left: unset;
+}
+.product-card-wrapper .color-swatch {
+  width: var(--swatch-size);
+  height: var(--swatch-size);
+}
+.product-card-wrapper #Slider-swatch {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 12px;
+  overflow-y: unset;
+  height: calc(var(--swatch-size) + 10px);
+}
+.product-card-wrapper .slider__slide:first-of-type {
+  padding-left: 3px;
+}
+/* The ipad end responds to the mobile end in vertical screen */
+/* @custom-media --tablet (max-width: 959px); */
+/* @custom-media --gt-mobile (min-width: 751px); */
+/* detectingScreen need to consider the configuration of the tablet */

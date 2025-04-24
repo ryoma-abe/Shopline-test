@@ -1,0 +1,435 @@
+{{assign "settings" section.settings}}
+{{assign "block_length" (length section.blocks)}}
+{{assign "image" section.settings.image}}
+{{assign "image_height" section.settings.image_height}}
+{{assign "pc_image_width" section.settings.pc_image_width}}
+{{assign "pc_image_position" settings.pc_image_position}}
+{{assign "pc_box_align" settings.pc_box_align}}
+{{assign "pc_text_align" settings.pc_text_align}}
+{{assign "image_overlap_display" settings.image_overlap_display}}
+{{assign "color_scheme" settings.color_scheme}}
+{{assign "mobile_text_align" settings.mobile_text_align}}
+{{assign "app_block_prefix" "shopline://apps"}}
+
+{{snippet "stylesheet" href=(asset_url "section-image-with-text.css")}}
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+{{assign "ignore_image_height" false}}
+{{#if color_scheme != "none" or image_overlap_display}}
+  {{assign "ignore_image_height" true}}
+{{/if}}
+<div class="section-padding page-width">
+  <div
+    class="image-with-text
+      image-with-text--align-{{pc_box_align}}
+      img-w-{{pc_image_width}}
+      pos-{{pc_image_position}}
+      {{#if ignore_image_height}}image-with-text--stretch{{/if}}
+      {{#if (isTruthy image_overlap_display)}}image-with-text--overlap{{/if}}"
+  >
+    <a
+      class="image-with-text__img-wrap
+        image-with-text__img-wrap--{{image_height}}
+        global-media-border-shadow hover-image-scale"
+      href="javascript:;"
+    >
+      <div class="image-with-text__image-box">
+        {{#if image}}
+          {{snippet "image" class="image-with-text__image" data=image}}
+        {{else}}
+          {{placeholder_svg_tag "image" "empty-image-class"}}
+        {{/if}}
+      </div>
+    </a>
+    <div
+      class="image-with-text__info-wrap {{#if (isFalsey image_overlap_display)}}color-scheme-{{color_scheme}}{{/if}} "
+    >
+      {{#if block_length > 0}}
+        <div class="image-with-text__info-reference">
+          <div
+            class="image-with-text__info
+              {{#if (isTruthy image_overlap_display)}}color-scheme-{{color_scheme}} image-with-text__info--overlap-pc-{{pc_image_position}}{{/if}}
+              image-with-text__info--align-{{pc_text_align}}
+              image-with-text__info--m-align-{{mobile_text_align}}"
+          >
+            {{#for section.blocks as |block|}}
+              {{#startsWith app_block_prefix block.type}}
+                {{render block}}
+              {{/startsWith}}
+              {{#if (trim block.type) == "title"}}
+                <h2
+                  {{{block.shopline_attributes}}}
+                  class="title3 image-with-text__title image-with-text__title--size-{{block.settings.title_size}}"
+                >
+                  {{block.settings.title}}
+                </h2>
+              {{/if}}
+              {{#if (trim block.type) == "content"}}
+                <div
+                  {{{block.shopline_attributes}}}
+                  class="body3 image-with-text__content rte"
+                >{{{block.settings.content}}}</div>
+              {{/if}}
+              {{#if (trim block.type) == "sub_title"}}
+                <div {{{block.shopline_attributes}}} class="body3 image-with-text__sub-title image-with-text__sub-title--size-{{block.settings.text_size}}">{{{block.settings.text}}}</div>
+              {{/if}}
+              {{#if (trim block.type) == "button"}}
+                {{#if (trim block.settings.button_text)}}
+                  <a
+                    {{{block.shopline_attributes}}}
+                    {{#if block.settings.link}}href="{{block.settings.link}}"{{else}}href="javascript:;"{{/if}}
+                    class="image-with-text__btn button"
+                  >
+                    {{block.settings.button_text}}
+                  </a>
+                {{/if}}
+              {{/if}}
+            {{/for}}
+          </div>
+        </div>
+      {{/if}}
+
+    </div>
+  </div>
+</div>
+{{#schema}}
+{
+  "name": "t:sections.image-with-text.name",
+  "class": "section",
+  "settings": [
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "t:sections.image-with-text.settings.image.label"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "label": "t:sections.image-with-text.settings.image_height.label",
+      "options": [
+        {
+          "value": "auto",
+          "label": "t:sections.image-with-text.settings.image_height.options__0.label"
+        },
+        {
+          "value": "high",
+          "label": "t:sections.image-with-text.settings.image_height.options__1.label"
+        },
+        {
+          "value": "low",
+          "label": "t:sections.image-with-text.settings.image_height.options__2.label"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "id": "pc_image_width",
+      "type": "select",
+      "label": "t:sections.image-with-text.settings.pc_image_width.label",
+      "options": [
+        {
+          "label": "t:sections.image-with-text.settings.pc_image_width.options__0.label",
+          "value": "small"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.image-with-text.settings.pc_image_width.options__1.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.image-with-text.settings.pc_image_width.options__2.label"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "id": "pc_image_position",
+      "type": "select",
+      "label": "t:sections.image-with-text.settings.pc_image_position.label",
+      "info": "t:sections.image-with-text.settings.pc_image_position.info",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.image-with-text.settings.pc_image_position.options__0.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.image-with-text.settings.pc_image_position.options__1.label"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "id": "pc_box_align",
+      "type": "select",
+      "label": "t:sections.image-with-text.settings.pc_box_align.label",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.image-with-text.settings.pc_box_align.options__0.label"
+        },
+        {
+          "value": "middle",
+          "label": "t:sections.image-with-text.settings.pc_box_align.options__1.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.image-with-text.settings.pc_box_align.options__2.label"
+        }
+      ],
+      "default": "middle"
+    },
+    {
+      "id": "pc_text_align",
+      "type": "select",
+      "label": "t:sections.image-with-text.settings.pc_text_align.label",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.image-with-text.settings.pc_text_align.options__0.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.image-with-text.settings.pc_text_align.options__1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.image-with-text.settings.pc_text_align.options__2.label"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "id": "image_overlap_display",
+      "type": "switch",
+      "label": "t:sections.image-with-text.settings.image_overlap_display.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.image-with-text.settings.color_scheme.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.image-with-text.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.image-with-text.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.image-with-text.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.image-with-text.settings.color_scheme.options__3.label"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "mobile_text_align",
+      "label": "t:sections.image-with-text.settings.mobile_text_align.label",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.image-with-text.settings.mobile_text_align.options__0.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.image-with-text.settings.mobile_text_align.options__1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.image-with-text.settings.mobile_text_align.options__2.label"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.image-with-text.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.image-with-text.settings.padding_top.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.image-with-text.settings.padding_bottom.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "sub_title",
+      "limit": 1,
+      "icon": "title",
+      "name": "t:sections.image-with-text.blocks.sub_title.name",
+      "settings": [
+        {
+          "id": "text",
+          "type": "text",
+          "label": "t:sections.image-with-text.blocks.sub_title.settings.text.label",
+          "default": "Improved"
+        },
+        {
+          "id": "text_size",
+          "type": "select",
+          "label": "t:sections.image-with-text.blocks.sub_title.settings.text_size.label",
+          "options": [
+            {
+              "label": "t:sections.image-with-text.blocks.sub_title.settings.text_size.options__0.label",
+              "value": "small"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.image-with-text.blocks.sub_title.settings.text_size.options__1.label"
+            },
+            {
+              "value": "large",
+              "label": "t:sections.image-with-text.blocks.sub_title.settings.text_size.options__2.label"
+            }
+          ],
+          "default": "medium"
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "limit": 1,
+      "icon": "title",
+      "name": "t:sections.image-with-text.blocks.title.name",
+      "settings": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": "t:sections.image-with-text.blocks.title.settings.title.label",
+          "default": "Image with text"
+        },
+        {
+          "id": "title_size",
+          "type": "select",
+          "default": "medium",
+          "limit": 1,
+          "label": "t:sections.image-with-text.blocks.title.settings.title_size.label",
+          "options": [
+            {
+              "value": "small",
+              "label": "t:sections.image-with-text.blocks.title.settings.title_size.options__0.label"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.image-with-text.blocks.title.settings.title_size.options__1.label"
+            },
+            {
+              "value": "large",
+              "label": "t:sections.image-with-text.blocks.title.settings.title_size.options__2.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "content",
+      "limit": 1,
+      "icon": "text",
+      "name": "t:sections.image-with-text.blocks.content.name",
+      "settings": [
+        {
+          "id": "content",
+          "type": "richtext",
+          "label": "t:sections.image-with-text.blocks.content.settings.content.label",
+          "default": "Pair large text with a full-width image to draw attention to an important detail of your brand or product line."
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "limit": 1,
+      "icon": "button",
+      "name": "t:sections.image-with-text.blocks.button.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "t:sections.image-with-text.blocks.button.settings.button_text.label",
+          "default": "Optional button"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.image-with-text.blocks.button.settings.link.label",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 1,
+      "category": "t:sections.image-with-text.presets.presets__0.category",
+      "name": "t:sections.image-with-text.presets.presets__0.name",
+      "settings": {
+        "image": {},
+        "image_height": "auto",
+        "pc_image_width": "medium",
+        "pc_image_position": "left",
+        "pc_box_align": "middle",
+        "pc_text_align": "left",
+        "image_overlap_display": false,
+        "color_scheme": "none",
+        "mobile_text_align": "left",
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": [
+        {
+          "type": "title",
+          "settings": {
+            "title": "Image with text",
+            "title_size": "medium"
+          }
+        },
+        {
+          "type": "content",
+          "settings": {
+            "content": "Pair large text with a full-width image to draw attention to an important detail of your brand or product line."
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "button_text": "Optional button",
+            "link": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

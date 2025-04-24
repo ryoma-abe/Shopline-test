@@ -1,0 +1,118 @@
+.viewall__button {
+  margin-top: 40px;
+}
+
+.collection-list__mask-container {
+  position: relative;
+}
+
+.collection-list__mask-container::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(var(--mask-color), calc(var(--mask-opacity, 0) / 100));
+}
+
+@media screen and (max-width: 959px) {
+  .viewall__button {
+    margin-top: 20px;
+  }
+  .collection-list__slider__container.slider.slider--mobile {
+    max-width: 100vw;
+    overflow-y: scroll;
+    flex-wrap: nowrap;
+    margin-bottom: 0;
+  }
+  .collection-list__slider__container.slider.slider--mobile .collection-item {
+    width: 143px;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .collection-list__slider__container {
+    flex-wrap: wrap;
+    overflow-y: auto;
+  }
+}
+
+.collection-list__items {
+  display: grid;
+  gap: 20px;
+  grid-auto-flow: row dense;
+  grid-template-columns: repeat(var(--grid-cols, 3), 1fr);
+}
+
+@media (max-width: 959px) {
+  .collection-list__items {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.collection-list__cover-image {
+  height: 100%;
+  grid-row-end: span 1;
+  grid-column-end: span 1;
+  background-color: rgb(var(--color-image-background));
+  display: flex;
+  position: relative;
+}
+
+.collection-list__cover-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 959px) {
+  .collection-list__cover-image {
+    padding-bottom: 50%;
+  }
+}
+
+@media (min-width: 960px) {
+  .collection-list__cover-image.w_1_h_2 {
+    grid-row-end: span 2;
+    grid-column-end: span 1;
+  }
+}
+
+.collection-list__cover-image-inner,
+.collection-list__cover-content {
+  display: flex;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.collection-list__cover-image-inner {
+  align-items: center;
+  justify-content: center;
+}
+
+.collection-list__cover-image-inner .placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.collection-list__cover-content {
+  padding: 20px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+@media (max-width: 959px) {
+  .collection-list__cover-content {
+    padding: 8px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

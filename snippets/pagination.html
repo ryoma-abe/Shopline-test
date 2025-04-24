@@ -1,0 +1,89 @@
+{{#comment}}
+    Renders a set of links for paginated results. Must be used within paginate tags.
+
+    Usage:
+    {{#paginate results by=2 total=100}}
+      {{ paginate.items }}
+    {{/paginate}}
+
+    Accepts:
+    - paginate: {Object}
+    - anchor: {String} (optional) This can be added so that on page reload it takes you to wherever you've placed your anchor tag.
+    - style: {simple | normal} pagination style
+{{/comment}}
+
+{{assign "style" (default style "simple")}}
+{{snippet "stylesheet" href=(asset_url "component-pagination.css") lazy=true}}
+
+<div class="pagination-wrapper">
+  <nav class="pagination">
+    {{#if style == "simple"}}
+      <ul class="simple-pagination__list list-unstyled">
+        <li>
+          <a
+            href="{{paginate.previous.url}}{{anchor}}"
+            class="pagination__item pagination__item--next pagination__item-arrow
+              {{#unless paginate.previous}}pagination__item--disible{{/unless}}"
+          >
+            {{snippet "icon-arrow"}}
+          </a>
+        </li>
+
+        <li class="pagination__num--container body3">{{paginate.current_page}}/{{paginate.pages}}</li>
+
+        <li>
+          <a
+            href="{{paginate.next.url}}{{anchor}}"
+            class="pagination__item pagination__item--prev pagination__item-arrow
+              {{#unless paginate.next}}pagination__item--disible{{/unless}}"
+          >
+            {{snippet "icon-arrow"}}
+          </a>
+        </li>
+      </ul>
+      {{assign "last_current_offset" (add paginate.current_offset paginate.page_size)}}
+      {{#if paginate.current_page == paginate.pages}}{{assign "last_current_offset" paginate.items}} {{/if}}
+      <div class="simple-pagination-info body4">
+        {{t
+          "products.product_list.load_more_desc"
+          current_offset=(add paginate.current_offset 1)
+          last_current_offset=last_current_offset
+          total=paginate.items
+        }}
+      </div>
+    {{else}}
+      <ul class="normal-pagination__list list-unstyled body3">
+        {{#if paginate.previous }}
+          <li>
+            <a href="{{ paginate.previous.url }}{{ anchor }}" class="pagination__item pagination__item--next pagination__item-arrow">
+              {{ snippet 'icon-arrow' }}
+            </a>
+          </li>
+        {{/if}}
+
+        {{#for paginate.parts as |part|}}
+          <li>
+            {{#if part.is_link }}
+              <a href="{{ part.url }}{{ anchor }}" class="pagination__item">{{ part.title }}</a>
+            {{else}}
+              {{assign "current_page_string" (append paginate.current_page "")}}
+              {{#if part.title == current_page_string}}
+                <a class="pagination__item pagination__item--current">{{ part.title }}</a>
+              {{else}}
+                <span class="pagination__item">{{ part.title }}</span>
+              {{/if}}
+            {{/if}}
+          </li>
+        {{/for}}
+
+        {{#if paginate.next }}
+          <li>
+            <a href="{{ paginate.next.url }}{{ anchor }}" class="pagination__item pagination__item--prev pagination__item-arrow">
+              {{ snippet 'icon-arrow' }}
+            </a>
+          </li>
+        {{/if}}
+        </ul>
+    {{/if}}
+  </nav>
+</div>

@@ -1,0 +1,21 @@
+{{#if settings.search_menu}}
+  <div class="predictive-search__suggested-menu">
+    {{#for settings.search_menu.links as |item|}}
+      <div class="predictive-search__suggested-menu__item">
+        <a
+          class="predictive-search__suggested-menu__link body4 fw-bold"
+          {{#if item.url}}href="{{item.url}}"{{else}}href="javascript:;"{{/if}}
+        >
+          {{item.title}}
+        </a>
+        {{#if (length item.links) > 0}}
+          {{#for item.links as |sub_item|}}
+            <a class="predictive-search__suggested-menu__link body5" {{#if item.url}}href="{{item.url}}"{{else}}href="javascript:;"{{/if}}>
+            {{sub_item.title}}
+            </a>
+          {{/for}}
+        {{/if}}
+      </div>
+    {{/for}}
+  </div>
+{{/if}}

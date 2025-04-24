@@ -1,0 +1,58 @@
+<div class="card-container">
+  <div class="body2 card__title">
+    <p class="fw-bold">{{t 'general.address.address'}} 1</p>
+  </div>
+
+  <div class="card__detail">
+    <div class="address">
+      {{#if (lengthEqual customer.addresses 0)}}
+        <div class="address--empty">
+          {{snippet 'icon-location'}}
+          <p class="body4">{{t 'customer.address.no_address_data'}}</p>
+          <a href="{{routes.account_address_new_url}}" class="button">
+            {{ snippet 'icon-plus' }}
+            <span>{{ t 'customer.address.add_address' }}</span>
+          </a>
+        </div>
+      {{else}}
+        
+        {{#if (gte (length customer.addresses) 50)}}
+          <p class="address--max">{{t 'customer.address.address_full_tip'}}</p>
+        {{else}}
+          <a href="{{routes.account_address_new_url}}" class="body4">
+            {{ snippet 'icon-plus' }}
+            <span>{{ t 'customer.address.add_address' }}</span>
+          </a>
+        {{/if}}
+        <div class="address__list">
+          {{#for customer.addresses as |address|}}
+            <div class="address__item">
+              <div class="address__header">
+                <p class="address__title">
+                  {{#if address.id == customer.default_address.id}}
+                    <span class="address--default">{{t 'customer.address.default'}}</span>
+                  {{/if}}
+                  <span class="body3 fw-bold address__name">{{ address.last_name }}{{ ternary address.first_name (append (ternary address.last_name ', ' '') address.first_name) '' }}</span>
+                </p>
+                <div class="address__btns">
+                  <a href="{{address.url}}" class="address__btn">{{snippet 'icon-edit'}}</a>
+                  {{#form "customer_address" address_seq=address.id return_to=routes.account_url id=(append 'address-form-' address.id)}}
+                    <button class="address__btn address__btn--remove" type="button" data-form-id="{{append 'address-form-' address.id}}" data-confirm-message="{{ t 'customer.address.delete__address' }}">{{snippet 'icon-delete'}}</button>
+                  {{/form}}
+                </div>
+              </div>
+
+              <div class="body4 address__phone">{{ address.phone }}</div>
+
+              <div class="body4 address__detail">
+                {{ assign 'formatted_address' (format_address address) }}
+                <div class="pay-info__content">{{{ replace formatted_address.string '<br>' ', ' }}}</div>
+              </div>
+            </div>
+          {{/for}}
+        </div>
+
+      {{/if}}
+    </div>
+  </div>
+</div>

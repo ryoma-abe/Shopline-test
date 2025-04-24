@@ -1,0 +1,133 @@
+tool-tip {
+  --tt-p-inline: 4px;
+  --tt-p-block: 4px;
+  --tt-triangle-size: 7px;
+  --tt-bg: #242833;
+
+  --tt-is-rtl: -1;
+
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(var(--tt-x, 0)) translateY(var(--tt-y, 0));
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  position: absolute;
+  z-index: 1;
+  max-width: min(80vw, 250px);
+  font-size: 14px;
+  padding: 8px 12px;
+  margin: 0;
+  border-radius: 5px;
+  background: var(--tt-bg);
+  color: #fff;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  width: max-content;
+}
+
+tool-tip::after {
+  content: "";
+  background: var(--tt-bg);
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 16px;
+  height: var(--tt-triangle-size);
+  left: calc(50% - 8px);
+  clip-path: path(
+    "M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z"
+  );
+}
+
+/* TOP */
+
+tool-tip[tip-position="top"],
+tool-tip:not([tip-position]) {
+  inset-inline-start: 50%;
+  inset-block-end: calc(100% + var(--tt-p-block) + var(--tt-triangle-size));
+  --tt-x: calc(50% * var(--tt-is-rtl));
+}
+
+tool-tip[tip-position="top"]::after,
+tool-tip:not([tip-position])::after {
+  top: 100%;
+  transform: rotate(180deg);
+}
+
+/* RIGHT */
+
+tool-tip[tip-position="right"] {
+  inset-inline-start: calc(100% + var(--tt-p-inline) + var(--tt-triangle-size));
+  inset-block-end: 50%;
+  --tt-y: 50%;
+}
+
+tool-tip[tip-position="right"]::after {
+  left: -12px;
+  transform: rotate(-90deg);
+  top: calc(50% - 4px);
+}
+
+tool-tip[tip-position="right"]:dir(rtl)::after {
+  left: calc(100% - 4px);
+  transform: rotate(90deg);
+  top: calc(50% - 4px);
+}
+
+/* BOTTOM */
+
+tool-tip[tip-position="bottom"] {
+  inset-inline-start: 50%;
+  inset-block-start: calc(100% + var(--tt-p-block) + var(--tt-triangle-size));
+  --tt-x: calc(50% * var(--tt-is-rtl));
+}
+
+tool-tip[tip-position="bottom"]::after {
+  --tt-tip: var(--tt-top-tip);
+  inset-block-start: calc(var(--tt-triangle-size) * -1);
+  border-block-start: var(--tt-triangle-size) solid transparent;
+}
+
+/* LEFT */
+
+tool-tip[tip-position="left"] {
+  inset-inline-end: calc(100% + var(--tt-p-inline) + var(--tt-triangle-size));
+  inset-block-end: 50%;
+  --tt-y: 50%;
+}
+
+tool-tip[tip-position="left"]::after {
+  left: calc(100% - 4px);
+  transform: rotate(90deg);
+  top: calc(50% - 4px);
+}
+
+tool-tip[tip-position="left"]:dir(rtl)::after {
+  left: -12px;
+  transform: rotate(-90deg);
+  top: calc(50% - 4px);
+}
+
+[dir="rtl"] tool-tip {
+  --tt-is-rtl: 1;
+}
+
+.has_tool-tip {
+  position: relative;
+}
+
+.has_tool-tip.tool-tip--open > tool-tip,
+.has_tool-tip:hover > tool-tip:not([controlled]),
+.has_tool-tip:focus-visible > tool-tip:not([controlled]),
+.has_tool-tip:active > tool-tip:not([controlled]) {
+  opacity: 0.9;
+  transition-delay: 0.2s;
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

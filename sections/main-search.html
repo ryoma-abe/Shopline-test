@@ -1,0 +1,400 @@
+{{snippet "stylesheet" href=(asset_url "component-card.css")}}
+{{snippet "stylesheet" href=(asset_url "component-price.css")}}
+{{snippet "stylesheet" href=(asset_url "section-main-search.css")}}
+<script src="{{ asset_url 'component-predictive-search.js' }}" defer></script>
+{{#if settings.enabled_color_swatch}}
+  {{snippet "stylesheet" href=(asset_url "component-color-swatches.css")}}
+  <script src="{{asset_url 'component-color-swatch.js'}}" defer="defer"></script>
+  <script src="{{asset_url 'component-color-swatch-radios.js'}}" defer="defer"></script>
+  <script src="{{asset_url 'component-product-form.js'}}" defer="defer"></script>
+{{/if}}
+{{#if settings.enable_quick_view}}
+  {{snippet "stylesheet" href=(asset_url "component-quick-add.css")}}
+  <script src="{{asset_url 'component-quick-add.js'}}" defer="defer"></script>
+{{/if}}
+
+{{snippet "section-padding-creator" section_id=section.id padding_top=section.settings.padding_top padding_bottom=section.settings.padding_bottom}}
+
+<div class="main-search{{#if (isFalsey search.performed) or (if (isTruthy search.performed) and (isFalsey search.results_count > 0))}}
+  main-search--empty{{/if}} section-padding">
+  <div class="main-search__header page-width">
+    {{snippet "breadcrumb" class="text-center" settings=settings}}
+    <h1 class="title4">{{t 'products.product_search.search'}}</h1>
+    <div class="main-search__search">
+      <predictive-search class="main-search__content">
+        <form action="{{ routes.search_url }}" method="get" class="main-search__form search">
+          <div class="main-search__field field">
+            <input
+              id="main-search-input"
+              class="main-search__input field__input body3"
+              type="search"
+              name="keyword"
+              value="{{ search.terms }}"
+              placeholder="{{ t 'general.search.search' }}"
+              maxlength="255"
+              autocorrect="off"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+            >
+            <label class="main-search__field-label field__label body3" for="main-search-input">{{ t 'general.search.search' }}</label>
+            <button class="main-search__submit-button">
+              {{snippet 'icon-search'}}
+            </button>
+          </div>
+
+          <div class="predictive-search global-modal-border-shadow" tabindex="-1">
+            <div class="predictive-search__results" data-predictive-search></div>
+            <div class="predictive-search__loading-state">
+              <span class="predictive-search__spinner">
+                {{ snippet 'icon-loading' }}
+              </span>
+            </div>
+          </div>
+        </form>
+      </predictive-search>
+    </div>
+    {{#if search.performed}}
+      <div class="main-search__results" id="main-search__results">
+        {{#if search.results_count == 1}}
+          <h2 class="main-search__headerTitle title4">{{t 'products.product_search.ount_results' count=search.results_count}}</h2>
+        {{else}}
+          <h2 class="main-search__headerTitle title4">{{t 'products.product_search.ount_results' count=search.results_count}}</h2>
+        {{/if}}
+        {{#if search.results_count == 0}}
+          <p class="main-search__searchText body3">{{{t 'products.product_search.search_no_results' keyword=search.terms}}}</p>
+        {{/if}}
+      </div>
+      <div class="main-search__container {{#if section.settings.filter_type == 'vertical' }}facets-vertical{{/if}}">
+        {{#if section.settings.enable_filtering or section.settings.enable_sorting }}
+          {{snippet "stylesheet" href=(asset_url "component-facets.css")}}
+          <script src="{{ asset_url 'component-facets.js' }}" defer="defer"></script>
+          <aside class="facets-wrapper{{#unless section.settings.enable_filtering}} facets-wrapper--no-filters{{/unless}}" id="main-collection-filters" data-id="{{ section.id }}">
+            {{ snippet 'facets' results=search enable_filtering=section.settings.enable_filtering enable_sorting=section.settings.enable_sorting filter_type=section.settings.filter_type }}
+          </aside>
+        {{/if}}
+
+        <div class="product-list-container" id="ProductListContainer" data-id="{{ section.id }}">
+          {{#paginate search.results by=section.settings.products_per_page}}
+            <div class="collection">
+              {{#if section.settings.enable_sorting and section.settings.filter_type == 'vertical' and search.results_count > 0}}
+              <facet-filters-form class="facets facets-vertical-sort page-width display-none-tablet">
+                <form class="facets-vertical-form" id="FacetSortForm" data-form-type="Tiled">
+                  <div id="ProductCountDesktop" class="product-count body3">
+                    {{#if search.results_count > 0}}
+                      {{ t 'products.facets.product_count' product_count=search.results_count  }}
+                    {{/if}}
+                  </div>
+                  {{ snippet 'facet-sort' data=search product_count=search.results_count}}
+                </form>
+              </facet-filters-form>
+              {{/if}}
+
+              {{#if search.results_count > 0}}
+                <ul class="grid grid-cols-{{ section.settings.columns_mobile }} grid-cols-{{ section.settings.columns_desktop }}-desktop">
+                  {{#for search.results as |item|}}
+                    {{#case item.object_type}}
+                      {{#when 'product'}}
+                        <li>
+                          {{snippet 'product-card'
+                            product_data=item
+                            index=forloop.index0
+                            section_id=section.id
+                            image_ratio=section.settings.product_image_ratio
+                            image_fill_type=section.settings.image_fill_type
+                            show_secondary_image=section.settings.show_secondary_image
+                            desktop_grid_cols=section.settings.columns_desktop
+                            mobile_grid_cols=section.settings.columns_mobile
+                            theme_settings=settings
+                          }}
+                        </li>
+                      {{/when}}
+                      {{#when 'collection'}}
+                        <li>
+                          <div class="search__collection-card">
+                            <a href="{{#if (isFalsey item.url)}}javascript:;{{else}}{{item.url}}{{/if}}" class="search__collection-card-cover global-collection-card-border-shadow">
+                              <div class="search__collection-card-title body4">
+                                <div class="search__collection-card-tag">
+                                  {{ snippet 'icon-collection-tag' }}
+                                </div>
+                                <div class="search__collection-card-text">
+                                  {{ item.title }}
+                                </div>
+                              </div>
+                              {{#if item.featured_image.src}}
+                                {{snippet 'image' data=item.featured_image pc_size=(append '1/' section.settings.columns_desktop ) mobile_size=(append '1/' section.settings.columns_mobile )}}
+                              {{else}}
+                                <div class="placeholder">
+                                  {{placeholder_svg_tag 'image'}}
+                                </div>
+                              {{/if}}
+                            </a>
+                          </div>
+                        </li>
+                      {{/when}}
+                      {{#when 'article'}}
+                        <li>
+                          <div class="search__article-card">
+                            <a href="{{#if (isFalsey item.url)}}javascript:;{{else}}{{item.url}}{{/if}}" class="search__article-card-wrapper global-blog-card-border-shadow">
+                              {{#if item.image.src}}
+                                {{snippet 'image' data=item.image pc_size=(append '1/' section.settings.columns_desktop ) mobile_size=(append '1/' section.settings.columns_mobile )}}
+                              {{else}}
+                                <div class="placeholder">
+                                  {{placeholder_svg_tag 'image'}}
+                                </div>
+                              {{/if}}
+                              <div class="search__article-card-info">
+                                <div class="search__article-card-title-wrapper">
+                                  <div class="search__article-card__tag">
+                                    {{ snippet 'icon-article-tag' }}
+                                  </div>
+                                  <div class="search__article-card-title body5 fw-bold">{{ item.title }}</div>
+                                </div>
+                                {{assign 'show_article_date' section.settings.show_article_date}}
+                                {{assign 'show_article_author' section.settings.show_article_author}}
+                                {{#if show_article_date or show_article_author}}
+                                  <div class="search__article-card-extra body4">
+                                    {{#if show_article_date}}
+                                    <div class="search__article-card-date">{{ date item.published_at '%B %d, %Y'}}</div>
+                                    {{/if}}
+                                    {{#if show_article_date and show_article_author}}
+                                    <div class="search__article-card-line"></div>
+                                    {{/if}}
+                                    {{#if show_article_author}}
+                                    <div class="search__article-card-author">{{ item.author }}</div>
+                                    {{/if}}
+                                  </div>
+                                {{/if}}
+                              </div>
+                            </a>
+                          </div>
+                        </li>
+                      {{/when}}
+                      {{#when 'page'}}
+                        <li>
+                          <div class="search__page-card">
+                            <a href="{{#if (isFalsey item.url)}}javascript:;{{else}}{{item.url}}{{/if}}" class="search__page-card-cover global-card-border-shadow">
+                              <div class="search__page-card-title body4">
+                                <div class="search__page-card-tag">
+                                  {{ snippet 'icon-page-tag' }}
+                                </div>
+                                <div class="search__page-card-text fw-bold">
+                                  {{ item.title }}
+                                </div>
+                              </div>
+                              <div class="placeholder">
+                                {{placeholder_svg_tag 'image'}}
+                              </div>
+                            </a>
+                          </div>
+                        </li>
+                      {{/when}}
+                    {{/case}}
+                {{/for}}
+                </ul>
+
+                {{#if paginate.pages > 1 }}
+                  {{ snippet 'pagination' paginate=paginate anchor='' }}
+                {{/if}}
+              {{/if}}
+
+              <div class="facets-loading">
+                {{snippet "loading-overlay-spinner"}}
+              </div>
+            </div>
+          {{/paginate}}
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main-search.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "t:sections.main-search.settings.products_per_page.label",
+      "default": 16,
+      "min": 16,
+      "max": 48,
+      "step": 1
+    },
+    {
+      "id": "columns_desktop",
+      "type": "range",
+      "label": "t:sections.main-search.settings.columns_desktop.label",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "id": "columns_mobile",
+      "type": "select",
+      "label": "t:sections.main-search.settings.columns_mobile.label",
+      "options": [
+        {
+          "value": 1,
+          "label": "t:sections.main-search.settings.columns_mobile.options__0.label"
+        },
+        {
+          "value": 2,
+          "label": "t:sections.main-search.settings.columns_mobile.options__1.label"
+        }
+      ],
+      "default": 2
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.main-search.settings.group_header__0.label"
+    },
+    {
+      "id": "product_image_ratio",
+      "type": "select",
+      "label": "t:sections.main-search.settings.product_image_ratio.label",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main-search.settings.product_image_ratio.options__0.label"
+        },
+        {
+          "value": "100",
+          "label": "t:sections.main-search.settings.product_image_ratio.options__1.label"
+        },
+        {
+          "value": "133.33",
+          "label": "3:4"
+        },
+        {
+          "value": "75",
+          "label": "t:sections.main-search.settings.product_image_ratio.options__3.label"
+        },
+        {
+          "value": "150",
+          "label": "t:sections.main-search.settings.product_image_ratio.options__4.label"
+        }
+      ],
+      "default": "150"
+    },
+    {
+      "id": "image_fill_type",
+      "type": "select",
+      "label": "t:sections.main-search.settings.image_fill_type.label",
+      "options": [
+        {
+          "value": "contain",
+          "label": "t:sections.main-search.settings.image_fill_type.options__0.label"
+        },
+        {
+          "value": "cover",
+          "label": "t:sections.main-search.settings.image_fill_type.options__1.label"
+        }
+      ],
+      "default": "contain"
+    },
+    {
+      "id": "show_secondary_image",
+      "type": "switch",
+      "label": "t:sections.main-search.settings.show_secondary_image.label",
+      "default": false
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.main-search.settings.group_header__1.label"
+    },
+    {
+      "type": "switch",
+      "id": "enable_filtering",
+      "label": "t:sections.main-search.settings.enable_filtering.label",
+      "default": true
+    },
+    {
+      "id": "filter_type",
+      "type": "select",
+      "label": "t:sections.main-search.settings.filter_type.label",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "t:sections.main-search.settings.filter_type.options__0.label"
+        },
+        {
+          "value": "vertical",
+          "label": "t:sections.main-search.settings.filter_type.options__1.label"
+        },
+        {
+          "value": "drawer",
+          "label": "t:sections.main-search.settings.filter_type.options__2.label"
+        }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "switch",
+      "id": "enable_sorting",
+      "label": "t:sections.main-search.settings.enable_sorting.label",
+      "default": true
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.main-search.settings.group_header__2.label"
+    },
+    {
+      "id": "show_article_author",
+      "type": "switch",
+      "label": "t:sections.main-search.settings.show_article_author.label",
+      "default": true
+    },
+    {
+      "id": "show_article_date",
+      "type": "switch",
+      "label": "t:sections.main-search.settings.show_article_date.label",
+      "default": true
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.main-search.settings.group_header__3.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.main-search.settings.padding_top.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.main-search.settings.padding_bottom.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "default": {
+    "settings": {
+      "products_per_page": 16,
+      "columns_desktop": 4,
+      "columns_mobile": 2,
+      "product_image_ratio": "150",
+      "image_fill_type": "contain",
+      "show_secondary_image": false,
+      "enable_filtering": true,
+      "filter_type": "horizontal",
+      "enable_sorting": true,
+      "padding_top": 80,
+      "padding_bottom": 80,
+      "show_article_author": true,
+      "show_article_date": true
+    }
+  }
+}
+{{/schema}}

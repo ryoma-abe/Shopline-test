@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-list-collections",
+      "settings": {
+        "title": "",
+        "sort": "title_asc",
+        "col": 6,
+        "add_margin": true,
+        "show_divider": false,
+        "collection_fill_type": "cover",
+        "collection_image_ratio": "100",
+        "pc_cols": 3,
+        "md_cols": 2
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

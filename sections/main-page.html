@@ -1,0 +1,51 @@
+{{snippet "stylesheet" href=(asset_url "section-main-page.css")}}
+
+{{
+  snippet "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+<div class="main-page page-width page-width--narrow section-padding">
+  {{snippet "breadcrumb" class="text-center" settings=settings}}
+  <h1 class="page-title title4">
+    {{ page.title }}
+  </h1>
+  <div class="rte">
+    {{{ page.content }}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main-page.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "group_header",
+      "label": "t:sections.main-page.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-page.settings.padding_top.label",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-page.settings.padding_bottom.label",
+      "default": 60
+    }
+  ]
+}
+{{/schema}}

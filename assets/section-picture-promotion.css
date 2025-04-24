@@ -1,0 +1,92 @@
+.picture-promotion__container {
+  box-sizing: content-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--grid-horizontal-space);
+}
+.picture-promotion__container.picture-promotion__one {
+  grid-template-columns: 1fr;
+}
+
+.picture-promotion__image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 380px;
+  line-height: 0;
+}
+
+.picture-promotion__image-wrapper .placeholder {
+  width: 100%;
+  max-height: 700px;
+  background-color: rgb(var(--color-image-background));
+}
+
+.picture-promotion__image {
+  width: 100%;
+  height: auto;
+}
+
+.picture-promotion__text-wrapper {
+  left: 0;
+  right: 0;
+  position: absolute;
+  bottom: 40px;
+  padding: 0 40px;
+  text-align: center;
+  line-height: 1;
+  color: var(--font-color);
+}
+
+.picture-promotion__text-wrapper .picture-promotion__title {
+  font-family: var(--title-font-family);
+  font-weight: var(--title-font-weight);
+  font-size: var(--pc-title-font-size);
+  line-height: 1.2;
+}
+
+.picture-promotion__text-wrapper
+  .picture-promotion__title.picture-promotion__font-border {
+  -webkit-text-stroke-color: var(--font-border-color);
+  -webkit-text-stroke-width: 0.02em;
+}
+
+.picture-promotion__text-wrapper .picture-promotion__subtitle {
+  font-family: var(--subtitle-font-family);
+  font-weight: var(--subtitle-font-weight);
+  font-size: var(--pc-subtitle-font-size);
+}
+
+.picture-promotion__text-wrapper
+  .picture-promotion__subtitle.picture-promotion__font-border {
+  -webkit-text-stroke-color: var(--font-border-color);
+  -webkit-text-stroke-width: 0.02em;
+}
+
+@media (max-width: 959px) {
+  .picture-promotion__container {
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+  .picture-promotion__image-wrapper {
+    min-height: 140px;
+  }
+  .picture-promotion__text-wrapper {
+    bottom: 20px;
+    padding: 0 20px;
+  }
+  .picture-promotion__text-wrapper .picture-promotion__title {
+    font-size: var(--m-title-font-size);
+  }
+  .picture-promotion__text-wrapper .picture-promotion__subtitle {
+    font-size: var(--m-subtitle-font-size);
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

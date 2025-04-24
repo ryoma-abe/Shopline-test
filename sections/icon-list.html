@@ -1,0 +1,220 @@
+{{snippet "stylesheet" href=(asset_url "section-icon-list.css")}}
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+{{assign "is_slider" ""}}
+{{assign "pc_layout_center" ""}}
+{{#if section.blocks.length > 6 and section.settings.slide}}
+  {{assign "is_slider" "slider"}}
+  <script src="{{asset_url 'component-slider.js'}}" defer></script>
+
+  {{#if request.design_mode}}
+    <script src="{{asset_url 'theme-editor.js'}}" defer="defer"></script>
+  {{/if}}
+{{else}}
+  {{assign "pc_layout_center" "layout-center--desktop"}}
+{{/if}}
+
+<div class="icon-list page-width section-padding color-scheme-{{section.settings.color_scheme}}">
+  {{#if section.settings.title}}
+    <h2 class="icon-list__title title4">
+      {{section.settings.title}}
+    </h2>
+  {{/if}}
+  <slider-component>
+    <ul
+      id="Slider-{{section.id}}"
+      class="icon-list__wrapper grid grid-cols-6-desktop
+        {{is_slider}}
+        {{pc_layout_center}}
+        slider--desktop
+        {{ternary section.settings.slide 'slider special-slide--mobile' 'grid-cols-2-tablet'}}
+        "
+    >
+      {{#for section.blocks as |block|}}
+        <li class="icon-list__item slider__slide" id="Slide-{{block.id}}">
+          <div class="icon-list__main-wrapper ratio global-product-card-border-shadow">
+            <a
+              {{{block.shopline_attributes}}}
+              {{#if block.settings.jump_link}}href="{{block.settings.jump_link}}"{{else}}href="javascript:;"{{/if}}
+              class="icon-list__link {{#if (isFalsey block.settings.jump_link)}}icon-list__link--text{{/if}}"
+            >
+              {{#if block.settings.image.url}}
+                {{snippet "image" data=block.settings.image class="global-product-card-border-shadow"}}
+              {{else}}
+                <div class="icon-list__empty-wraper">
+                  {{placeholder_svg_tag "image" "placeholder"}}
+                </div>
+              {{/if}}
+            </a>
+          </div>
+        </li>
+      {{/for}}
+    </ul>
+    {{#if is_slider}}
+      <button type="button" class="slider-button slider-button--prev display-none-tablet" name="previous">
+        {{snippet "icon-arrow"}}
+      </button>
+      <button type="button" class="slider-button slider-button--next display-none-tablet" name="next">
+        {{snippet "icon-arrow"}}
+      </button>
+    {{/if}}
+  </slider-component>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.icon-list.name",
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:sections.icon-list.blocks.item.name",
+      "icon": "image",
+      "limit": 12,
+      "settings": [
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "t:sections.icon-list.blocks.item.settings.image.label"
+        },
+        {
+          "id": "jump_link",
+          "type": "url",
+          "label": "t:sections.icon-list.blocks.item.settings.jump_link.label"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.icon-list.settings.title.label"
+    },
+    {
+      "type": "switch",
+      "id": "slide",
+      "label": "t:sections.icon-list.settings.slide.label",
+      "info": "t:sections.icon-list.settings.slide.info",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.icon-list.settings.color_scheme.label",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.icon-list.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.icon-list.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.icon-list.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.icon-list.settings.color_scheme.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.icon-list.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.icon-list.settings.padding_top.label",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.icon-list.settings.padding_bottom.label",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 4,
+      "category": "t:sections.icon-list.presets.presets__0.category",
+      "name": "t:sections.icon-list.presets.presets__0.name",
+      "settings": {
+        "title": "",
+        "slide": true,
+        "padding_top": 60,
+        "padding_bottom": 60
+      },
+      "blocks": [
+        {
+          "type": "item",
+          "icon": "image",
+          "settings": {
+            "image": {},
+            "jump_link": ""
+          }
+        },
+        {
+          "type": "item",
+          "icon": "image",
+          "settings": {
+            "image": {},
+            "jump_link": ""
+          }
+        },
+        {
+          "type": "item",
+          "icon": "image",
+          "settings": {
+            "image": {},
+            "jump_link": ""
+          }
+        },
+        {
+          "type": "item",
+          "icon": "image",
+          "settings": {
+            "image": {},
+            "jump_link": ""
+          }
+        },
+        {
+          "type": "item",
+          "icon": "image",
+          "settings": {
+            "image": {},
+            "jump_link": ""
+          }
+        },
+        {
+          "type": "item",
+          "icon": "image",
+          "settings": {
+            "image": {},
+            "jump_link": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

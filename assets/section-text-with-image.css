@@ -1,0 +1,250 @@
+.text-with-image__image__container1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 100px;
+}
+
+.text-with-image__label1,
+text-with-image__label2 {
+  align-items: flex-start;
+  flex: 1;
+}
+
+.text-with-image__label1 {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-with-image__subtitle {
+  margin-bottom: 10px;
+}
+
+.text-with-image__title {
+  margin-bottom: 15px;
+}
+
+.text-with-image__image {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--product-card-border-radius);
+  display: flex;
+}
+
+.text-with-image__image a {
+  display: flex;
+}
+
+.text-with-image__image-line {
+  border: 1px solid #ffffff;
+  position: absolute;
+  left: 40px;
+  bottom: 40px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.text-with-image__image__container2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 100px;
+  position: relative;
+}
+
+.text-with-image__label2 {
+}
+
+.text-with-image__image2 {
+  margin-top: -100px;
+  border-radius: var(--product-card-border-radius);
+  display: flex;
+  overflow: hidden;
+}
+
+.text-with-image__image2 a {
+  display: flex;
+}
+
+.text-with-image__image-adapt {
+  min-width: 45%;
+  width: 45%;
+}
+
+.text-with-image__image-adapt img {
+  width: 100%;
+  height: auto;
+}
+
+.text-with-image__image-lg {
+  min-width: 45%;
+  width: 45%;
+}
+
+.text-with-image__image-lg img {
+  width: 100%;
+  height: 700px;
+}
+
+.text-with-image__image-sm {
+  min-width: 45%;
+  width: 45%;
+}
+
+.text-with-image__image-sm img {
+  width: 100%;
+  height: 500px;
+}
+
+.text-with-image__image-lg .placeholder,
+.text-with-image__image-adapt .placeholder {
+  width: 100%;
+  height: 700px;
+  background-color: rgb(var(--color-image-background));
+}
+
+.text-with-image__image-sm .placeholder {
+  width: 100%;
+  height: 500px;
+  background-color: rgb(var(--color-image-background));
+}
+
+.text-with-image__image img,
+.text-with-image__image2 img {
+  object-fit: cover;
+}
+
+.text-with-image__product-container {
+  position: absolute;
+  left: 40px;
+  bottom: 40px;
+  background-color: rgba(var(--color-page-background));
+  width: 300px;
+  height: 80px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: calc(var(--product-card-border-radius) / 2);
+  box-shadow: 0px 6px 30px 0px rgba(var(--color-text), 0.1);
+}
+
+.text-with-image__product-container2 {
+  position: absolute;
+  right: 40px;
+  bottom: 40px;
+  background-color: rgba(var(--color-page-background));
+  width: 300px;
+  height: 80px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: calc(var(--product-card-border-radius) / 2);
+  box-shadow: 0px 6px 30px 0px rgba(var(--color-text), 0.1);
+}
+
+.text-with-image__product-label {
+  padding: 10px 8px;
+}
+
+.text-with-image__product-label-name {
+  width: 210px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.text-with-image__product-image {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+}
+
+.text-with-image__product-image img {
+  width: 100%;
+  height: 100%;
+}
+
+.text-with-image__image-wrapper {
+  width: 100%;
+}
+
+@media (max-width: 959px) {
+  .text-with-image__image-line {
+    left: 16px;
+    bottom: 16px;
+  }
+
+  .text-with-image__image__container1 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .text-with-image__image__container1 .text-with-image__label1 {
+    justify-content: flex-start;
+    margin-left: 0;
+    margin-bottom: 20px;
+    margin-top: 0;
+  }
+
+  .text-with-image__image__container1 .text-with-image__image {
+    width: 100%;
+    line-height: 0;
+  }
+
+  .text-with-image__product-container {
+    width: auto;
+    left: 16px;
+    bottom: 16px;
+  }
+
+  .text-with-image__product-container2 {
+    width: auto;
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .text-with-image__image__container2 {
+    flex-direction: column;
+    margin-top: 20px;
+    gap: 0;
+  }
+
+  .text-with-image__image__container2 .text-with-image__image2 {
+    margin-top: 0;
+    line-height: 0;
+  }
+
+  .text-with-image__image__container2 .text-with-image__label2 {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 20px;
+    margin-right: 0;
+    order: 3;
+  }
+
+  .text-with-image__image__container2 .text-with-image__image2 {
+    width: 100%;
+  }
+  .text-with-image__image__container1
+    .text-with-image__label1.layout-left-wrapper {
+    order: 1;
+  }
+  .text-with-image__image__container1
+    .text-with-image__label1.layout-right-wrapper {
+    order: 2;
+    margin-bottom: 0;
+    margin-top: 20px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

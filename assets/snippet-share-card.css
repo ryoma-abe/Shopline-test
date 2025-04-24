@@ -1,0 +1,110 @@
+.third-party-share {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: var(--flex-items-align, center);
+}
+
+.third-party-share > a {
+  margin-right: 10px;
+}
+
+.third-party-share > a:last-child {
+  margin-right: 0;
+}
+
+.third-party-share .third-party-item {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+}
+
+.third-party-share .third-party-item .third-party-name {
+  margin-left: 2px;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.third-party-share .third-party-item .third-party-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.third-party-share .third-party-item svg {
+  color: var(--color-text);
+}
+
+.third-party-share .third-party-more {
+  position: relative;
+}
+
+.third-party-share
+  .third-party-more.third-party-more-active
+  .third-party-arrow {
+  transform: rotate(-180deg);
+}
+
+.third-party-share
+  .third-party-more.third-party-more-active
+  .third-party-more-list {
+  max-height: 200px;
+  transition: max-height 0.2s ease-in;
+}
+
+.third-party-share .third-party-more-list {
+  position: absolute;
+  right: 0;
+  top: 30px;
+  z-index: 10;
+  overflow: hidden;
+  max-height: 0;
+  padding: 0 12px;
+  background: rgb(var(--color-page-background));
+  box-shadow: 0 2px 40px rgba(var(--color-text), 0.1);
+  transition: max-height 0.2s ease-out;
+}
+
+.third-party-share .third-party-more-list > a {
+  margin-bottom: 12px;
+}
+
+.third-party-share .third-party-more-list > a:first-child {
+  margin-top: 12px;
+  margin-bottom: 15px;
+}
+
+.third-party-share .third-party-arrow {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(var(--color-text), 0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s linear;
+}
+
+.third-party-share .third-party-arrow.third-party-arrow-large {
+  width: 32px;
+  height: 32px;
+}
+
+.third-party-share .third-party-arrow.third-party-arrow-small {
+  width: 24px;
+  height: 24px;
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

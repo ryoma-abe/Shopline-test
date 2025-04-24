@@ -1,0 +1,145 @@
+.collection-pref-card {
+  position: relative;
+  background-color: rgb(var(--color-image-background));
+  padding-bottom: 50%;
+  height: 0;
+}
+
+.collection-pref-card__inner,
+.collection-pref-card__background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.collection-pref-card__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+}
+
+@media (max-width: 959px) {
+  .collection-pref-card__inner {
+    padding: 20px;
+  }
+}
+
+.collection-pref-card__background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.collection-pref-card__product-img {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  max-width: 50%;
+  margin-left: 10px;
+}
+
+.collection-pref-card__product-img img,
+.collection-pref-card__product-img svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.collection-pref-card__product-img svg {
+  background-color: rgb(var(--color-image-background));
+}
+
+.collection-pref-card__name {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+}
+
+.collection-pref-card__name > *:not(:last-child) {
+  margin-bottom: 12px;
+}
+
+.collection-pref-card__name.left-top {
+  align-self: flex-start;
+  text-align: left;
+}
+
+.collection-pref-card__name.center-top {
+  align-self: flex-start;
+}
+
+.collection-pref-card__name.right-top {
+  align-self: flex-start;
+  text-align: right;
+}
+
+.collection-pref-card__name.left-center {
+  align-self: center;
+  text-align: left;
+}
+
+.collection-pref-card__name.center-center {
+  align-self: center;
+}
+
+.collection-pref-card__name.right-center {
+  align-self: center;
+  text-align: right;
+}
+
+.collection-pref-card__name.left-bottom {
+  align-self: flex-end;
+  text-align: left;
+}
+
+.collection-pref-card__name.center-bottom {
+  align-self: flex-end;
+}
+
+.collection-pref-card__name.right-bottom {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.collection-pref-card__name.with-image {
+  text-align: center;
+}
+
+@media (max-width: 959px) {
+  .collection-pref-card {
+    height: 100px;
+    padding-bottom: 0;
+  }
+  .collection-pref-card__name.mb-left {
+    text-align: left;
+    align-self: center;
+  }
+  .collection-pref-card__name.mb-center {
+    align-self: center;
+    text-align: center;
+  }
+  .collection-pref-card__name.mb-right {
+    align-self: center;
+    text-align: right;
+  }
+  .collection-pref-card__name.with-image {
+    text-align: center;
+  }
+  .collection-pref-card__product-img img,
+  .collection-pref-card__product-img svg {
+    object-fit: contain;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

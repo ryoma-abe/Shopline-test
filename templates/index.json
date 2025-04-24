@@ -1,0 +1,366 @@
+{
+  "sections" : {
+    "featured-slideshow" : {
+      "disabled" : false,
+      "type" : "featured-slideshow",
+      "settings" : {
+        "show_arrows" : true,
+        "switch" : true,
+        "autoplay" : true,
+        "autoplay_speed" : 7,
+        "content_height" : 100
+      },
+      "blocks" : {
+        "block-1" : {
+          "type" : "image",
+          "icon" : "image",
+          "settings" : {
+            "image_text_layout" : "100%",
+            "image_layout_style" : "revert",
+            "show_content_line" : true,
+            "overlay_opacity" : 50,
+            "text_font_color" : "#FFFFFF",
+            "text_background_color" : "#2C2924",
+            "content_vertical_layout" : "flex-end",
+            "content_horizontal_layout" : "start",
+            "title" : "Apparel & Accessories",
+            "title_font" : "Oregano:400",
+            "title_font_size" : "title4",
+            "content" : "Discover iconics style for the seasons, now on sale",
+            "button_text" : "Shop this",
+            "button_style" : "button--secondary",
+            "text_content_horizontal_layout" : "center",
+            "text_title" : "THighlight an\nimage banner",
+            "text_title_font_size" : "title3",
+            "text_enabled_custom_font" : true,
+            "text_content" : "",
+            "text_button_text" : "Shop this",
+            "text_button_style" : "button--link",
+            "image" : "shopline://shop_images/6effe17f-4f69-4818-86cb-2edce586583f.png"
+          }
+        }
+      },
+      "block_order" : [ "block-1" ]
+    },
+    "icon-list" : {
+      "disabled" : false,
+      "type" : "icon-list",
+      "settings" : {
+        "title" : "",
+        "slide" : true,
+        "color_scheme" : "none",
+        "padding_top" : 60,
+        "padding_bottom" : 60
+      },
+      "blocks" : {
+        "block-1" : {
+          "type" : "item",
+          "icon" : "image",
+          "settings" : {
+            "image" : { },
+            "jump_link" : ""
+          }
+        },
+        "block-2" : {
+          "type" : "item",
+          "icon" : "image",
+          "settings" : {
+            "image" : { },
+            "jump_link" : ""
+          }
+        },
+        "block-3" : {
+          "type" : "item",
+          "icon" : "image",
+          "settings" : {
+            "image" : { },
+            "jump_link" : ""
+          }
+        },
+        "block-4" : {
+          "type" : "item",
+          "icon" : "image",
+          "settings" : {
+            "image" : { },
+            "jump_link" : ""
+          }
+        },
+        "block-5" : {
+          "type" : "item",
+          "icon" : "image",
+          "settings" : {
+            "image" : { },
+            "jump_link" : ""
+          }
+        },
+        "block-6" : {
+          "type" : "item",
+          "icon" : "image",
+          "settings" : {
+            "image" : { },
+            "jump_link" : ""
+          }
+        }
+      },
+      "block_order" : [ "block-1", "block-2", "block-3", "block-4", "block-5", "block-6" ]
+    },
+    "collection-list" : {
+      "disabled" : false,
+      "type" : "collection-list",
+      "settings" : {
+        "title" : "Shop the collection",
+        "collection_title_position" : "left-center",
+        "button_text" : "View all",
+        "color_scheme" : "none",
+        "show_collection_cover" : true,
+        "cover_image_size" : "w_1_h_2",
+        "cover_image_title_position" : "center",
+        "cover_image_title" : "Collection",
+        "cover_image_title_color" : "#000000",
+        "desktop_grid_cols" : 3,
+        "padding_top" : 80,
+        "padding_bottom" : 80,
+        "cover_image" : "shopline://shop_images/6a0edf0f-4b29-474d-8d84-817b99a3510d.png"
+      },
+      "blocks" : {
+        "block-1" : {
+          "type" : "collection",
+          "settings" : {
+            "image_display_area" : "left",
+            "button_text" : "SHOP NOW",
+            "category" : "12267142355304251564644030"
+          }
+        },
+        "block-2" : {
+          "type" : "collection",
+          "settings" : {
+            "image_display_area" : "left",
+            "button_text" : "SHOP NOW",
+            "category" : "12267142355327571894944030"
+          }
+        },
+        "block-3" : {
+          "type" : "collection",
+          "settings" : {
+            "image_display_area" : "left",
+            "button_text" : "SHOP NOW",
+            "category" : "12267142355352402174684030"
+          }
+        },
+        "block-4" : {
+          "type" : "collection",
+          "settings" : {
+            "button_text" : "SHOP NOW",
+            "image_display_area" : "left",
+            "category" : "12267142355366830464584030"
+          }
+        }
+      },
+      "block_order" : [ "block-1", "block-2", "block-3", "block-4" ]
+    },
+    "featured-collection" : {
+      "type" : "featured-collection",
+      "settings" : {
+        "title" : "New Arrivals",
+        "heading_size" : "title3",
+        "collection" : null,
+        "products_to_show" : 12,
+        "columns_desktop" : 4,
+        "full_width" : false,
+        "columns_mobile" : 2,
+        "enable_desktop_slider" : true,
+        "enable_mobile_slider" : true,
+        "button_text" : "View all",
+        "product_image_ratio" : "150",
+        "image_fill_type" : "cover",
+        "show_secondary_image" : true,
+        "padding_top" : 80,
+        "padding_bottom" : 80
+      },
+      "blocks" : {
+        "block-1" : {
+          "type" : "collection",
+          "settings" : {
+            "collection" : "12267142355304251564644030"
+          }
+        },
+        "block-2" : {
+          "type" : "collection",
+          "settings" : {
+            "collection" : "12267142355327571894944030"
+          }
+        },
+        "block-3" : {
+          "type" : "collection",
+          "settings" : {
+            "collection" : "12267142355352402174684030"
+          }
+        }
+      },
+      "block_order" : [ "block-1", "block-2", "block-3" ],
+      "disabled" : false
+    },
+    "picture-promotion" : {
+      "disabled" : false,
+      "type" : "picture-promotion",
+      "settings" : {
+        "is_fullscreen" : true,
+        "padding_top" : 60,
+        "padding_bottom" : 60,
+        "title_font_family" : "Poppins:600",
+        "pc_title_font_size" : 70,
+        "m_title_font_size" : 30,
+        "subtitle_font_family" : "Poppins:600",
+        "pc_subtitle_font_size" : 110,
+        "m_subtitle_font_size" : 50,
+        "font_color" : "#FFFFFF",
+        "font_border_color" : "#000000"
+      },
+      "blocks" : {
+        "block-1" : {
+          "type" : "image",
+          "settings" : {
+            "image" : "shopline://shop_images/42bf52c1-c2e3-4bba-8742-259064a594a3.png",
+            "link" : "",
+            "title" : "BUY 3 get",
+            "subtitle" : "50% OFF",
+            "enabled_font_border" : true
+          }
+        },
+        "block-2" : {
+          "type" : "image",
+          "settings" : {
+            "image" : "shopline://shop_images/32048bd7-78ed-4837-9316-424e3f2bb91c.png",
+            "link" : "",
+            "title" : "BUY 3 get",
+            "subtitle" : "50% OFF",
+            "enabled_font_border" : true
+          }
+        }
+      },
+      "block_order" : [ "block-1", "block-2" ]
+    },
+    "featured-collection-2" : {
+      "type" : "featured-collection",
+      "settings" : {
+        "title" : "Featured collection",
+        "heading_size" : "title3",
+        "collection" : null,
+        "products_to_show" : 12,
+        "columns_desktop" : 4,
+        "full_width" : false,
+        "columns_mobile" : 2,
+        "enable_desktop_slider" : true,
+        "enable_mobile_slider" : true,
+        "button_text" : "View all",
+        "product_image_ratio" : "150",
+        "image_fill_type" : "cover",
+        "show_secondary_image" : true,
+        "padding_top" : 80,
+        "padding_bottom" : 80,
+        "tab_background_color" : "#000000",
+        "tab_text_color" : "#CDF24D"
+      },
+      "blocks" : {
+        "block-2" : {
+          "type" : "collection",
+          "settings" : {
+            "collection" : "12267142355366830464584030"
+          }
+        }
+      },
+      "block_order" : [ "block-2" ],
+      "disabled" : false
+    },
+    "blog" : {
+      "disabled" : false,
+      "type" : "blog",
+      "settings" : {
+        "title" : "Blogs",
+        "blog_collection" : "6725c1f511c87d0be8d277b3",
+        "mobile_pagination_style" : "simple",
+        "enable_mobile_slide" : false,
+        "limit" : 4,
+        "pc_cols" : 4,
+        "title_font_size" : "title3",
+        "is_show_date" : true,
+        "is_show_author" : true,
+        "is_show_cover" : true,
+        "is_show_desc" : true,
+        "btn_text" : "View all",
+        "color_scheme" : "none",
+        "cover_img_ratio" : "0.75",
+        "padding_top" : 80,
+        "padding_bottom" : 80
+      },
+      "blocks" : { },
+      "block_order" : [ ]
+    },
+    "sign-up-and-save" : {
+      "type" : "sign-up-and-save",
+      "settings" : {
+        "full_screen_width" : true,
+        "color_scheme" : "none",
+        "padding_top" : 80,
+        "padding_bottom" : 80
+      },
+      "disabled" : false,
+      "blocks" : {
+        "block-1" : {
+          "type" : "title",
+          "settings" : {
+            "title" : "Sign up and save",
+            "fontSize" : "title3"
+          }
+        },
+        "block-2" : {
+          "type" : "desc",
+          "settings" : {
+            "description" : "Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals."
+          }
+        },
+        "block-3" : {
+          "type" : "button",
+          "settings" : {
+            "button_text" : "Subscribe",
+            "placeholder" : "Enter your email"
+          }
+        }
+      },
+      "block_order" : [ "block-1", "block-2", "block-3" ]
+    },
+    "text-with-image" : {
+      "type" : "text-with-image",
+      "disabled" : false,
+      "settings" : {
+        "title" : "Apparel & Accessories",
+        "title_font_size" : "title3",
+        "content" : "Explore our trendy collection of clothing and accessories for men, women, and children.",
+        "button_text" : "Optional button",
+        "show_image_line" : true,
+        "image_height" : "lg",
+        "layout" : "title_left",
+        "padding_top" : 60,
+        "padding_bottom" : 60,
+        "image_1" : "shopline://shop_images/d65b6f8a-b03c-4556-9e22-6cb520322ca2.png",
+        "image_2" : "shopline://shop_images/a82720b4-2f4f-471b-9469-6f78cf4ec6b6.png"
+      }
+    },
+    "video" : {
+      "type" : "video",
+      "disabled" : false,
+      "settings" : {
+        "title" : "",
+        "title_size" : "title3",
+        "cover" : "shopline://shop_images/f19f0cf2-c24a-4cdc-9313-47db81751d4e.png",
+        "internal_video" : "",
+        "external_video" : "",
+        "full_width" : true,
+        "color_scheme" : "none",
+        "padding_top" : 0,
+        "padding_bottom" : 0
+      }
+    }
+  },
+  "order" : [ "featured-slideshow", "collection-list", "featured-collection", "text-with-image", "video", "featured-collection-2", "picture-promotion", "blog", "sign-up-and-save" ]
+}

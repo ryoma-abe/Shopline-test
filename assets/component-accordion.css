@@ -1,0 +1,147 @@
+accordion-component summary + * {
+  overflow: hidden;
+}
+
+.accordion summary {
+  display: flex;
+  position: relative;
+  line-height: 1;
+  padding: 15px 0;
+}
+
+.accordion .summary__title {
+  display: flex;
+  flex: 1;
+}
+
+.accordion .summary__title + .icon-arrow {
+  height: 6px;
+}
+
+.accordion + .accordion {
+  margin-top: 0;
+  border-top: none;
+}
+
+.accordion {
+  display: block;
+  margin-top: 26px;
+  margin-bottom: 0;
+  border-top: 1px solid rgba(var(--color-text), 0.08);
+  border-bottom: 1px solid rgba(var(--color-text), 0.08);
+}
+
+@media (max-width: 959px) {
+  .accordion {
+    margin-top: 20px;
+  }
+}
+
+.accordion__title {
+  display: inline-block;
+  max-width: calc(100% - 60px);
+  min-height: 16px;
+  margin: 0;
+  word-break: break-word;
+}
+
+.accordion .icon-accordion {
+  align-self: center;
+  fill: rgb(var(--color-text));
+  height: 20px;
+  margin-right: 10px;
+  width: 20px;
+}
+
+.accordion details[open] > summary .icon-arrow {
+  transform: rotate(180deg);
+}
+
+.accordion__content {
+  margin-bottom: 15px;
+  word-break: break-word;
+  overflow-x: auto;
+  padding: 0 6px;
+}
+
+.accordion__content img {
+  max-width: 100%;
+}
+
+summary {
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+}
+
+summary .icon-arrow {
+  position: absolute;
+  right: 10px;
+}
+
+summary .icon-fold {
+  position: absolute;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  border: 1px solid rgba(var(--color-text), 0.1);
+  border-radius: 50%;
+}
+
+summary .icon-fold svg {
+  width: 20px;
+  height: 9px;
+}
+
+@media screen and (min-width: 960px) {
+  summary .icon-fold {
+    width: 34px;
+    height: 34px;
+  }
+  summary .icon-fold svg {
+    width: 34px;
+    height: 12px;
+  }
+}
+
+.accordion details[open] > summary .open {
+  display: flex;
+  align-items: center;
+}
+
+.accordion details[open] > summary .close {
+  display: none;
+}
+
+.accordion details > summary .open {
+  display: none;
+}
+
+.accordion details > summary .close {
+  display: flex;
+  align-items: center;
+}
+
+.accordion summary {
+  align-items: center;
+}
+
+.accordion summary .custom-icon-accordion,
+.accordion summary .icon-accordion {
+  width: var(--icon-width);
+  height: var(--icon-width);
+  align-self: center;
+  margin-right: 10px;
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

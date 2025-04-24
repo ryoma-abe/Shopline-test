@@ -1,0 +1,34 @@
+.dividing-line-container {
+  display: flex;
+  align-items: center;
+  padding-top: var(--pc-padding-top);
+  padding-bottom: var(--pc-padding-bottom);
+  background-color: var(--background-color);
+}
+.dividing-line-container .line {
+  flex-grow: 1;
+  height: 1px;
+  background-color: var(--line-color);
+}
+.dividing-line-container .dividing-line-text {
+  padding: 0 40px;
+  color: var(--title-color);
+  font-family: var(--title-font-family);
+  font-style: var(--title-font-style);
+  font-size: var(--title-font-size);
+}
+
+@media (max-width: 959px) {
+  .dividing-line-container {
+    padding-top: var(--m-padding-top);
+    padding-bottom: var(--m-padding-bottom);
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

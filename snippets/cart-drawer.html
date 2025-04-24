@@ -1,0 +1,54 @@
+{{assign "scene" "cart-drawer"}}
+
+<cart-drawer id="cart-drawer" class="cart-drawer">
+  <div id="CartDrawer" class="cart-drawer-container visible">
+    <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
+    <div class="cart-drawer__body">
+      <div class="cart-drawer__inner">
+        <div class="cart-drawer__inner-wrapper {{#if cart.empty}}cart-empty{{/if}}">
+          <div class="cart-drawer__header">
+            <h2 class="cart-drawer__heading title5 text-uppercase">{{t "general.header.cart"}}</h2>
+            <div class="cart-drawer__close" onclick="this.closest('cart-drawer').close()">
+              {{snippet "icon-close"}}
+            </div>
+          </div>
+          <div class="cart__warnings">
+            <div class="cart__empty-text-wrapper">
+              <h2 class="cart__empty-text body3">{{t "cart.item.empty_cart"}}</h2>
+              <a href="{{#if settings.cart_continue_url}}{{settings.cart_continue_url}}{{else}}{{routes.all_products_collection_url}}{{/if}}" class="button body3 fw-bold">
+                {{t "cart.checkout_proceeding.continue_shopping"}}
+              </a>
+            </div>
+            {{snippet "cart-empty-recommend-product" grid_class="grid grid-cols-2" title_class="title5"}}
+          </div>
+          <cart-drawer-items>
+            <div class="cart-drawer__items" id="CartDrawer-CartItems">
+              {{#for cart.items as |item|}}
+                {{snippet "cart-item" item=item namespace="CartDrawer-" type="drawer"}}
+              {{/for}}
+            </div>
+            <div id="CartDrawer-CartErrors"></div>
+          </cart-drawer-items>
+          <div class="cart-drawer__checkout-container">
+            {{#if cart.discount_enable_cart}}
+              {{snippet "cart-coupon" cart=cart}}
+            {{/if}}
+
+            <ul class="cart-drawer__amount-wrapper">
+              {{#if cart.items_subtotal_price != cart.total_price}}
+                <li class="cart__subtotal">
+                  <em class="body3">{{t "cart.checkout_proceeding.subtotal"}}</em>
+                  <span class="body2 fw-bold">{{money_with_currency cart.items_subtotal_price}}</span>
+                </li>
+              {{/if}}
+              {{#if cart.total_discount > 0}}
+                {{snippet "cart-level-discount-applications" cart=cart}}
+              {{/if}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{snippet "cart-fixed-checkout" scene=scene cart=cart shop=shop className="cart-drawer__fixed-checkout"}}
+    </div>
+  </div>
+</cart-drawer>

@@ -1,0 +1,64 @@
+{{layout "gift_card"}}
+
+{{snippet "stylesheet" href=(asset_url "template-giftcard.css")}}
+
+{{assign "invalid" (if (isFalsey gift_card.enabled) or (isTruthy gift_card.expired))}}
+
+{{#if gift_card.code}}
+  <div id="giftCardPage">
+    <div class="store-name">{{shop.name}}</div>
+    {{#if invalid}}
+      <div class="gift-card-status">{{t "products.giftcard.invalid_tip"}}</div>
+    {{else}}
+      <div class="gift-card-status">{{t "products.giftcard.receive_tip"}}</div>
+    {{/if}}
+    <div class="gift-card-wrapper {{#if invalid}}disabled{{/if}}">
+      <div class="gift-card-box">
+        <div class="gift-card-bg">
+          <div class="gift-card-code notranslate">{{gift_card.code}}</div>
+        </div>
+      </div>
+      <div class="gift-card-info">
+        <div class="balance item">
+          <div class="name">{{t "products.giftcard.balance"}}</div>
+          <div class="content notranslate">{{money_with_currency gift_card.balance}}</div>
+        </div>
+        <div class="expiration-time item">
+          <div class="name">{{t "products.giftcard.expired_date"}}</div>
+          {{#if gift_card.expires_on}}
+            <div class="content">
+              <div class="date-ymd">
+                {{#if gift_card.expired}}
+                  {{snippet "icon-giftcard-warning"}}
+                  <em>{{t "products.giftcard.receive_at"}}</em>
+                {{/if}}
+                <span>
+                  {{date gift_card.expires_on "%Y-%m-%d"}}
+                </span>
+              </div>
+              <div class="date-hms">
+                {{date gift_card.expires_on "%H:%M"}}
+              </div>
+            </div>
+          {{else}}
+            <div class="content">{{t "products.giftcard.permanent"}}</div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="gift-card-use-box">
+      <a href="{{routes.root_url}}" target="_blank" rel="noopener" class="btn-use">
+        {{#if invalid}}
+          {{t "products.giftcard.buy_giftcard"}}
+        {{else}}
+          {{t "products.giftcard.use_giftcard"}}
+        {{/if}}
+      </a>
+      {{#if (isFalsey invalid)}}
+        <div class="use-explain">{{t "products.giftcard.use_giftcard_tip"}}</div>
+      {{/if}}
+    </div>
+  </div>
+{{else}}
+  <div class="noGiftCardData"></div>
+{{/if}}

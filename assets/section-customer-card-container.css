@@ -1,0 +1,144 @@
+.card-container {
+  border: 1px solid rgb(var(--color-entry-line));
+  padding: 0 40px 24px;
+  word-break: break-word;
+}
+@media (max-width: 959px) {
+  .card-container {
+    padding: 10px 10px 20px 10px;
+  }
+}
+.card-container .card__title {
+  padding: 24px 0;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(var(--color-entry-line));
+}
+.card-container .card__title p {
+  margin: 0;
+}
+.card-container .card__title .edit-entry {
+  line-height: 1;
+  cursor: pointer;
+}
+.card-container .card__title .edit-entry svg {
+  width: 24px;
+  height: 24px;
+}
+@media (max-width: 959px) {
+  .card-container .card__title {
+    padding: 10px 0px;
+    margin-bottom: 20px;
+  }
+}
+
+.info-item:first-child {
+  margin-top: 0px;
+}
+
+.info-item {
+  margin-top: 16px;
+}
+
+.info-item .info-label {
+  color: rgb(var(--color-light-text));
+  margin-bottom: 4px;
+}
+
+.info-item .info-value {
+  display: flex;
+  align-items: center;
+}
+
+.info-item .info-value .info-value__edit {
+  margin-left: 16px;
+  display: none;
+  align-items: center;
+  color: rgb(var(--color-button-background));
+  cursor: pointer;
+}
+
+.info-item .info-value .info-value__edit svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+.info-item .info-value .bind-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.info-item .info-value .bind-info span {
+  margin-left: 4px;
+}
+
+.info-item.third .bind-info {
+  cursor: default;
+}
+
+.info-item.third .bind-info svg {
+  width: 20px;
+  height: 20px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-row:first-child {
+  padding-top: 0;
+}
+
+.info-row:last-child {
+  padding-bottom: 0;
+}
+
+.info-row + .info-row {
+  border-top: 1px solid rgb(var(--color-entry-line));
+}
+
+.subscribe-wrapper {
+  padding: 16px 0;
+}
+
+.subscribe-wrapper:first-child {
+  padding-top: 0;
+}
+
+.subscribe-wrapper:last-child {
+  padding-bottom: 0;
+}
+
+.subscribe-wrapper + .subscribe-wrapper {
+  border-top: 1px solid rgb(var(--color-entry-line));
+}
+
+.subscribe-form__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subscribe-form__wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+}
+
+.subscribe-form__error {
+  color: rgb(var(--color-discount));
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

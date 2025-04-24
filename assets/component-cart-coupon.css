@@ -1,0 +1,45 @@
+.cart__coupon-wrapper .coupon__input {
+  margin-bottom: 0px;
+}
+.cart__coupon-wrapper .coupon__button {
+  flex-shrink: 0;
+  margin-left: 6px;
+}
+.cart__coupon-wrapper .coupon-error-message {
+  margin: 8px 0 0 0;
+}
+.cart__coupon-wrapper .cart__coupon-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.cart__coupon-wrapper .cart__coupon-list .coupon__list-item {
+  background-color: rgba(var(--color-text), 0.1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding: 5px 8px;
+  margin-right: 6px;
+  margin-top: 8px;
+}
+.cart__coupon-wrapper .cart__coupon-list .coupon__list-item .icon-discount-tag {
+  margin-right: 6px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.3;
+}
+.cart__coupon-wrapper .cart__coupon-list .coupon__list-item .coupon__close {
+  display: flex;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

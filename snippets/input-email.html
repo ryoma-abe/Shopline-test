@@ -1,0 +1,17 @@
+<input
+  type="email"
+  title='{{ternary (if input_title) input_title t "general.general.email_tip"}}'
+  pattern="^[a-zA-Z0-9+._\-]{1,50}@[a-zA-Z0-9_\-]+\.([\.]?[a-zA-Z0-9_\-]+){1,5}$"
+  class="{{input_class}}"
+  id="{{input_id}}"
+  name="{{input_name}}"
+  placeholder="{{input_placeholder}}"
+  
+  {{#if input_spellcheck}}spellcheck="{{input_spellcheck}}"{{/if}}
+  {{#if input_autocomplete}}autocomplete="{{input_autocomplete}}"{{/if}}
+  {{#if input_autocapitalize}}autocapitalize="{{input_autocapitalize}}"{{/if}}
+  {{#if input_autocorrect}}autocorrect="{{input_autocorrect}}"{{/if}}
+  {{#if input_required}}required{{/if}}
+  {{#if input_disabled}}disabled{{/if}}
+  {{#if input_value}}value="{{input_value}}"{{/if}}  
+/>

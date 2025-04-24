@@ -1,0 +1,228 @@
+.article-template {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.article-template > *:first-child {
+  padding-top: 0;
+}
+.article-template .media {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.article-template .media > * {
+  display: block;
+  max-width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+.article-template .media > img {
+  object-fit: cover;
+  object-position: center center;
+  transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.article-template__hero-container {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.article-template__hero-container + .article-template__content {
+  padding-top: 0;
+}
+.article-template__hero-small {
+  height: 110px;
+}
+.article-template__hero-medium {
+  height: 220px;
+}
+.article-template__hero-large {
+  height: 330px;
+}
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .article-template__hero-small {
+    height: 220px;
+  }
+
+  .article-template__hero-medium {
+    height: 440px;
+  }
+
+  .article-template__hero-large {
+    height: 660px;
+  }
+}
+@media screen and (min-width: 990px) {
+  .article-template__hero-small {
+    height: 275px;
+  }
+
+  .article-template__hero-medium {
+    height: 550px;
+  }
+
+  .article-template__hero-large {
+    height: 825px;
+  }
+}
+.article-template .caption-with-letter-spacing {
+  opacity: 0.6;
+  font-weight: 400;
+}
+.article-template header {
+  padding-top: 40px;
+  padding-bottom: 20px;
+}
+.article-template__title {
+  padding-bottom: 20px;
+}
+.article-template__link {
+  display: flex;
+  text-decoration: none;
+  align-items: center;
+}
+.article-template__link .icon-wrap {
+  display: flex;
+  margin-right: 10px;
+  transform: rotate(90deg);
+  position: relative;
+  transform-origin: center;
+  width: 10px;
+  height: 10px;
+}
+.article-template__content {
+  position: relative;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.article-template__divide {
+  width: 100%;
+}
+.article-template__divide:before {
+  content: "";
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: rgba(var(--color-entry-line));
+}
+.article-template__social-sharing {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.article-template__comment-title {
+  text-transform: uppercase;
+  padding-bottom: 40px;
+}
+.article-template__comments-comment {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px;
+  width: 100%;
+  min-height: 145px;
+  background: var(rgba(--color-page-background));
+  border: 1px solid rgb(var(--color-entry-line));
+  border-radius: var(--card-border-radius);
+  margin-bottom: 20px;
+}
+.article-template__comments-comment .caption-with-letter-spacing {
+  opacity: 1;
+}
+.article-template__comments-comment .right {
+  text-align: right;
+  padding-top: 30px;
+}
+.article-template__comments-comment:last-of-type {
+  padding-bottom: 0;
+}
+.article-template__comment-warning {
+  margin-top: 20px;
+}
+.article-template__comment-submit {
+  text-align: center;
+  padding-top: 40px;
+}
+.article-template__back {
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+.article-template .circle-divider::after {
+  content: "\2022";
+  margin: 0 13px 0 15px;
+}
+.article-template .circle-divider:last-of-type::after {
+  display: none;
+}
+.article-template .comment_title {
+  text-transform: uppercase;
+  padding-bottom: 40px;
+}
+.article-template .field__info {
+  padding-bottom: 40px;
+}
+.article-template__comments-fields > .field:last-child {
+  margin-bottom: 0;
+}
+@media (min-width: 960px) {
+  .article-template .article-template__comment-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 20px;
+  }
+}
+@media (max-width: 959px) {
+  .article-template {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .article-template__hero-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .article-template header {
+    padding-top: 20px;
+  }
+  .article-template__content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .article-template__social-sharing {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .article-template__back {
+    padding-top: 20px;
+    padding-bottom: 40px;
+  }
+
+  .article-template__comment-wrapper {
+    padding-bottom: 40px;
+  }
+  .article-template__comments-comment {
+    padding: 20px;
+    min-height: 100px;
+  }
+  .article-template .comment_title {
+    padding-bottom: 20px;
+  }
+  .article-template__comments {
+    padding-bottom: 40px;
+  }
+  .article-template__comment-title {
+    padding-bottom: 20px;
+  }
+  .article-template__comment-warning {
+    margin-top: 10px;
+  }
+  .article-template .field__info {
+    padding-bottom: 20px;
+  }
+  .article-template__comment-submit {
+    padding-top: 30px;
+  }
+}
+/* The ipad end responds to the mobile end in vertical screen */
+/* @custom-media --tablet (max-width: 959px); */
+/* @custom-media --gt-mobile (min-width: 751px); */
+/* detectingScreen need to consider the configuration of the tablet */

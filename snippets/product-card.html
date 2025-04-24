@@ -1,0 +1,468 @@
+{{#comment}}
+  Renders a product card
+
+  Accepts:
+  - product_data: {Object} Product Item object (optional)
+  - show_secondary_image: {Boolean} Show the secondary image on hover. Default: false (optional)
+  - mobile_show_secondary_image: {Boolean} Show the secondary image on mobile hover. Default: false (optional)
+  - section_id: {String} The ID of the section that contains this card.
+  - image_ratio: {String} Size of the product image card. Default: 100
+  - image_fill_type {String} Product image filling method
+  - desktop_grid_cols: {Number}
+  - mobile_grid_cols: {Number}
+  - lazy_load: {Boolean} Image should be lazy loaded.
+  - theme_settings: {Object} theme settings
+  - position: {String} determines the position of the product image card
+  - image_shape: {'square'|'round'} Image shape. Default: square (optional)
+  - price_show_type: {'lowest_price'|'price_interval'|'from_lowest_price'} Price display method. Default: 'from_lowest_price' (optional)
+  - show_origin_price: {Boolean} Whether to render origin price. Default: true (optional)
+
+  Usage:
+  {{ snippet 'product-card' }}
+{{/comment}}
+
+
+
+
+
+
+
+{{assign "card_style" theme_settings.product_card_style}}
+{{assign "card_image_padding" theme_settings.product_card_image_padding}}
+{{assign "card_content_align" theme_settings.product_card_content_align}}
+{{assign "color_card_background" theme_settings.color_card_background}}
+{{assign "color_card_text" theme_settings.color_card_text}}
+{{#capture "card_background_color"}}
+  {{~#if color_card_background~}}
+    {{ theme_settings.color_card_background.red }}, {{ theme_settings.color_card_background.green }}, {{theme_settings.color_card_background.blue }}
+  {{~else~}}
+    {{ theme_settings.color_image_background.red }}, {{ theme_settings.color_image_background.green }}, {{theme_settings.color_image_background.blue }}
+  {{~/if~}}
+{{/capture}}
+{{#capture "card_text_color"}}
+  {{~#if color_card_text~}}
+    {{ theme_settings.color_card_text.red }}, {{ theme_settings.color_card_text.green }}, {{theme_settings.color_card_text.blue }}
+  {{~else~}}
+    {{ theme_settings.color_text.red }}, {{ theme_settings.color_text.green }}, {{theme_settings.color_text.blue }}
+  {{~/if~}}
+{{/capture}}
+
+{{assign "image_ratio" (default image_ratio 100)}}
+{{assign "color_regex" (toRegex (t "products.general.variant_property_color") flags="i")}}
+{{assign "has_color_sku_option" false}}
+{{assign "product_form_id" (append "quick-add-" section_id "__" product_data.id)}}
+
+{{#if image_ratio == "adapt" and product_data.featured_media}}
+  {{assign "image_ratio" (ternary product_data.featured_media.aspect_ratio (divide 100 product_data.featured_media.aspect_ratio) 100)
+  }}
+{{else if image_ratio == "adapt"}}
+  
+  {{assign "image_ratio" 100}}
+{{/if}}
+
+
+{{#unless product_data}}
+  {{assign "image_ratio" 100}}
+{{/unless}}
+
+{{assign "image_round" (if image_shape == "round")}}
+{{#if image_round}}
+  {{assign "image_ratio" "100"}}
+{{/if}}
+
+{{assign "jump_link" product_data.url}}
+
+{{assign "swatch_slider" false}}
+{{#if settings.enabled_color_swatch and settings.swatch_show_style == "horizontal_slide"}}
+    {{assign "swatch_slider" true}}
+{{/if}}
+
+{{assign "valid_quick_view" (if theme_settings.enable_quick_view and product_data and product_data.available)}}
+{{assign "quick_view_button_pc_style" theme_settings.quick_view_button_pc_style }}
+{{assign "quick_view_button_mobile_style" theme_settings.quick_view_button_mobile_style }}
+{{assign "quick_view_mobile_position" theme_settings.quick_view_mobile_position}}
+{{assign "is_multi_variant" (not product.has_only_default_variant)}}
+{{assign "price_show_type" (default price_show_type theme_settings.product_card_price_show_type)}}
+{{#if price_show_type == "follow_theme_setting"}}
+  {{assign "price_show_type" theme_settings.product_card_price_show_type}}
+{{/if}}
+
+<div
+  class="product-card-wrapper card card-wrapper product-card-style-{{card_style}}
+  {{#if card_style == 'card'}} global-product-card-border-shadow{{/if}}"
+  data-product-id="{{product_data.id}}"
+  data-product-form-id="{{product_form_id}}"
+  style="--card-image-padding: {{card_image_padding}}px;
+  --color-card-background: {{card_background_color}};
+  --color-card-text: {{card_text_color}};"
+>
+  <div class="card-main">
+    <a {{#if jump_link}}href="{{jump_link}}"{{else}}href="javascript:;"{{/if}} class="full-unstyled-link">
+      <span class="visually-hidden">
+        {{#if product_data}}
+          {{product_data.title}}
+        {{else}}
+          {{t "onboarding.product_title"}}
+        {{/if}}
+      </span>
+    </a>
+
+    <div
+      class="card__inner--wrapper {{#if card_style != 'card'}}global-product-card-border-shadow{{/if}} {{#if image_round}}card__visible{{/if}}"
+      style="{{#if image_round}}--product-card-border-radius:50%;{{/if}}"
+    >
+      <div
+        class="card__inner ratio {{#if image_round}}card__inner--round{{/if}}"
+        style="--ratio-percent: {{image_ratio}}%;
+        --image-fill-type: {{image_fill_type}};
+        --badge-border-radius: {{theme_settings.product_discount_radius}}px;
+        --image-object-position:{{position}};"
+      >
+        <a
+          href="{{#if jump_link}}{{jump_link}}{{else}}javascript:;{{/if}}"
+          class="card__media
+            {{#if show_secondary_image}}media--hover-effect{{/if}}
+            {{#if mobile_show_secondary_image}}mobile--media--hover-effect{{/if}}
+          "
+        >
+          {{#capture "object_fit_contain_style_1"}}{{#if image_fill_type == 'contain' and product_data.featured_media.aspect_ratio > 1}}height:auto;{{/if}}{{/capture}}
+          {{#capture "object_fit_contain_style_2"}}{{#if image_fill_type == 'contain' and product_data.media.[1].aspect_ratio > 1}}height:auto;{{/if}}{{/capture}}
+
+          {{#if product_data.featured_media}}
+            {{snippet
+              "image"
+              data=product_data.featured_media
+              lazy=lazy_load
+              pc_size=(append "1/" desktop_grid_cols)
+              mobile_size=(append "1/" mobile_grid_cols)
+              class="collection-hero__image"
+              style=object_fit_contain_style_1
+            }}
+            {{#if product_data.media.[1] and show_secondary_image or mobile_show_secondary_image}}
+              {{snippet
+                "image"
+                data=product_data.media.[1]
+                lazy=lazy_load
+                pc_size=(append "1/" desktop_grid_cols)
+                mobile_size=(append "1/" mobile_grid_cols)
+                class="collection-hero__image"
+                style=object_fit_contain_style_2
+              }}
+            {{/if}}
+          {{else}}
+            
+            <div class="placeholder">
+              {{placeholder_svg_tag "image"}}
+            </div>
+          {{/if}}
+        </a>
+        {{#if theme_settings.product_discount_size == "mini"}}
+          {{assign "tag_class" "body5 fw-bold"}}
+          {{assign "card_badge_class" "card__badge--mini"}}
+        {{else}}
+          {{assign "tag_class" "body4 fw-bold"}}
+        {{/if}}
+
+        {{assign "discount_price" (minus product_data.compare_at_price product_data.price)}}
+        {{assign
+          "discount_ratio"
+          (round (divide (divided_by (times discount_price 10000) product_data.compare_at_price) 100))
+        }}
+        <div
+          style="{{#if theme_settings.product_discount_style == "ratio" and discount_ratio <= 0}}display:none;{{/if}}"
+          class="card__badge
+            {{theme_settings.product_discount_position}}
+            {{card_badge_class}}
+            {{#unless product_data.available}}sold-out-message{{/unless}}"
+        >
+          {{~#unless product_data.available}}
+            <span class="{{tag_class}}">
+              {{t "transaction.item.sold_out"}}
+            </span>
+          {{/unless~}}
+          {{~#if
+            product_data.available and product_data.compare_at_price >
+            product_data.price and theme_settings.product_discount
+          }}
+            <span class="{{tag_class}}">
+              {{#case theme_settings.product_discount_tag_style}}
+                {{#when "sale"}}
+                  {{t "products.product_list.sale"}}
+                {{else}}
+
+                  {{#if theme_settings.product_discount_style == "number"}}
+                    {{{t "products.product_list.save_byjs" priceDom=(money_with_currency discount_price)}}}
+                  {{else}}
+                    {{t "products.product_list.save_ratio" price=discount_ratio}}
+                  {{/if}}
+                {{/when}}
+              {{/case}}
+            </span>
+          {{/if~}}
+        </div>
+
+        {{assign "enable_pc_hover_quick_view_icon" (if valid_quick_view and quick_view_button_pc_style == 'hover_button')}}
+        {{#if enable_pc_hover_quick_view_icon}}
+          <div class="card__center-actions">
+            {{assign "button_id" (append "quick-add-" section_id "__" product_data.id "-button-hover")}}
+            {{assign "classes" "quick-add-button--hover display-none-tablet"}}
+            {{snippet "quick-add-button" product_data=product_data id=button_id classes=classes button_style="button"}}
+          </div>
+        {{/if}}
+
+        {{assign "enable_pc_quick_view_icon" (if valid_quick_view and quick_view_button_pc_style == "icon")}}
+        {{assign "enable_mb_quick_view_icon" (if valid_quick_view and quick_view_button_mobile_style == "icon" and quick_view_mobile_position == "inside")}}
+        {{#if enable_pc_quick_view_icon or enable_mb_quick_view_icon}}
+          {{#capture "button_classes"}}
+            {{~#if enable_pc_quick_view_icon}}display-block-desktop {{/if~}}
+            {{~#if enable_mb_quick_view_icon}}display-block-tablet {{/if~}}
+          {{/capture}}
+          {{assign "button_id" (append "quick-add-" section_id "__" product_data.id "-submit")}}
+          {{snippet "quick-add-button" product_data=product_data id=button_id classes="display-none" button_classes=button_classes}}
+        {{/if}}
+      </div>
+    </div>
+    <div class="card__content" style="--swatch-gap: {{#if theme_settings.swatch_size == 18}}6px{{else}}8px{{/if}}">
+      {{#if theme_settings.enabled_color_swatch}}
+        {{assign "is_slide_swatch" (if theme_settings.swatch_show_style == "horizontal_slide")}}
+        {{#for product_data.options_with_values as |option_info|}}
+          {{#if (test option_info.name color_regex)}}
+            {{assign "has_color_sku_option" true}}
+            {{#if swatch_slider}}
+              <slider-component>
+            {{else}}
+              <div>
+            {{/if}}
+
+            {{#if is_slide_swatch}}
+              <button class="control__arrow-button" name="previous" disabled="disabled">
+                <div class="control__arrow-button-bg"></div>
+                {{snippet "icon-arrow"}}
+              </button>
+            {{/if}}
+
+            <ul {{#if is_slide_swatch}}id="Slider-swatch"{{/if}}
+              class="card__colors {{theme_settings.swatch_style}}
+              {{#if card_content_align == "center"}}card__colors--center{{/if}}
+              {{#if is_slide_swatch}}slider{{/if}}"
+              data-property-number="{{length product_data.options}}"
+            >
+              {{#for option_info.values as |option|}}
+                {{#if theme_settings.swatch_show_style == "show_one_row"}}
+                  {{#if forloop.index0 < theme_settings.swatch_max_show}}
+                    {{assign "current_option_first_sku"
+                      (itemAt (where product_data.variants (append "option" (plus option_info.position 1)) option) 0)
+                    }}
+                    <color-swatch
+                      class="color-swatch"
+                      title="{{option}}"
+                      style="--swatch-background-color:{{option}}"
+                      {{#if (length product_data.options) <= 2}}data-variant-id="{{current_option_first_sku.id}}"{{/if}}
+                    >
+                      {{#if current_option_first_sku.featured_media}}
+                        {{snippet
+                          "image"
+                          data=current_option_first_sku.featured_media
+                          lazy=true
+                          pc_size=(append "1/" desktop_grid_cols)
+                          mobile_size=(append "1/" mobile_grid_cols)
+                          class="display-none"
+                        }}
+                      {{else if product_data.featured_media}}
+                        {{snippet
+                          "image"
+                          data=product_data.featured_media
+                          lazy=true
+                          pc_size=(append "1/" desktop_grid_cols)
+                          mobile_size=(append "1/" mobile_grid_cols)
+                          class="display-none"
+                        }}
+                      {{/if}}
+                      <a
+                        class="color-swatch__inner"
+                        {{#if current_option_first_sku.url}}href="{{current_option_first_sku.url}}"{{else}}href="javascript:;"{{/if}}
+                      >
+                        <span class="visibility-hidden">{{option}}</span>
+                      </a>
+                    </color-swatch>
+                  {{/if}}
+                {{/if}}
+
+                {{#if theme_settings.swatch_show_style == "horizontal_slide"}}
+                  {{assign
+                    "current_option_first_sku"
+                    (itemAt (where product_data.variants (append "option" (plus option_info.position 1)) option) 0)
+                  }}
+
+                  <li id="Slide-swatch{{add forloop.index0 1}}" class="slider__slide">
+                    <color-swatch
+                      class="color-swatch"
+                      title="{{option}}"
+                      style="--swatch-background-color:{{option}}"
+                      {{#if (length product_data.options) <= 2}}data-variant-id="{{current_option_first_sku.id}}"{{/if}}
+                    >
+                      {{#if current_option_first_sku.featured_media}}
+                        {{snippet
+                          "image"
+                          data=current_option_first_sku.featured_media
+                          lazy=true
+                          pc_size=(append "1/" desktop_grid_cols)
+                          mobile_size=(append "1/" mobile_grid_cols)
+                          class="display-none"
+                        }}
+                      {{else if product_data.featured_media}}
+                        {{snippet
+                          "image"
+                          data=product_data.featured_media
+                          lazy=true
+                          pc_size=(append "1/" desktop_grid_cols)
+                          mobile_size=(append "1/" mobile_grid_cols)
+                          class="display-none"
+                        }}
+                      {{/if}}
+                      <a
+                        class="color-swatch__inner"
+                        {{#if
+                          current_option_first_sku.url
+                        }}href="{{current_option_first_sku.url}}"{{else}}href="javascript:;"{{/if}}
+                      ><span class="visibility-hidden">{{option}}</span></a>
+                    </color-swatch>
+                  </li>
+                {{/if}}
+
+                {{#if theme_settings.swatch_show_style == "tiling"}}
+                  {{assign
+                    "current_option_first_sku"
+                    (itemAt (where product_data.variants (append "option" (plus option_info.position 1)) option) 0)
+                  }}
+                  <color-swatch
+                    class="color-swatch"
+                    title="{{option}}"
+                    style="--swatch-background-color:{{option}}"
+                    {{#if (length product_data.options) <= 2}}data-variant-id="{{current_option_first_sku.id}}"{{/if}}
+                  >
+                    {{#if current_option_first_sku.featured_media}}
+                      {{snippet
+                        "image"
+                        data=current_option_first_sku.featured_media
+                        lazy=true
+                        pc_size=(append "1/" desktop_grid_cols)
+                        mobile_size=(append "1/" mobile_grid_cols)
+                        class="display-none"
+                      }}
+                    {{else if product_data.featured_media}}
+                      {{snippet
+                        "image"
+                        data=product_data.featured_media
+                        lazy=true
+                        pc_size=(append "1/" desktop_grid_cols)
+                        mobile_size=(append "1/" mobile_grid_cols)
+                        class="display-none"
+                      }}
+                    {{/if}}
+                    <a
+                      class="color-swatch__inner"
+                      {{#if
+                        current_option_first_sku.url
+                      }}href="{{current_option_first_sku.url}}"{{else}}href="javascript:;"{{/if}}
+                    ><span class="visibility-hidden">{{option}}</span></a>
+                  </color-swatch>
+                {{/if}}
+              {{/for}}
+
+              {{#if theme_settings.swatch_show_style == "show_one_row"}}
+                {{#gt (length option_info.values) theme_settings.swatch_max_show}}
+                  <a
+                    class="color-swatch__remain body3"
+                    {{#if product_data.url}}href="{{product_data.url}}"{{else}}href="javascript:;"{{/if}}
+                  >
+                    +{{minus (length option_info.values) theme_settings.swatch_max_show}}
+                  </a>
+                {{/gt}}
+              {{/if}}
+            </ul>
+
+            {{#if is_slide_swatch}}
+              <button class="control__arrow-button" name="next" disabled="disabled">
+                <div class="control__arrow-button-bg"></div>
+                {{snippet "icon-arrow"}}
+              </button>
+            {{/if}}
+
+            {{#if swatch_slider}}
+              </slider-component>
+            {{else}}
+              </div>
+            {{/if}}
+          {{/if}}
+        {{/for}}
+      {{/if}}
+
+      <h3 class="product__title body3 {{theme_settings.product_title_show_type}}
+        {{#unless theme_settings.product_mobile_title_show}}display-none-tablet{{/unless}}
+        {{#unless theme_settings.product_pc_title_show}}display-none-desktop{{/unless}}"
+      >
+        {{#if product_data}}
+          {{product_data.title}}
+        {{else}}
+          {{t "onboarding.product_title"}}
+        {{/if}}
+        {{#if has_color_sku_option and theme_settings.enabled_color_swatch}}
+          <span class="color-suffix"></span>
+        {{/if}}
+      </h3>
+
+      {{assign "enable_mb_bottom_quick_view_icon" (if valid_quick_view and quick_view_button_mobile_style == "icon" and quick_view_mobile_position == "below")}}
+
+      <div
+        class="card__content-bottom
+          {{#if (isFalsey enable_mb_bottom_quick_view_icon) and card_content_align == 'center'}}card__content-bottom-center{{/if}}
+          {{#if card_content_align == 'left'}}card__content-bottom-left{{/if}}"
+      >
+        {{snippet "price"
+          product=product_data
+          show_from=(if is_multi_variant and price_show_type == "from_lowest_price")
+          show_range=(if is_multi_variant and price_show_type == "price_interval")
+          show_origin=show_origin_price
+        }}
+        {{#if enable_mb_bottom_quick_view_icon}}
+          {{assign "button_id" (append "quick-add-" section_id "-mobile__" product_data.id "-submit")}}
+          {{assign "classes" "quick-add--tiled display-none-desktop"}}
+          {{snippet "quick-add-button" product_data=product_data id=button_id classes=classes}}
+        {{/if}}
+      </div>
+
+      <div class="card__button"></div>
+    </div>
+  </div>
+
+  {{assign "enable_pc_quick_view_button" (if theme_settings.enable_quick_view and product_data and quick_view_button_pc_style == "button")}}
+  {{assign "enable_mb_quick_view_button" (if theme_settings.enable_quick_view and product_data and quick_view_button_mobile_style == "button")}}
+
+  {{#if enable_pc_quick_view_button or enable_mb_quick_view_button}}
+    {{#capture "button_classes"}}
+      {{~#if enable_pc_quick_view_button}}display-block-desktop {{/if~}}
+      {{~#if enable_mb_quick_view_button}}display-block-tablet {{/if~}}
+    {{/capture}}
+    <div class="card__bottom-actions">
+      {{assign "button_id" (append "quick-add-" section_id "__" product_data.id "-button-bottom")}}
+      {{snippet "quick-add-button" product_data=product_data id=button_id classes="display-none" button_classes=button_classes button_style="button" disabled=(not product_data.available)}}
+    </div>
+  {{else}}
+    <div class="card__bottom-actions--empty-placeholder"></div>
+  {{/if}}
+  {{#if theme_settings.enable_quick_view}}
+    <quick-add-modal id="QuickAdd-{{product_data.id}}">
+      <details>
+        <summary class="display-none"></summary>
+        <div class="modal__overlay"></div>
+        <div class="modal__content quick-add-modal__content">
+          <button id="ModalClose-{{product_data.id}}" type="button" class="quick-add-modal__toggle" name="close">
+            {{snippet "icon-close"}}
+          </button>
+          <div id="QuickAddInfo-{{product_data.id}}" class="quick-add-modal__content-info"></div>
+        </div>
+      </details>
+    </quick-add-modal>
+  {{/if}}
+</div>

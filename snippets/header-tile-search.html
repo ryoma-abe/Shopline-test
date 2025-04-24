@@ -1,0 +1,31 @@
+<predictive-search class="search-modal__content display-none-tablet" data-show-suggested-menu="{{ternary settings.search_menu true false}}">
+  <form action="{{routes.search_url}}" method="get" class="search-modal__form search">
+    <div class="search-modal__field field">
+      <input
+        id="Tile-Search-1"
+        class="search-modal__input field__input body3"
+        type="search"
+        name="keyword"
+        value=""
+        placeholder="{{t 'general.search.search'}}"
+        maxlength="255"
+        autocorrect="off"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+      />
+      <button class="search-modal__submit-button">
+        {{snippet "icon-search"}}
+      </button>
+    </div>
+    <div class="predictive-search global-modal-border-shadow" tabindex="-1">
+      {{snippet 'suggested-menu'}}
+      <div class="predictive-search__results" data-predictive-search></div>
+      <div class="predictive-search__loading-state">
+        <span class="predictive-search__spinner">
+          {{snippet "icon-loading"}}
+        </span>
+      </div>
+    </div>
+  </form>
+</predictive-search>

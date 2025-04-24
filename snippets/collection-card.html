@@ -1,0 +1,95 @@
+{{#comment}}
+    Renders a collection card
+
+    Accepts:
+    - card_collection {Object} Collection object
+    - title: {String} collection title
+    - is_scroll: {Boolean} decides if the cards should be scrollable or not
+    - position: {String} determines the position of the product image card
+    - ratio: {Number} Size of the product image card. Default: 100
+    - fill_type: {String} decides how the product image card should fill the available space
+    - class: {String} container class
+    - desktop_grid_cols: {Number}
+    - mobile_grid_cols: {Number}
+    - lazy_load: {Boolean} Image should be lazy loaded.
+    - image_shape: {'square'|'round'} Image shape. Default: square
+
+    Usage:
+    {{ snippet 'collection-card' }}
+{{/comment}}
+{{assign "theme_settings" settings}}
+{{assign "card_style" theme_settings.collection_card_style}}
+{{assign "card_image_padding" theme_settings.collection_card_image_padding}}
+{{assign "card_content_align" theme_settings.collection_card_content_align}}
+{{assign "color_card_background" theme_settings.color_card_background}}
+{{assign "color_card_text" theme_settings.color_card_text}}
+{{#capture "card_background_color"}}
+  {{~#if color_card_background~}}
+    {{ theme_settings.color_card_background.red }}, {{ theme_settings.color_card_background.green }}, {{theme_settings.color_card_background.blue }}
+  {{~else~}}
+    {{ theme_settings.color_image_background.red }}, {{ theme_settings.color_image_background.green }}, {{theme_settings.color_image_background.blue }}
+  {{~/if~}}
+{{/capture}}
+{{#capture "card_text_color"}}
+  {{~#if color_card_text~}}
+    {{ theme_settings.color_card_text.red }}, {{ theme_settings.color_card_text.green }}, {{theme_settings.color_card_text.blue }}
+  {{~else~}}
+    {{ theme_settings.color_text.red }}, {{ theme_settings.color_text.green }}, {{theme_settings.color_text.blue }}
+  {{~/if~}}
+{{/capture}}
+
+{{assign "image_round" (if image_shape == "round")}}
+{{assign "image_ratio" (default ratio 100)}}
+{{#if ratio == "adapt" and (has card_collection "featured_image")}}
+  {{assign
+    "image_ratio"
+    (ternary card_collection.featured_image.aspect_ratio (divide 100 card_collection.featured_image.aspect_ratio) 100)
+  }}
+{{/if}}
+{{#if ratio == "adapt" and (isFalsey (has card_collection "featured_image"))}}
+  {{assign "image_ratio" 100}}
+{{/if}}
+{{#if image_round}}
+  {{assign "image_ratio" 100}}
+{{/if}}
+<div class="collection-item col shopline-element-collection-item card-shadow-pb">
+  <a class="card collection-card-wrapper
+    card-wrapper hover-effect-container {{class}} {{#if is_scroll}}slider__slide{{/if}}
+    collection-card-style-{{card_style}} {{#if card_style == 'card'}}global-collection-card-border-shadow{{/if}}"
+    style="--card-image-padding: {{card_image_padding}}px; 
+    --color-card-background: {{card_background_color}};
+    --color-card-text: {{card_text_color}};"
+    {{{shopline_attributes}}}
+    {{#if is_scroll}}id="Slide-collection__item"{{/if}}
+    href="{{#if (isFalsey card_collection.url)}}javascript:;{{else}}{{card_collection.url}}{{/if}}">
+    <div class="{{#if is_scroll}}collection__scroll__item{{/if}}">
+      <div class="card__inner--wrapper {{#if card_style != 'card'}}global-collection-card-border-shadow{{/if}}" style="{{#if image_round}}--collection-card-border-radius:50%;{{/if}}">
+        <div class="card__inner ratio collection__item__image {{#if image_round}}card__inner--round{{/if}} " 
+        style="--ratio-percent: {{image_ratio}}%; 
+          --image-fill-type: {{default fill_type 'cover'}};
+          --image-object-position:{{position}};"
+        >
+          <div class="card__media">
+            {{#if card_collection.featured_image.src}}
+              {{snippet
+                "image"
+                data=card_collection.featured_image
+                lazy=lazy_load
+                pc_size=(append "1/" desktop_grid_cols)
+                mobile_size=(append "1/" mobile_grid_cols)
+                class="hover-effect-target"
+              }}
+            {{else}}
+              <div class="placeholder">
+                {{placeholder_svg_tag "image"}}
+              </div>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      <div class="body3 collection__item__name card__content {{#if card_content_align == 'center'}}text-center{{else}}text-left{{/if}}">
+        {{default block.settings.title (default card_collection.title "Example collection")}}
+      </div>
+    </div>
+  </a>
+</div>

@@ -1,0 +1,213 @@
+.collapsible-content {
+  position: relative;
+  z-index: 0;
+}
+
+.collapsible-section-layout {
+  padding-bottom: 50px;
+  padding-top: 50px;
+}
+
+@media screen and (min-width: 960px) {
+  .collapsible-section-layout {
+    padding-bottom: 70px;
+    padding-top: 70px;
+  }
+}
+
+.collapsible-content__media--small {
+  height: 194px;
+}
+
+.collapsible-content__media--large {
+  height: 435px;
+}
+
+@media screen and (min-width: 960px) {
+  .collapsible-content__media--small {
+    height: 314px;
+  }
+
+  .collapsible-content__media--large {
+    height: 695px;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .collapsible-content__grid--reverse {
+    flex-direction: row-reverse;
+  }
+}
+
+.collapsible-content-wrapper-narrow {
+  margin: 0 auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  max-width: 734px;
+}
+
+.collapsible-content__header {
+  word-break: break-word;
+}
+
+.collapsible-content__heading {
+  margin-bottom: 30px;
+  margin-top: 0;
+}
+
+@media screen and (min-width: 960px) {
+  .collapsible-content__heading {
+    margin-bottom: 40px;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .collapsible-content
+    .grid-cols-2.collapsible-content__grid--reverse
+    .grid__item:first-child {
+    padding-left: 20px;
+  }
+  .collapsible-content
+    .grid-cols-2.collapsible-content__grid--reverse
+    .grid__item:last-child {
+    padding-right: 20px;
+  }
+  .collapsible-content
+    .grid-cols-2:not(.collapsible-content__grid--reverse)
+    .grid__item:first-child {
+    padding-right: 20px;
+  }
+  .collapsible-content
+    .grid-cols-2:not(.collapsible-content__grid--reverse)
+    .grid__item:last-child {
+    padding-left: 20px;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .collapsible-content .accordion summary {
+    padding: 27px 0;
+  }
+}
+
+@media screen and (max-width: 959px) {
+  .collapsible-content .accordion summary {
+    padding: 20px 0;
+  }
+}
+
+.collapsible-none-layout .accordion + .accordion {
+  border-top: 0;
+}
+
+.collapsible-content .accordion {
+  margin-top: 0;
+}
+
+.collapsible-content summary:hover .accordion__title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* check for flexbox gap in older Safari versions */
+
+@supports not (inset: 10px) {
+  @media screen and (min-width: 960px) {
+    .collapsible-content__grid:not(.collapsible-content__grid--reverse)
+      .grid__item:last-child,
+    .collapsible-content__grid--reverse .collapsible-content__grid-item {
+      padding-left: 70px;
+    }
+    .collapsible-content__grid .grid-cols-2 {
+      padding-left: 70px;
+    }
+  }
+}
+
+@media screen and (max-width: 959px) {
+  .collapsible-content .grid-cols-2 > * {
+    width: 100%;
+  }
+}
+
+.collapsible-content .grid:last-child {
+  margin-bottom: 0;
+}
+
+.collapsible-content .rte > p:last-child {
+  margin-bottom: 0;
+}
+
+.collapsible-content .rte > p:first-child {
+  margin-top: 0;
+}
+
+.collapsible-content .media > *:not(.zoom):not(.deferred-media__poster-button),
+.collapsible-content .media model-viewer {
+  display: block;
+  max-width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.collapsible-content .media {
+  position: relative;
+}
+
+.collapsible-content .gradient {
+  background-attachment: fixed;
+}
+
+.collapsible-content .media > img {
+  object-fit: cover;
+  object-position: center center;
+  transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.collapsible-content__layout-inline .accordion,
+.collapsible-content__layout-block .accordion {
+  background-color: rgba(var(--box-background-color));
+  padding: 20px;
+  border: none;
+}
+
+.collapsible-content__layout-inline .accordion summary,
+.collapsible-content__layout-block .accordion summary {
+  padding: 0;
+}
+
+.collapsible-content__layout-inline .accordion .accordion__content,
+.collapsible-content__layout-block .accordion .accordion__content {
+  padding: 0;
+  padding-top: 20px;
+  margin-bottom: 0;
+}
+
+.collapsible-content__layout-inline .accordion + .accordion {
+  margin-top: 12px;
+}
+
+.collapsible-content__layout-block .accordion + .accordion {
+  border-top: 1px solid rgba(var(--color-text), 0.08);
+}
+
+.collapsible-content__layout-block .accordion:first-child {
+  border-top-left-radius: var(--content-border-radius);
+  border-top-right-radius: var(--content-border-radius);
+}
+
+.collapsible-content__layout-block .accordion:last-child {
+  border-bottom-left-radius: var(--content-border-radius);
+  border-bottom-right-radius: var(--content-border-radius);
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

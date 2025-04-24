@@ -1,0 +1,67 @@
+{{assign 'm_height' section.settings.m_height}}
+{{assign 'pc_height' section.settings.pc_height}}
+{{assign 'background_color' section.settings.background_color}}
+
+
+<style>
+  .spacing-{{section.id}}__container {
+    height: {{pc_height}}px;
+    {{#if background_color}}
+    background-color: {{background_color}};
+    {{/if}}
+  }
+  @media screen and (max-width: 959px) {
+    .spacing-{{section.id}}__container {
+      height: {{m_height}}px;
+    }
+  }
+</style>
+
+<div class="spacing-{{section.id}}__container"></div>
+
+{{#schema}}
+{
+  "name": "t:sections.spacing.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "pc_height",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.spacing.settings.pc_height.label",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "m_height",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.spacing.settings.m_height.label",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "label": "t:sections.spacing.settings.background_color.label",
+      "id": "background_color",
+      "default": ""
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 6,
+      "category": "t:sections.spacing.presets.presets__0.category",
+      "name": "t:sections.spacing.presets.presets__0.name",
+      "settings": {
+        "pc_height": 60,
+        "m_height": 40,
+        "background_color": ""
+      }
+    }
+  ]
+}
+{{/schema}}

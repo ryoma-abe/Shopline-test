@@ -1,0 +1,49 @@
+{{#comment}}
+    Accepts:
+    - all_country_dialing_code: {Array}
+    - input_name:{string}
+    - input_id:{string}
+    - code_name:{string}
+    - country_iso_code:{string}
+    - input_disabled?:{boolean}
+    - input_required"?:{boolean}
+
+    Usage:
+    {{snippet
+      "input-phone"
+      all_country_dialing_code=section.all_country_dialing_code
+      input_name="customer[phone]"
+      input_id="customer[phone]"
+      code_name="customer[code]"
+      country_iso_code=localization.country.iso_code
+    }}
+{{/comment}}
+<div class="field__container">
+  <input
+    class="field__input"
+    type="tel"
+    id="{{input_id}}"
+    name="{{input_name}}"
+    placeholder="{{t 'general.order_tracking.other_phone'}}"
+    {{#if input_required}}required{{/if}}
+    {{#if input_disabled}}disabled{{/if}}
+  />
+  <label for="{{input_id}}" class="field__label body3">
+    {{t "general.order_tracking.other_phone"}}
+  </label>
+</div>
+<div class="field__suffix country-select-wrapper">
+  <div class="country-select-trigger">
+    <span data-id="country-select-label"></span>
+    {{snippet "icon-arrow"}}
+  </div>
+  <select name="{{code_name}}" class="country-select" {{#if input_disabled}}disabled{{/if}}>
+    {{#for all_country_dialing_code as |country_dialing_code|}}
+      {{#if country_iso_code == country_dialing_code.iso_code}}
+        <option value="{{country_dialing_code.dialing_code}}" data-iso-code="{{country_dialing_code.iso_code}}" selected="selected">{{country_dialing_code.name}}</option>
+      {{else}}
+        <option value="{{country_dialing_code.dialing_code}}" data-iso-code="{{country_dialing_code.iso_code}}">{{country_dialing_code.name}}</option>
+      {{/if}}
+    {{/for}}
+  </select>
+</div>

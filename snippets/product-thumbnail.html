@@ -1,0 +1,209 @@
+{{#comment}}
+    Renders a product thumbnail with a modal-opener
+
+    Accepts:
+    - media: {Object} Product Media object
+    - media_count: {Number} Number of media objects
+    - position: {String} Position of the media. Used for accessible label.
+    - desktop_layout: {String} Layout of the media for desktop.
+    - mobile_layout: {String} Layout of the media for mobile.
+    - loop: {Boolean} Enable video looping (optional)
+    - modal_id: {String} The product modal that will be shown by clicking the thumbnail
+    - media_width: {Float} The width percentage that the media column occupies on desktop.
+    - lazy_load: {Boolean} Image should be lazy loaded.
+    - pc_magnifier_type: {click|hover} Commodity amplifier trigger method
+    - video_mute: {0|1} Whether the external video is muted or not is related to autoplay. If it is autoplay, setting 1 will take effect
+    - image_quality: {Number} Image compression ratio (optional) default 80.
+    - magnifier_interactive_type: {mode_1|mode_2} Default: mode_1
+    - product_image_ratio: {String} The ratio of the product image on PC
+    - product_image_fill_type: {String} The fill type of the product image on PC
+    - product_mobile_image_ratio: {String} The ratio of the product image on mobile
+    - product_mobile_image_fill_type: {String} The fill type of the product image on mobile
+    - youtube_control: {Number} Enable YouTube controls (optional) 
+    - youtube_show_playlist: {Number} Enable YouTube playlist (optional)
+
+    Usage:
+    {{ snippet 'product-thumbnail' }}
+{{/comment}}
+
+<script src="{{asset_url 'component-product-thumbnail-opener.js'}}" defer="defer"></script>
+{{assign "pc_magnifier_type" (default pc_magnifier_type "click")}}
+{{assign "video_mute" (default video_mute 0)}}
+
+{{assign "desktop_columns" 1}}
+{{#if desktop_layout == "columns" and media_count > 1}}
+  {{assign "desktop_columns" 2}}
+{{/if}}
+
+{{assign "mobile_columns" 1}}
+{{#if mobile_layout == "columns" and media_count > 1}}
+  {{assign "mobile_columns" 2}}
+{{/if}}
+
+{{~#capture "sizes"~}}
+  (min-width: {{settings.page_width}}px) {{round (divide (times (minus settings.page_width 100) media_width) desktop_columns)}}px, (min-width: 990px) calc({{divide (times media_width 100) desktop_columns}}vw - 100px), calc(100vw / {{mobile_columns}} - 40px)
+{{~/capture~}}
+
+{{~#capture "modal_instance"~}}
+  {{~#if media.media_type == "video" or media.media_type == "external_video" or magnifier_interactive_type == "mode_1"~}}
+    #ProductModal-{{modal_id}}
+  {{~else~}}
+    #ProductPhotoSwipe-{{modal_id}}
+  {{~/if~}}
+{{~/capture~}}
+
+{{~#capture "original_image_aspect_ratio"~}}
+  {{~#if media.media_type != "image"~}}
+    {{~#if media.aspect_ratio~}}
+      {{times (divide 1 media.aspect_ratio) 100}}
+    {{~else~}}
+      100
+    {{~/if~}}
+  {{~else~}}
+    {{~#if media.preview_image.aspect_ratio~}}
+      {{times (divide 1 media.preview_image.aspect_ratio) 100}}
+    {{~else~}}
+      100
+    {{~/if~}}
+  {{~/if~}}
+{{~/capture~}}
+
+{{~#capture "featured_image_aspect_ratio"~}}
+  {{~#if product.featured_image.aspect_ratio~}}
+    {{times (divide 1 product.featured_image.aspect_ratio) 100}}
+  {{~else~}}
+    100
+  {{~/if~}}
+{{~/capture~}}
+
+{{~#capture "image_aspect_ratio"~}}
+  {{~#if product_image_ratio == "original" or (is_falsey product_image_ratio)~}}
+    {{~original_image_aspect_ratio~}}
+  {{~else if product_image_ratio == "adapt_first_image"~}}
+    {{~featured_image_aspect_ratio~}}
+  {{~else if product_image_ratio~}}
+    {{~product_image_ratio~}}
+  {{~else~}}
+    100
+  {{~/if~}}
+{{~/capture~}}
+
+{{~#capture "mobile_image_aspect_ratio"~}}
+  {{~#if product_mobile_image_ratio == "original" or (is_falsey product_mobile_image_ratio)~}}
+    {{~original_image_aspect_ratio~}}
+  {{~else if product_mobile_image_ratio == "adapt_first_image"~}}
+    {{~featured_image_aspect_ratio~}}
+  {{~else if product_mobile_image_ratio~}}
+    {{~product_mobile_image_ratio~}}
+  {{~else~}}
+    100
+  {{~/if~}}
+{{~/capture~}}
+
+{{~#capture "image_ratio"~}}
+  --product-image-ratio:{{~image_aspect_ratio~}}%;
+  --product-mobile-image-ratio:{{~mobile_image_aspect_ratio~}}%;
+{{~/capture~}}
+
+{{~#capture "fill_type"~}}
+  --product-image-fill-type: {{#if product_image_fill_type}}{{product_image_fill_type}}{{else}}cover{{/if}};
+  --product-mobile-image-fill-type: {{#if product_mobile_image_fill_type}}{{product_mobile_image_fill_type}}{{else}}cover{{/if}};
+{{~/capture~}}
+
+<product-thumbnail-opener
+  class="product__modal-opener product__modal-opener--{{media.media_type}}"
+  data-modal="{{modal_instance}}"
+  data-pc-magnifier-type="{{pc_magnifier_type}}"
+>
+  <span class="product__media-icon motion-reduce quick-add-hidden">
+    {{#case media.media_type}}
+      {{#when "video" "external_video"}}
+        {{snippet "icon-play"}}
+      {{else}}
+        {{snippet "icon-zoom"}}
+      {{/when}}
+    {{/case}}
+  </span>
+  {{assign "image" (default media.preview_image media)}}
+  <div
+    class="product__media media media--transparent global-media-settings"
+    style="{{image_ratio}}"
+    data-height="{{image.height}}"
+    data-width="{{image.width}}"
+  >
+    {{snippet
+      "image"
+      class="product__media-image"
+      style=fill_type
+      data=image
+      lazy=lazy_load
+      sizes=sizes
+      breakpoints="246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946"
+      quality=image_quality
+    }}
+  </div>
+  <button class="product__media-toggle quick-add-hidden" type="button" data-media-id="{{media.id}}"></button>
+</product-thumbnail-opener>
+
+{{#if media.media_type != "image"}}
+  <deferred-media class="deferred-media media media--transparent" style="{{image_ratio}}" data-media-id="{{media.id}}">
+    <button id="Deferred-Poster-Modal-{{media.id}}" class="deferred-media__poster" type="button">
+      <span class="deferred-media__poster-button auto-width motion-reduce">
+        {{snippet "icon-play"}}
+      </span>
+      {{snippet
+        "image"
+        class="deferred-media-image"
+        style=fill_type
+        data=(default media.preview_image media)
+        lazy=lazy_load
+        breakpoints="246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946"
+        quality=image_quality
+      }}
+    </button>
+    <template>
+      {{#case media.media_type}}
+        {{#when "external_video"}}
+          {{assign "video_class" (append "js-" media.host)}}
+          {{#if media.host "youtube"}}
+            {{#if youtube_show_playlist}}
+              {{external_video_tag
+                (external_video_url
+                  media autoplay=1 loop=loop playlist=media.external_id mute=video_mute controls=youtube_control
+                )
+                class=video_class
+                loading="lazy"
+                frameborder="0"
+              }}
+            {{else}}
+              {{external_video_tag
+                (external_video_url media autoplay=1 loop=loop mute=video_mute controls=youtube_control)
+                class=video_class
+                loading="lazy"
+                frameborder="0"
+              }}
+            {{/if}}
+          {{else}}
+            {{external_video_tag
+              (external_video_url media autoplay=1 loop=loop mute=video_mute)
+              class=video_class
+              loading="lazy"
+              frameborder="0"
+            }}
+          {{/if}}
+        {{/when}}
+        {{#when "video"}}
+          {{video_tag
+            media
+            autoplay=true
+            loop=loop
+            controls=true
+            preload="none"
+            muted=(ternary (if video_mute == 1) true false)
+            onloadeddata="this.play();"
+          }}
+        {{/when}}
+      {{/case}}
+    </template>
+  </deferred-media>
+{{/if}}

@@ -1,0 +1,23 @@
+product-float-buy-buttons {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 100%;
+  background-color: rgba(var(--color-page-background));
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+  padding: 20px 20px 10px;
+  transform: translateY(100%);
+  transition: all 0.3s;
+}
+product-float-buy-buttons.show {
+  transform: translateY(0);
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

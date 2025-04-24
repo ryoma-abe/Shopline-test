@@ -1,0 +1,9 @@
+{{#for cart.cart_level_discount_applications as |level_discount_application|}}
+  <li class="cart__level-wrapper">
+    <div class="cart__level-label">
+      {{snippet "icon-discount-tag"}}
+      <em class="body3">{{level_discount_application.title}}</em>
+    </div>
+    <span class="cart__level-value body2 fw-bold">-{{money_with_currency level_discount_application.value}}</span>
+  </li>
+{{/for}}

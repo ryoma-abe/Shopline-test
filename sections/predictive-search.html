@@ -1,0 +1,35 @@
+<div class="predictive-search-results">
+  {{#if (size predictive_search.products)}}
+    <h2 class="predictive-search__head body5">
+      {{ t 'search.product_list.title' }}
+      <span class="predictive-search__rusults">
+        {{t "products.product_search.ount_results" count=(size predictive_search.products)}}
+      </span>
+      <span class="predictive-search__spinner">
+        {{ snippet 'icon-loading'}}
+      </span>
+    </h2>
+    <ul class="predictive-search__results-list list-unstyled" data-predictive-search>
+      {{#for predictive_search.products as |product|}}
+        <li class="predictive-search__list-item">
+          <a class="predictive-search__item link" href="{{ product.url }}">
+            {{#if product.featured_image}}
+              {{ snippet 'image' data=product.featured_image class="predictive-search__item-image" }}
+            {{else}}
+              {{ placeholder_svg_tag 'image' 'predictive-search__item-image' }}
+            {{/if}}
+            <div class="predictive-search__item-content">
+              <p class="predictive-search__item-head body3">{{ product.title }}</p>
+              {{#if settings.show_search_goods_price}}
+                <p class="predictive-search__item-price"><span class="body3">{{money product.price}}</span> {{#if product.compare_at_price > product.price}}<span class="body5 line-through">{{money product.compare_at_price}}</span>{{/if}}</p>
+              {{/if}}
+            </div>
+          </a>
+        </li>
+      {{/for}}
+    </ul>
+  {{/if}}
+  <button class="predictive-search__term button body3" type="submit">
+    {{ t "general.search.search_hint" key="__QUERY_KEY__" }}
+  </button>
+</div>

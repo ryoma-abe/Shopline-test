@@ -1,0 +1,290 @@
+.collection.loading::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  opacity: 0;
+}
+
+.collection .empty-tips {
+  text-align: center;
+}
+
+.collection .facets-loading {
+  display: none;
+  position: fixed;
+  z-index: 51;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92px;
+  height: 92px;
+  border-radius: 12px;
+  background-color: rgb(var(--color-page-background));
+  box-shadow: 0px 10px 50px 0px rgba(var(--color-text), 0.08);
+}
+
+.collection .facets-loading > div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.collection .facets-loading > div svg {
+  width: 60px;
+  height: 60px;
+}
+
+.collection.loading .facets-loading {
+  display: block;
+}
+
+.infinite-scroll-button-tip {
+  margin-top: 48px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.infinite-scroll-button-wrapper {
+  text-align: center;
+}
+
+.infinite-scroll-button-wrapper.hidden {
+  display: none;
+}
+
+.infinite-scroll-loading {
+  display: none;
+  color: rgb(var(--color-text));
+  margin-top: 48px;
+}
+
+.infinite-scroll-loading.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infinite-scroll-loading .infinite-scroll-loading-tip {
+  margin-left: 18px;
+}
+
+@media (max-width: 959px) {
+  .infinite-scroll-loading {
+    margin-top: 20px;
+  }
+}
+
+/* promotional block */
+
+.promotional-block {
+  position: relative;
+}
+
+.promotional-block.full_width {
+  width: 100%;
+}
+
+@media (max-width: 959px) {
+  .promotional-block.m_full_width {
+    width: 100%;
+  }
+}
+
+.promotional-block .promotional-block--wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.promotional-block .promotional-block--wrapper .promotional-image--inner {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+}
+
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-image--inner
+  .promotional-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-position: var(--promotional-image-position, center);
+}
+
+.promotional-block .promotional-block--wrapper .promotional-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(var(--color-mask), var(--promotional-mask-opacity));
+  padding: 8px;
+  display: flex;
+  top: 0;
+  left: 0;
+}
+
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay.text-position-center
+  .promotional-content,
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay.text-position-top
+  .promotional-content,
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay.text-position-bottom
+  .promotional-content {
+  text-align: center;
+}
+
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay.text-position-left-top
+  .promotional-content,
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay.text-position-left
+  .promotional-content,
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay.text-position-left-bottom
+  .promotional-content {
+  text-align: left;
+}
+
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay.text-position-right-top
+  .promotional-content,
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay.text-position-right
+  .promotional-content,
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay.text-position-right-bottom
+  .promotional-content {
+  text-align: right;
+}
+
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay
+  .promotional-content
+  > * {
+  margin-top: 4px;
+}
+
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay
+  .promotional-content
+  :first-child {
+  margin-top: 0;
+}
+
+.promotional-block
+  .promotional-block--wrapper
+  .promotional-overlay
+  .promotional-placeholder-link {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  display: block;
+}
+
+.promotional-block.full_width {
+  width: 100%;
+}
+
+.promotional-block.full_width .promotional-block--wrapper {
+  height: auto;
+}
+
+.promotional-block.full_width
+  .promotional-block--wrapper
+  .promotional-image--inner {
+  position: relative;
+}
+
+@media (min-width: 960px) {
+  .promotional-block.full_width
+    .promotional-block--wrapper.has-pc-image
+    .promotional-image--inner::before {
+    content: "";
+    width: 0;
+    height: 0;
+    padding-bottom: var(--promotional-pc-image-ratio, 30%);
+    display: block;
+  }
+  .promotional-block.full_width
+    .promotional-block--wrapper.has-pc-image
+    .promotional-overlay {
+    position: absolute;
+  }
+}
+
+@media (max-width: 959px) {
+  .promotional-block.full_width
+    .promotional-block--wrapper.has-mobile-image
+    .promotional-image--inner::before {
+    content: "";
+    width: 0;
+    height: 0;
+    padding-bottom: var(--promotional-mobile-image-ratio, 30%);
+    display: block;
+  }
+  .promotional-block.full_width
+    .promotional-block--wrapper.has-mobile-image
+    .promotional-overlay {
+    position: absolute;
+  }
+}
+
+@media (max-width: 959px) {
+  .promotional-block.m_full_width .promotional-block--wrapper {
+    height: auto;
+  }
+  .promotional-block.m_full_width
+    .promotional-block--wrapper
+    .promotional-image--inner {
+    position: relative;
+  }
+  .promotional-block.m_full_width
+    .promotional-block--wrapper.has-mobile-image
+    .promotional-image--inner::before {
+    content: "";
+    width: 0;
+    height: 0;
+    padding-bottom: var(--promotional-mobile-image-ratio, 30%);
+    display: block;
+  }
+  .promotional-block.m_full_width
+    .promotional-block--wrapper.has-mobile-image
+    .promotional-overlay {
+    position: absolute;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

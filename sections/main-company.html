@@ -1,0 +1,380 @@
+{{snippet "stylesheet" href=(asset_url "section-main-company.css")}}
+<script src="{{asset_url 'component-company-form.js'}}" defer></script>
+<script src="{{asset_url 'component-address-cascade.js'}}" defer="defer"></script>
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+<div class="main-company__section section-padding">
+  <company-form>
+    {{#form "company_account_application" id="company-register-form" class="company-form"}}
+      {{#if form.posted_successfully}}
+        <div class="company-form__success-info">
+          <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24.9997 2.08325C37.655 2.08325 47.9163 12.3446 47.9163 24.9999C47.9163 37.6552 37.655 47.9166 24.9997 47.9166C12.3444 47.9166 2.08301 37.6552 2.08301 24.9999C2.08301 12.3446 12.3444 2.08325 24.9997 2.08325ZM23.4648 31.862L35.4163 19.7826L33.364 17.7083L22.4386 28.7505L16.6354 22.8851L14.583 24.9595L21.4124 31.862C21.6846 32.137 22.0537 32.2916 22.4386 32.2916C22.8235 32.2916 23.1927 32.137 23.4648 31.862Z" fill="#55B55C"/>
+          </svg>
+          <div class="body3">{{t "customer.company.register.success.title"}}</div>
+          <div class="body3">{{t "customer.company.register.success.description"}}</div> 
+        </div>
+      {{else if form.errors.messages}}
+        <div class="company-form__error-info">
+          <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.08301 24.9999C2.08301 12.3446 12.3444 2.08325 24.9997 2.08325C37.655 2.08325 47.9163 12.3446 47.9163 24.9999C47.9163 37.6552 37.655 47.9166 24.9997 47.9166C12.3444 47.9166 2.08301 37.6552 2.08301 24.9999ZM23.2632 35.7391C22.8027 35.2786 22.544 34.6541 22.544 34.0029C22.544 33.3517 22.8027 32.7272 23.2632 32.2667C23.7237 31.8062 24.3482 31.5475 24.9994 31.5475C25.6506 31.5475 26.2751 31.8062 26.7356 32.2667C27.1961 32.7272 27.4547 33.3517 27.4547 34.0029C27.4547 34.6541 27.1961 35.2786 26.7356 35.7391C26.2751 36.1996 25.6506 36.4583 24.9994 36.4583C24.3482 36.4583 23.7237 36.1996 23.2632 35.7391ZM26.2271 28.2737H23.7717C23.5466 28.2737 23.3625 28.0896 23.3625 27.8645V13.9508C23.3625 13.7257 23.5466 13.5416 23.7717 13.5416H26.2271C26.4521 13.5416 26.6363 13.7257 26.6363 13.9508V27.8645C26.6363 28.0896 26.4521 28.2737 26.2271 28.2737Z" fill="#FE9E0F"/>
+          </svg>
+          <div class="body3">
+            {{form.errors.messages}}
+          </div>
+        </div>
+      {{else}}
+        <h1 class="company-form__title title5 text-center">{{t "customer.company.register.title"}}</h1>
+        {{snippet
+          "form-field"
+          type="email"
+          id="CompanyEmail"
+          name="company[email]"
+          required="true"
+          pattern="^[a-zA-Z0-9+._\-]{1,50}@[a-zA-Z0-9_\-]+\.([\.]?[a-zA-Z0-9_\-]+){1,5}$"
+          placeholder=(t 'customer.company.email.placeholder')
+          autocomplete="company_email"}}
+
+        {{#if form.register_config.first_name_visible}}
+          {{snippet
+            "form-field"
+            id="CompanyFirstName"
+            name="company[first_name]"
+            required="false"
+            placeholder=(t 'customer.company.first_name.placeholder')
+            autocomplete="company_first_name"
+            classes="cols-2-desktop"}}
+        {{/if}}
+
+        {{#if form.register_config.last_name_visible}}
+          {{snippet
+            "form-field"
+            id="CompanyLastName"
+            name="company[last_name]"
+            required="false"
+            placeholder=(t 'customer.company.last_name.placeholder')
+            autocomplete="company_last_name"
+            classes="cols-2-desktop"}}
+        {{/if}}
+
+        {{snippet
+          "form-field"
+          id="CompanyName"
+          name="company[company_name]"
+          required="true"
+          placeholder=(t 'customer.company.company_name.placeholder')
+          autocomplete="company_name"
+          maxlength="255"}}
+
+        <div class="company-form__header">
+          <span class="body4 fw-bold">{{t "customer.company.account.shipping"}}</span>
+        </div>
+
+        {{snippet
+          "form-field"
+          type="tel"
+          id="CompanyPhone"
+          name="company[shipping_address][mobile_phone]"
+          placeholder=(t 'customer.company.phone.placeholder')
+          maxlength="16"
+          }}
+    
+        <address-cascade class="company-form__address-cascade" localization="{{json localization}}">
+          {{snippet
+            "form-field"
+            classes="company-form__country"
+            type="select"
+            id="AddressCountry"
+            showArrow="true"
+            name="company[shipping_address][country_code]"
+            placeholder=(t 'customer.company.country.placeholder')
+            autocomplete="company_country"
+            }}
+
+          <div class="group company-form__province cols-2-desktop" id="AddressProvinceGroup">
+            {{snippet
+              "form-field"
+              wrapId="AddressProvinceSelectContainer"
+              hidden="true"
+              type="select"
+              id="AddressProvinceSelect"
+              showArrow="true"
+              name="company[shipping_address][province_code]"
+              placeholder=(t 'customer.company.province.placeholder')
+              autocomplete="company_province"
+              }}
+            {{snippet
+              "form-field"
+              wrapId="AddressProvinceInputContainer"
+              hidden="true"
+              type="text"
+              id="AddressProvinceInput"
+              name="company[shipping_address][province]"
+              placeholder=(t 'customer.company.province.placeholder')
+              autocomplete="company_province"
+              }}
+          </div>
+
+          <div class="group company-form__city cols-2-desktop" id="AddressCityGroup">
+            {{snippet
+              "form-field"
+              wrapId="AddressCitySelectContainer"
+              hidden="true"
+              type="select"
+              id="AddressCitySelect"
+              showArrow="true"
+              name="company[shipping_address][city_code]"
+              placeholder=(t 'customer.company.city.placeholder')
+              autocomplete="company_city"
+              }}
+            {{snippet
+              "form-field"
+              wrapId="AddressCityInputContainer"
+              hidden="true"
+              type="text"
+              id="AddressCityInput"
+              name="company[shipping_address][city]"
+              placeholder=(t 'customer.company.city.placeholder')
+              autocomplete="company_city"
+              maxlength="64"
+              }}
+          </div>
+
+          <div class="group company-form__district cols-2-desktop" id="AddressDistrictGroup">
+            {{snippet
+              "form-field"
+              wrapId="AddressDistrictSelectContainer"
+              hidden="true"
+              type="select"
+              id="AddressDistrictSelect"
+              showArrow="true"
+              name="company[shipping_address][district_code]"
+              placeholder=(t 'customer.company.district.placeholder')
+              autocomplete="company_district"
+              }}
+            {{snippet
+              "form-field"
+              wrapId="AddressDistrictInputContainer"
+              hidden="true"
+              type="text"
+              id="AddressDistrictInput"
+              name="company[shipping_address][district]"
+              placeholder=(t 'customer.company.district.placeholder')
+              autocomplete="company_district"
+              maxlength="64"
+              }}
+          </div>
+
+          {{snippet
+            "form-field"
+            id="CompanyZip"
+            name="company[shipping_address][zip_code]"
+            placeholder=(t 'customer.company.zip.placeholder')
+            autocomplete="company_zip"
+            maxlength="10"
+            classes="cols-2-desktop"}}
+        </address-cascade>
+
+        {{snippet
+          "form-field"
+          id="CompanyAddress"
+          name="company[shipping_address][addr]"
+          placeholder=(t 'customer.company.address.placeholder')
+          autocomplete="company_address"
+          maxlength="255"}}
+
+        {{snippet
+          "form-field"
+          id="CompanyAddress2"
+          name="company[shipping_address][addr_two]"
+          placeholder=(t 'customer.company.address2.placeholder')
+          autocomplete="company_address2"
+          maxlength="255"}}
+
+        {{snippet
+          "form-field"
+          type="checkbox"
+          id="CompanyBillSameAsShipping"
+          name=""
+          checked="true"
+          placeholder=(t 'customer.company.billingSameAsShipping.placeholder')
+          classes="company-form__field"
+          }}
+
+        <div class="company-bill-form__container display-none" id="CompanyBillForm">
+          <div class="company-form__header">
+            <span class="body4 fw-bold">{{t "customer.company.account.billTitle"}}</span>
+          </div>
+
+          {{snippet
+            "form-field"
+            type="tel"
+            id="CompanyBillingPhone"
+            name="company[billing_address][mobile_phone]"
+            placeholder=(t 'customer.company.billing.phone.placeholder')
+            maxlength="16"
+            }}
+
+          <address-cascade class="company-form__address-cascade" localization="{{json localization}}">
+            {{snippet
+              "form-field"
+              classes="company-form__country"
+              type="select"
+              id="AddressCountry"
+              showArrow="true"
+              name="company[billing_address][country_code]"
+              placeholder=(t 'customer.company.billing.country.placeholder')
+              autocomplete="company_country"
+              }}
+
+            <div class="group company-form__province cols-2-desktop" id="AddressProvinceGroup">
+              {{snippet
+                "form-field"
+                wrapId="AddressProvinceSelectContainer"
+                hidden="true"
+                type="select"
+                id="AddressProvinceSelect"
+                showArrow="true"
+                name="company[billing_address][province_code]"
+                placeholder=(t 'customer.company.billing.province.placeholder')
+                autocomplete="company_province"
+                }}
+              {{snippet
+                "form-field"
+                wrapId="AddressProvinceInputContainer"
+                hidden="true"
+                type="text"
+                id="AddressProvinceInput"
+                name="company[billing_address][province]"
+                placeholder=(t 'customer.company.billing.province.placeholder')
+                autocomplete="company_province"
+                }}
+            </div>
+
+            <div class="group company-form__city cols-2-desktop" id="AddressCityGroup">
+              {{snippet
+                "form-field"
+                wrapId="AddressCitySelectContainer"
+                hidden="true"
+                type="select"
+                id="AddressCitySelect"
+                showArrow="true"
+                name="company[billing_address][city_code]"
+                placeholder=(t 'customer.company.billing.city.placeholder')
+                autocomplete="company_city"
+                }}
+              {{snippet
+                "form-field"
+                wrapId="AddressCityInputContainer"
+                hidden="true"
+                type="text"
+                id="AddressCityInput"
+                name="company[billing_address][city]"
+                placeholder=(t 'customer.company.billing.city.placeholder')
+                autocomplete="company_city"
+                maxlength="64"
+                }}
+            </div>
+
+            <div class="group company-form__district cols-2-desktop" id="AddressDistrictGroup">
+              {{snippet
+                "form-field"
+                wrapId="AddressDistrictSelectContainer"
+                hidden="true"
+                type="select"
+                id="AddressDistrictSelect"
+                showArrow="true"
+                name="company[billing_address][district_code]"
+                placeholder=(t 'customer.company.billing.district.placeholder')
+                autocomplete="company_district"
+                }}
+              {{snippet
+                "form-field"
+                wrapId="AddressDistrictInputContainer"
+                hidden="true"
+                type="text"
+                id="AddressDistrictInput"
+                name="company[billing_address][district]"
+                placeholder=(t 'customer.company.billing.district.placeholder')
+                autocomplete="company_district"
+                maxlength="64"
+                }}
+            </div>
+
+            {{snippet
+              "form-field"
+              id="CompanyZip"
+              name="company[billing_address][zip_code]"
+              placeholder=(t 'customer.company.billing.zip.placeholder')
+              autocomplete="company_zip"
+              maxlength="10"
+              classes="cols-2-desktop"}}
+          </address-cascade>
+
+          {{snippet
+            "form-field"
+            id="CompanyBillingAddress"
+            name="company[billing_address][addr]"
+            placeholder=(t 'customer.company.billing.address.placeholder')
+            autocomplete="company_address"
+            maxlength="255"}}
+
+          {{snippet
+            "form-field"
+            id="CompanyBillingAddress2"
+            name="company[billing_address][addr_two]"
+            placeholder=(t 'customer.company.billing.address2.placeholder')
+            autocomplete="company_address2"
+            maxlength="255"}}
+        </div>
+
+        <div class="company-form__footer">
+          <button type="submit" class="button">
+            {{t "customer.company.register.button"}}
+          </button>
+        </div>
+      {{/if}}
+    {{/form}}
+  </company-form>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main-company.name",
+  "class": "section",
+  "default": {
+    "setting": {
+      "padding_top": 80,
+      "padding_bottom": 80
+    }
+  },
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-company.settings.padding_top.label",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-company.settings.padding_bottom.label",
+      "default": 80
+    }
+  ]
+}
+{{/schema}}

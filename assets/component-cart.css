@@ -1,0 +1,87 @@
+.cart-empty .cart__warnings {
+  display: block;
+}
+
+.cart__footer-container.cart-empty,
+.cart-empty .cart__contents,
+.cart-empty .main-cart-items-container {
+  display: none;
+}
+
+.cart-drawer__inner-wrapper.cart-empty cart-drawer-items,
+.cart-drawer .cart-empty .cart-drawer__checkout-container {
+  display: none;
+}
+
+.cart__warnings {
+  display: none;
+  width: 100%;
+  text-align: center;
+}
+
+.cart__warnings .cart__empty-text-wrapper {
+  margin: 80px 0;
+}
+
+.cart__empty-product-recommend {
+  margin-top: 80px;
+}
+
+.cart-drawer .cart__warnings .cart__empty-text-wrapper {
+  margin: 200px 0;
+}
+
+.cart-drawer .cart__empty-product-recommend {
+  margin-top: 200px;
+}
+
+.cart__empty-text {
+  margin-bottom: 20px;
+  color: rgb(var(--color-text));
+}
+
+.cart__level-wrapper {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cart__level-wrapper svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.cart__level-wrapper .cart__level-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.6;
+}
+
+.cart__level-wrapper .cart__level-value {
+  color: rgba(var(--color-discount));
+  white-space: nowrap;
+}
+
+@media (max-width: 959px) {
+  .cart__warnings .cart__empty-text-wrapper {
+    margin: 130px 0;
+  }
+  .cart__empty-product-recommend {
+    margin-top: 130px;
+  }
+  .cart-drawer .cart__warnings .cart__empty-text-wrapper {
+    margin: 80px 0;
+  }
+  .cart-drawer .cart__empty-product-recommend {
+    margin-top: 80px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

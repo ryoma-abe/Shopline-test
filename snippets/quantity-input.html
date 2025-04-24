@@ -1,0 +1,45 @@
+{{assign 'min' (default min 1)}}
+{{assign 'max' (default max 99999)}}
+{{assign 'step' (default step 1)}}
+{{assign 'cart_qty' (default cart_qty 0)}}
+{{assign 'value' (default value 1)}}
+{{assign 'namespace' (ternary (eq namespace 'CartDrawer-') 'Drawer-quantity-' 'Quantity-')}}
+{{assign 'border_style' (default settings.border_style 'outline') }}
+
+<quantity-input class="quantity {{border_style}}-border">
+  <button class="quantity__button {{#if min == value}}disabled{{/if}}" name="minus" type="button">
+    {{#case border_style}}
+      {{#when 'line' 'outline'}}
+        {{snippet "icon-minus"}}
+      {{/when}}
+      {{#when 'none'}}
+        {{snippet "icon-minus-hollow"}}
+      {{/when}}
+    {{/case}}
+  </button>
+  <input
+    class="quantity__input body3"
+    type="number"
+    name="quantity"
+    id="{{namespace}}{{id}}"
+    min="{{min}}"
+    data-min="{{min}}"
+    max="{{max}}"
+    data-max="{{max}}"
+    step="{{step}}"
+    value="{{value}}"
+    data-cart-quantity="{{ cart_qty }}"
+    form="{{form_id}}"
+    {{#if min == value and max == value}}disabled{{/if}}
+  />
+  <button class="quantity__button {{#if max == value}}disabled{{/if}}" name="plus" type="button">
+    {{#case border_style}}
+      {{#when 'line' 'outline'}}
+        {{snippet "icon-plus"}}
+      {{/when}}
+      {{#when 'none'}}
+        {{snippet "icon-plus-hollow"}}
+      {{/when}}
+    {{/case}}
+  </button>
+</quantity-input>

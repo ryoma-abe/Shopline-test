@@ -1,0 +1,45 @@
+{{#comment}}
+  Render breadcrumb
+    Accepts:
+      - settings: {Object} theme settings
+      - class: {String} Custom classes
+{{/comment}}
+{{#unless template.name == "index" or template.name == "cart"}}
+  <nav class="breadcrumb body4 {{class}} {{#if settings.show_pc_breadcrumb}} display-block-desktop{{/if}} {{#if settings.show_mobile_breadcrumb}} display-block-tablet{{/if}} quick-add-modal-hidden">
+    <a href="{{routes.root_url}}">{{t "general.general.home"}}</a>
+    {{#if template.name == "collection" and collection.handle}}
+      <span class="breadcrumb__divider">/</span>
+      <span class="breadcrumb__last-crumb">{{collection.title}}</span>
+    {{else if template.name == "product"}}
+      {{#if collection}}
+        <span class="breadcrumb__divider">/</span>
+        <a href="{{collection.url}}" class="breadcrumb__collection">{{collection.title}}</a>
+      {{else}}
+        <product-breadcrumb class="display-none">
+          <span class="breadcrumb__divider">/</span>
+          <a href="javascript:;" class="breadcrumb__collection">
+            {{#for product.collections as |collection|}}
+              <span class="display-none" data-url="{{collection.url}}" data-id="{{collection.id}}">{{collection.title}}</span>
+            {{/for}}
+          </a>
+        </product-breadcrumb>
+      {{/if}}
+      <span class="breadcrumb__divider">/</span>
+      <span class="breadcrumb__last-crumb">{{product.title}}</span>
+    {{else if template.name == "blog"}}
+      <span class="breadcrumb__divider">/</span>
+      <span class="breadcrumb__last-crumb">{{blog.title}}</span>
+    {{else if template.name == "article"}}
+      <span class="breadcrumb__divider">/</span>
+      <a href="{{blog.url}}">{{blog.title}}</a>
+      <span class="breadcrumb__divider">/</span>
+      <span class="breadcrumb__last-crumb">{{article.title}}</span>
+    {{else if template.name == "page"}}
+      <span class="breadcrumb__divider">/</span>
+      <span class="breadcrumb__last-crumb">{{page.title}}</span>
+    {{else}}
+      <span class="breadcrumb__divider">/</span>
+      <span class="breadcrumb__last-crumb">{{page_title}}</span>
+    {{/if}}
+  </nav>
+{{/unless}}

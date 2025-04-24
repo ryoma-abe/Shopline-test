@@ -1,0 +1,286 @@
+{{snippet "stylesheet" href=(asset_url "section-main-article.css")}}
+<article class="article-template">
+  {{#for section.blocks as |block|}}
+    {{#if block.type == "select"}}
+      {{#if article.image.src}}
+        <div class="page-width article-template__hero-container" {{{block.shopline_attributes}}}>
+          <div
+            class="article-template__hero-{{block.settings.image_height}} media"
+            {{#if block.settings.image_height == "adapt" and article.image}}
+              style="padding-bottom:{{times (divide 1 article.image.aspect_ratio) 100}}%;"
+            {{/if}}
+          >
+            {{snippet "image" data=article.image lazy=false fetchpriority="high"}}
+          </div>
+        </div>
+      {{/if}}
+    {{/if}}
+    {{#if block.type == "title"}}
+      <header class="page-width" {{{block.shopline_attributes}}}>
+        {{snippet "breadcrumb" class="text-left" settings=settings}}
+        <h1 class="article-template__title title4">{{article.title}}</h1>
+        {{#if block.settings.blog_show_date}}
+          <span class="circle-divider caption-with-letter-spacing body3">
+            {{date article.published_at "abbreviated_date"}}
+          </span>
+        {{/if}}
+        {{#if block.settings.blog_show_author}}
+          <span class="caption-with-letter-spacing body3">
+            <span itemprop="name">{{article.author}}</span>
+          </span>
+        {{/if}}
+      </header>
+      <div class="article-template__divide page-width"></div>
+    {{/if}}
+    {{#if block.type == "content"}}
+      <div class="article-template__content page-width rte body3" itemprop="articleBody" {{{block.shopline_attributes}}}>
+        {{{article.content}}}
+      </div>
+    {{/if}}
+    {{#if block.type == "share"}}
+      <div class="article-template__social-sharing page-width" {{{block.shopline_attributes}}}>
+        {{snippet
+          "share-card"
+          theme_settings=settings
+          share_type="article_detail"
+          share_data=article
+          domain=request.host
+        }}
+      </div>
+    {{/if}}
+  {{/for}}
+  <div class="article-template__back element-margin-top page-width">
+    <a href="{{blog.url}}" class="article-template__link link animate-arrow body3">
+      <span class="icon-wrap">{{snippet "icon-arrow"}}</span>
+      {{t "blog.general.back"}}
+    </a>
+  </div>
+  {{#if blog.comments_enabled}}
+    <div class="article-template__comment-wrapper">
+      <div id="comments" class="page-width">
+        {{#if article.comments_count > 0}}
+          {{assign "anchor_id" (append "#Comments-" article.id)}}
+          <h2 id="{{anchor_id}}" class="article-template__comment-title title4" tabindex="-1">
+            {{#if article.comments_count == 1}}
+              {{t "blog.comment.single_count" count=article.comments_count}}
+            {{else}}
+              {{t "blog.comment.title" count=article.comments_count}}
+            {{/if}}
+          </h2>
+          {{#paginate article.comments by=5}}
+            <div class="article-template__comments">
+              {{#if comment.status == "pending" and comment.content}}
+                <article id="{{comment.id}}" class="article-template__comments-comment body3">
+                  {{comment.content}}
+                  <footer class="right">
+                    <span class="circle-divider caption-with-letter-spacing body6">{{comment.author}}</span>
+                  </footer>
+                </article>
+              {{/if}}
+              {{#for article.comments as |comment|}}
+                <article id="{{comment.id}}" class="article-template__comments-comment body3">
+                  {{comment.content}}
+                  <footer class="right">
+                    <span class="circle-divider caption-with-letter-spacing body6">{{comment.author}}</span><span
+                      class="caption-with-letter-spacing body6"
+                    >
+                      {{date comment.created_at "abbreviated_date"}}
+                    </span>
+                  </footer>
+                </article>
+              {{/for}}
+              {{#if paginate.pages > 1}}
+                {{snippet "pagination" paginate=paginate anchor=""}}
+              {{/if}}
+            </div>
+          {{/paginate}}
+        {{/if}}
+        {{assign "moderated" blog.moderated}}
+        {{#form "new_comment" article}}
+          {{#if moderated and form.posted_successfully}}
+            {{assign "post_message" "blog.comment.comment_audit_tip"}}
+          {{else}}
+            {{assign "post_message" "blog.comment.success"}}
+          {{/if}}
+          <h2 class="title4 comment_title">{{t "blog.comment.post_comment"}}</h2>
+          {{#if form.errors.messages}}
+            <h3 class="field__info field__info--error body6" tabindex="-1">
+              {{snippet "icon-error"}}{{form.errors.messages}}
+            </h3>
+          {{/if}}
+          {{#if form.posted_successfully}}
+            <h3 class="field__info body6" tabindex="-1">
+              {{snippet "icon-success"}}{{t post_message}}
+            </h3>
+          {{/if}}
+          <div
+            {{#unless blog.moderated}}
+              class="article-template__comments-fields"
+            {{/unless}}
+          >
+            <div class="article-template__comment-fields">
+              <div class="field field--with-error">
+                <input
+                  type="text"
+                  name="comment[author]"
+                  id="CommentForm-author"
+                  class="field__input"
+                  autocomplete="name"
+                  value="{{form.author}}"
+                  required
+                  placeholder="{{t 'customer.account.name'}}"
+                />
+                <label class="field__label" for="CommentForm-author">
+                  {{t "customer.account.name"}}
+                </label>
+              </div>
+              <div class="field field--with-error">
+                {{snippet
+                  "input-email"
+                  input_name="comment[email]"
+                  input_id="CommentForm-email"
+                  input_autocomplete="email"
+                  input_class="field__input"
+                  input_value=form.email
+                  input_autocorrect="off"
+                  input_autocapitalize="off"
+                  input_required=true
+                  input_placeholder=(t "customer.account.email")
+                }}
+                <label class="field__label" for="CommentForm-email">
+                  {{t "customer.account.email"}}
+                </label>
+              </div>
+            </div>
+            <div class="field field--with-error">
+              <textarea
+                rows="5"
+                name="comment[body]"
+                id="CommentForm-body"
+                class="field__input text-area"
+                required
+                placeholder="{{t 'blog.comment.post_comment'}}"
+                value="{{form.body}}"
+              >{{form.body}}</textarea>
+              <label class="form__label field__label" for="CommentForm-body">
+                {{t "blog.comment.post_comment"}}</label>
+            </div>
+          </div>
+          {{#if blog.moderated}}
+            <p class="article-template__comment-warning body6">
+              {{t "blog.comment.moderated_tip"}}
+            </p>
+          {{/if}}
+          <div class="article-template__comment-submit">
+            <button type="submit" class="button">{{t "blog.comment.post_comment"}}</button>
+          </div>
+        {{/form}}
+      </div>
+    </div>
+  {{/if}}
+</article>
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "articleBody": {{{ json (strip_html article.content) }}},
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{{ append request.origin article.url }}}"
+    },
+    "headline": "{{ article.title }}",
+    {{#if article.excerpt}}
+      "description": {{{ json (strip_html article.excerpt) }}},
+    {{/if}}
+    {{#if article.image.src}}
+      "image": [
+        "{{{ article.image.src }}}"
+      ],
+    {{/if}}
+    "datePublished": "{{ date article.published_at '%Y-%m-%dT%H:%M:%SZ' }}",
+    "dateCreated": "{{ date article.created_at '%Y-%m-%dT%H:%M:%SZ' }}",
+    "author": {
+      "@type": "Person",
+      "name": "{{ article.author }}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ shop.name }}"
+    }
+  }
+</script>
+
+{{#schema}}
+{
+  "name": "t:sections.main-article.name",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "select",
+      "name": "t:sections.main-article.blocks.select.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "image_height",
+          "options": [
+            {
+              "value": "adapt",
+              "label": "t:sections.main-article.blocks.select.settings.image_height.options__0.label"
+            },
+            {
+              "value": "small",
+              "label": "t:sections.main-article.blocks.select.settings.image_height.options__1.label"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.main-article.blocks.select.settings.image_height.options__2.label"
+            },
+            {
+              "value": "large",
+              "label": "t:sections.main-article.blocks.select.settings.image_height.options__3.label"
+            }
+          ],
+          "default": "medium",
+          "label": "t:sections.main-article.blocks.select.settings.image_height.label"
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "t:sections.main-article.blocks.title.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "switch",
+          "id": "blog_show_date",
+          "default": true,
+          "label": "t:sections.main-article.blocks.title.settings.blog_show_date.label"
+        },
+        {
+          "type": "switch",
+          "id": "blog_show_author",
+          "default": false,
+          "label": "t:sections.main-article.blocks.title.settings.blog_show_author.label"
+        }
+      ]
+    },
+    {
+      "type": "share",
+      "name": "t:sections.main-article.blocks.share.name",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "content",
+      "name": "t:sections.main-article.blocks.content.name",
+      "limit": 1,
+      "settings": []
+    }
+  ]
+}
+{{/schema}}

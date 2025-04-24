@@ -1,0 +1,29 @@
+{{assign "conact_icon_1" block.settings.conact_icon_1}}
+{{assign "conact_text_1" block.settings.conact_text_1}}
+{{assign "conact_icon_2" block.settings.conact_icon_2}}
+{{assign "conact_text_2" block.settings.conact_text_2}}
+{{assign "conact_icon_3" block.settings.conact_icon_3}}
+{{assign "conact_text_3" block.settings.conact_text_3}}
+{{assign "conact_icon_4" block.settings.conact_icon_4}}
+{{assign "conact_text_4" block.settings.conact_text_4}}
+{{assign "conact_icon_5" block.settings.conact_icon_5}}
+{{assign "conact_text_5" block.settings.conact_text_5}}
+<div class="footer__block-wrapper footer-block__details-content">
+  <div class="footer__conact-list">
+    {{#if conact_text_1}}
+      {{snippet "footer-conact-block" icon=conact_icon_1 text=conact_text_1}}
+    {{/if}}
+    {{#if conact_text_2}}
+      {{snippet "footer-conact-block" icon=conact_icon_2 text=conact_text_2}}
+    {{/if}}
+    {{#if conact_text_3}}
+      {{snippet "footer-conact-block" icon=conact_icon_3 text=conact_text_3}}
+    {{/if}}
+    {{#if conact_text_4}}
+      {{snippet "footer-conact-block" icon=conact_icon_4 text=conact_text_4}}
+    {{/if}}
+    {{#if conact_text_5}}
+      {{snippet "footer-conact-block" icon=conact_icon_5 text=conact_text_5}}
+    {{/if}}
+  </div>
+</div>

@@ -1,0 +1,5 @@
+{{~#if lazy~}}
+  <link rel="stylesheet" href="{{ href }}" media="print" onload="this.media='all'">
+{{~else~}}
+  {{stylesheet_tag href preload=(default preload (ternary section.index (if section.index <= 2) true))}}
+{{~/if~}}

@@ -1,0 +1,16 @@
+.tips-cart {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+.tips-cart svg {
+  width: 14px;
+  margin-right: 4px;
+}
+.tips-cart-fail-color {
+  color: #e32619;
+}
+/* The ipad end responds to the mobile end in vertical screen */
+/* @custom-media --tablet (max-width: 959px); */
+/* @custom-media --gt-mobile (min-width: 751px); */
+/* detectingScreen need to consider the configuration of the tablet */

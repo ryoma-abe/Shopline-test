@@ -1,0 +1,53 @@
+{{ assign "salesIndexArr" (JSONparse '[1, 2, 3, 4]' )}}
+
+
+{{assign 'num' 0}}
+
+{{#for salesIndexArr as |item|}}
+  {{#if (trim (get (append 'product_sales_point_' item) settings)) }}
+    {{assign 'num' (plus num 1)}}
+  {{/if}}
+{{/for}}
+
+{{#capture 'gridNum'}}
+  {{~#if num == 1}}onlyOne
+  {{~else if num == 2}}onlyTwo
+  {{~else if num > 2}}overThree
+  {{~else}}overThree
+  {{/if}}
+{{/capture}}
+<div class="product__sell-info {{gridNum}} product__sell-info-{{settings.layout}}">
+  {{#for salesIndexArr as |item|}}
+    {{#if (trim (get (append 'product_sales_point_' item) settings)) }}
+      <div class="product__sell-box">
+        <div class="product__sell-icon">
+          {{#if (get (append 'product_sales_point_' item '_custom_icon') settings)}}
+            {{snippet 'image' style="width: 24px;height: 24px;object-fit: cover" class="product__sell-info__custom-icon" data=(get (append 'product_sales_point_' item '_custom_icon') settings)}}
+          {{else}}
+            {{#if (get (append 'product_sales_point_' item '_icon') settings) == 'checkmark'}}
+              {{snippet 'icon-sell-checkmark' }}
+            {{/if}}
+            {{#if (get (append 'product_sales_point_' item '_icon') settings) == 'globe'}}
+              {{snippet 'icon-sell-globe' }}
+            {{/if}}
+            {{#if (get (append 'product_sales_point_' item '_icon') settings) == 'leaf'}}
+              {{snippet 'icon-sell-leaf' }}
+            {{/if}}
+            {{#if (get (append 'product_sales_point_' item '_icon') settings) == 'lock'}}
+              {{snippet 'icon-sell-lock' }}
+            {{/if}}
+            {{#if (get (append 'product_sales_point_' item '_icon') settings) == 'package'}}
+              {{snippet 'icon-sell-package' }}
+            {{/if}}
+            {{#if (get (append 'product_sales_point_' item '_icon') settings) == 'truck'}}
+              {{snippet 'icon-sell-truck' }}
+            {{/if}}
+          {{/if}}
+        </div>
+        <div class="product__sell-text body3">
+          {{{ get (append 'product_sales_point_' item) settings }}}
+        </div>
+      </div>
+    {{/if}}
+  {{/for}}
+</div>

@@ -1,0 +1,100 @@
+{{snippet "stylesheet" href=(asset_url "snippet-cart-fixed-checkout.css")}}
+{{snippet "stylesheet" href=(asset_url "section-main-cart-footer.css")}}
+
+<script src="{{asset_url 'section-main-cart-footer.js'}}" defer="defer"></script>
+
+{{assign "scene" "main-cart"}}
+
+<div
+  class="page-width cart__footer-container {{#if cart.empty}}cart-empty{{/if}}"
+  id="main-cart-footer"
+  data-id="{{section.id}}"
+>
+  <div class="cart__checkout-container">
+    {{#for section.blocks as |block|}}
+      {{#if block.type == "subtotal"}}
+        <div class="cart__checkout-subtotal" {{{block.shopline_attributes}}}>
+          {{#if cart.discount_enable_cart}}
+            {{snippet "cart-coupon" cart=cart}}
+          {{/if}}
+
+          <ul class="cart__amount-wrapper">
+            {{#if cart.items_subtotal_price != cart.total_price}}
+              <li class="cart__subtotal">
+                <em class="body3">{{t "cart.checkout_proceeding.subtotal"}}</em>
+                <span class="body2 fw-bold">{{money_with_currency cart.items_subtotal_price}}</span>
+              </li>
+            {{/if}}
+            {{#if cart.total_discount > 0}}
+              {{snippet "cart-level-discount-applications" cart=cart}}
+            {{/if}}
+            <li class="cart__total">
+              <em class="body2 fw-bold">{{t "cart.payment.total_sum"}}</em>
+              <span class="body2 fw-bold">{{money_with_currency cart.total_price}}</span>
+            </li>
+          </ul>
+        </div>
+      {{/if}}
+      {{#if block.type == "buttons"}}
+        <div class="cart__checkout-wrapper" {{{block.shopline_attributes}}}>
+          <div class="cart__checkout">
+            {{#if additional_checkout_buttons}}
+              {{{content_for_additional_checkout_buttons}}}
+            {{/if}}
+            {{assign "form_id" (append "cart-form--" scene)}}
+            {{#form "cart" id=form_id}}
+              <button type="submit" id="checkout" class="cart__checkout-button button" name="checkout">
+                {{t "cart.checkout_proceeding.checkout"}}
+              </button>
+            {{/form}}
+          </div>
+          <div class="cart__taxes__desc body4 rte">
+            {{#if cart.taxes_included and shop.shipping_policy.body}}
+              {{{t "cart.next_step.taxes_included_and_shipping_policy_html" link=shop.shipping_policy.url}}}
+            {{else if cart.taxes_included}}
+              {{t "cart.next_step.taxes_included_but_shipping_at_checkout"}}
+            {{else if shop.shipping_policy.body}}
+              {{{t "cart.next_step.taxes_and_shipping_policy_at_checkout_html" link=shop.shipping_policy.url}}}
+            {{else}}
+              {{t "cart.next_step.calculated_taxes_fees"}}
+            {{/if}}
+          </div>
+        </div>
+      {{/if}}
+      {{#startsWith "shopline://apps" block.type}}
+        {{render block}}
+      {{/startsWith}}
+    {{/for}}
+    <div id="cart-errors"></div>
+  </div>
+
+  {{snippet
+    "cart-fixed-checkout"
+    scene=scene
+    cart=cart
+    shop=shop
+    className="cart-footer__fixed-checkout display-none-desktop"
+  }}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main-cart-footer.name",
+  "class": "section",
+  "blocks": [
+    {
+      "type": "buttons",
+      "name": "t:sections.main-cart-footer.blocks.buttons.name",
+      "limit": 1
+    },
+    {
+      "type": "subtotal",
+      "name": "t:sections.main-cart-footer.blocks.subtotal.name",
+      "limit": 1
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{{/schema}}

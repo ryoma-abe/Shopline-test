@@ -1,0 +1,52 @@
+.addresses-container {
+  max-width: 780px;
+}
+.addresses-container .address-form,
+.addresses-container address-cascade,
+.addresses-container .address-form__footer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.addresses-container .address-form__footer {
+  width: 100%;
+  align-items: center;
+}
+@media (max-width: 959px) {
+  .addresses-container .address-form__footer {
+    width: 100%;
+    align-items: flex-start;
+  }
+  .addresses-container .address-form__footer .address-form__btns {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .addresses-container .address-form__footer .button {
+    width: 100%;
+  }
+  .addresses-container .address-form__footer .button + .button {
+    margin-bottom: 12px;
+  }
+}
+.addresses-container .address-form__btns > .button:first-child {
+  margin-right: 12px;
+}
+@media (min-width: 960px) {
+  .addresses-container .cols-2-desktop {
+    width: calc(50% - 8px);
+  }
+}
+.addresses-container .group {
+  width: 100%;
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

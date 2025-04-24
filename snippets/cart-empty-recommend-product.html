@@ -1,0 +1,52 @@
+{{assign "grid_class" grid_class}}
+{{assign "title_class" title_class}}
+
+{{#if settings.cart_empty_recommend_collection.products.length > 0}}
+  {{snippet "stylesheet" href=(asset_url "component-card.css")}}
+  {{snippet "stylesheet" href=(asset_url "component-price.css")}}
+  {{snippet "stylesheet" href=(asset_url "snippet-cart-empty-recommend-product.css")}}
+
+  {{#if settings.enabled_color_swatch}}
+    {{snippet "stylesheet" href=(asset_url "component-color-swatches.css")}}
+    <script src="{{asset_url 'component-color-swatch.js'}}" defer="defer"></script>
+    <script src="{{asset_url 'component-color-swatch-radios.js'}}" defer="defer"></script>
+    <script src="{{asset_url 'component-product-form.js'}}" defer></script>
+  {{/if}}
+  {{#if settings.enable_quick_view}}
+    {{snippet "stylesheet" href=(asset_url "component-quick-add.css")}}
+    <script src="{{asset_url 'component-quick-add.js'}}" defer></script>
+  {{/if}}
+
+  <div class="cart__empty-product-recommend text-left">
+    {{#if settings.cart_empty_recommend_title}}
+      <div class="cart__empty-product-recommend-title text-center {{title_class}}">{{settings.cart_empty_recommend_title}}</div>
+    {{/if}}
+    <slider-component class="slider-mobile-gutter">
+      <ul
+        id="Slider-{{section.id}}"
+        class="{{grid_class}} slider contains-product-card-slider slider--mobile slider-full-screen "
+      >
+        
+          {{assign "limit" (multiply settings.cart_empty_recommend_product_to_show 1)}}
+          {{#for settings.cart_empty_recommend_collection.products limit=limit as |product|}}
+            <li
+              id="Slide-{{section.id}}-product-recommend"
+              class="grid__item slider__slide"
+            >
+              {{snippet
+                "product-card"
+                product_data=product
+                image_ratio=settings.cart_empty_recommend_product_image_ratio
+                show_secondary_image=false
+                section_id=section.id
+                desktop_grid_cols="4"
+                mobile_grid_cols="2"
+                image_fill_type=settings.cart_empty_recommend_product_image_fill_type
+                theme_settings=settings
+              }}
+            </li>
+          {{/for}}
+      </ul>
+    </slider-component>
+  </div>
+{{/if}}

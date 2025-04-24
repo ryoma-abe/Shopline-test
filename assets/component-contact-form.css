@@ -1,0 +1,56 @@
+.contact img {
+  max-width: 100%;
+}
+.contact .title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.contact .form__message {
+  align-items: flex-start;
+}
+.contact .icon-success {
+  margin-top: 2px;
+}
+.contact .field {
+  margin-bottom: 15px;
+}
+.contact .field__info {
+  margin-bottom: 20px;
+}
+@media screen and (min-width: 960px) {
+  .contact .field {
+    margin-bottom: 20px;
+  }
+  .contact .field__info {
+    margin-bottom: 30px;
+  }
+}
+.contact__button {
+  margin-top: 30px;
+  text-align: center;
+}
+.contact__button .button {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+@media screen and (min-width: 960px) {
+  .contact__button {
+    margin-top: 40px;
+  }
+}
+@media screen and (min-width: 960px) {
+  .contact__fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 20px;
+  }
+}
+@media screen and (min-width: 960px) {
+  .contact .title {
+    margin-bottom: 30px;
+  }
+}
+/* The ipad end responds to the mobile end in vertical screen */
+/* @custom-media --tablet (max-width: 959px); */
+/* @custom-media --gt-mobile (min-width: 751px); */
+/* detectingScreen need to consider the configuration of the tablet */

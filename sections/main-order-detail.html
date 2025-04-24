@@ -1,0 +1,298 @@
+{{snippet "stylesheet" href=(asset_url "section-main-order-detail.css")}}
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+<div class="page-width order-detail-page section section-padding">
+  <section class="order-detail">
+    <div class="order-detail__title body4">
+      <div class="order-detail__seq body2 fw-bold">{{t 'order.order_status.sequence' id=(append '#' order.order_number) }}</div>
+      <div class="order-detail__create-time">
+        <span>{{t 'order.order_details.time'}}</span>
+        {{ date order.created_at '%Y-%m-%d %H:%M' }}
+      </div>
+      
+      {{#if order.cancelled}}
+        <span class="order-detail__status fw-bold">
+          {{t 'order.order_status.canceled'}}
+        </span>
+      {{/if}}
+    </div>
+
+    
+    <div class="order-detail__panel">
+      <h3 class="panel__title body2 fw-bold">{{ t 'order.shipping.info' }}</h3>
+      <div class="panel__content body4 order-detail__info">
+        {{#if order.customer.name}}<p>{{ order.customer.name }}</p>{{/if}}
+        {{#if order.customer.email}}<p>{{ order.customer.email }}</p>{{/if}}
+        {{#if order.customer.phone}}<p>{{ order.customer.phone }}</p>{{/if}}
+        {{#if order.shipping_address}}{{ format_address order.shipping_address }}{{/if}}
+      </div>
+    </div>
+
+    
+    <div class="order-detail__content">
+      
+      <table class="order-detail__product-table">
+        <thead class="product-table__head body2 fw-bold">
+          <tr>
+            <th align="left" colspan="3">{{ t 'order.order_list.item_amount' item=order.item_count }}</th>
+            <th class="head-title--quantity" align="right">{{ t 'order.order_details.products.quantity' }}</th>
+            <th class="display-none-tablet" align="right">{{ t 'products.facets.price.label' }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#for order.line_items as |item|}}
+            {{ assign 'has_fulfillment' (if (length item.fulfillments) > 0) }}
+            <tr class="body3">
+              <td align="left">
+                <div class="product-item__cover">
+                  {{#if item.image.src}}
+                    {{ snippet 'image' data=item.image pc_size="80px" mobile_size="64px" }}
+                  {{else}}
+                    {{ placeholder_svg_tag 'image' "image-fallback"}}
+                  {{/if}}
+                </div>
+              </td>
+              <td class="main-col left" align="left" {{#not has_fulfillment}}colspan="2"{{/not}}>
+                <div class="product-item__main">
+                  <div class="product-item__info">
+                    <p class="product-item__title tag-unstyled">{{ item.title }}</p>
+                    <p class="product-item__spec tag-unstyled body5">
+                      {{#for item.options_with_values as |option|}}
+                        <span>{{ option.value }}</span>{{#not forloop.last}} / {{/not}}
+                      {{/for}}
+                    </p>
+                    {{#for item.line_level_discount_allocations as |discount_allocation|}}
+                      <span class="product-item__discount body5">
+                        {{ snippet 'icon-discount-tag' }}
+                        {{ discount_allocation.discount_application.title }}(-{{ money_with_currency discount_allocation.amount currency=order.currency }})
+                      </span>
+                    {{/for}}
+
+                    
+                    {{#if item.properties.length > 0}}
+                      {{#for item.properties as |property|}}
+                        <div class="product-property product-item__spec body5">
+                          <span class="product-property__name">{{property.name}}:&nbsp;</span>
+                          {{#if property.type == "text"}}
+                            <span>{{property.value}}</span>
+                          {{else if property.type == "link"}}
+                            <a class="button button--link" href="{{property.urls.[0]}}" target="_blank">
+                              {{#if property.value}}
+                                {{property.value}}
+                              {{else}}
+                                {{t 'cart.item.click_to_view'}}
+                              {{/if}}
+                            </a>
+                          {{else if property.type == "picture"}}
+                            <div class="product-property__value">
+                              {{#for property.urls as |url|}}
+                                <a class="product-property__link" href="{{url}}" target="_blank">
+                                  {{snippet "image" class="product-property__image" data=url}}
+                                </a>
+                              {{/for}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/for}}
+                    {{/if}}
+                  </div>
+                  
+                  {{#if has_fulfillment}}
+                    <div class="product-item__fulfillments display-none-desktop">
+                      {{#for item.fulfillments as |fulfillment|}}
+                        <div class="product-item__fulfillment">
+                          <div class="fulfillment__text body4">{{ t 'order.fulfillment.createTime' time=fulfillment.created_at }}</div>
+                          {{#if fulfillment.tracking_number}}<div class="fulfillment__text body4 fw-bold">{{ fulfillment.tracking_company }} {{ fulfillment.tracking_number }}</div>{{/if}}
+                          {{#if fulfillment.tracking_url}}<a class="fulfillment__text fulfillment__link body4 fw-bold" href="{{ fulfillment.tracking_url }}" target="_blank">{{ t 'order.shipping.package_tracking' }}</a>{{/if}}
+                        </div>
+                      {{/for}}
+                    </div>
+                  {{/if}}
+                  
+                  <span class="product-item__prices fw-bold display-none-desktop">
+                    {{#if item.original_price != item.final_price}}
+                      <span class="product-item__ori-price">{{ money_with_currency item.original_price currency=order.currency }}</span>
+                    {{/if}}
+                    <span class="product-item__price">{{ money_with_currency item.final_price currency=order.currency }}</span>
+                  </span>
+                </div>
+              </td>
+              
+              {{#if has_fulfillment}}
+                <td class="fulfillment-td" align="left">
+                  <div class="product-item__fulfillments display-none-tablet">
+                    {{#for item.fulfillments as |fulfillment|}}
+                      <div class="product-item__fulfillment">
+                        <div class="fulfillment__text body4">{{ t 'order.fulfillment.createTime' time=fulfillment.created_at }}</div>
+                        {{#if fulfillment.tracking_number}}<div class="fulfillment__text body4 fw-bold">{{ fulfillment.tracking_company }} {{ fulfillment.tracking_number }}</div>{{/if}}
+                        {{#if fulfillment.tracking_url}}<a class="fulfillment__text fulfillment__link body4 fw-bold" href="{{ fulfillment.tracking_url }}" target="_blank">{{ t 'order.shipping.package_tracking' }}</a>{{/if}}
+                      </div>
+                    {{/for}}
+                  </div>
+                </td>
+              {{/if}}
+              <td class="tool-col fw-bold" align="right">
+                <div class="col-wrap">
+                  <span class="product-item__quantity">x{{ item.quantity }}</span>
+                </div>
+              </td>
+              <td class="tool-col display-none-tablet fw-bold" align="right">
+                <div class="col-wrap">
+                  <div class="product-item__prices">
+                    {{#if item.original_price != item.final_price}}
+                      <span class="product-item__ori-price">{{ money_with_currency item.original_price currency=order.currency }}</span>
+                    {{/if}}
+                    <span class="product-item__price">{{ money_with_currency item.final_price currency=order.currency }}</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {{/for}}
+        </tbody>
+      </table>
+      
+      <div class="order-detail__cost">
+        <div class="cost__block body4">
+          <div class="cost__item">
+            <div class="cost__label">{{ t 'cart.payment.subtotal_price' }}</div>
+            <div class="cost__content">
+              <span>{{ money_with_currency order.line_items_subtotal_price currency=order.currency }}</span>
+            </div>
+          </div>
+          <div class="cost__item">
+            <div class="cost__label">{{ t 'transaction.general.shipping_fee' }}</div>
+            <div class="cost__content">
+              <span>{{ ternary order.shipping_price (money_with_currency order.shipping_price currency=order.currency) (t 'transaction.general.free_charge') }}</span>
+            </div>
+          </div>
+          {{#if order.tip}}
+            <div class="cost__item">
+              <div class="cost__label">{{ t 'transaction.general.order_tip' }}</div>
+              <div class="cost__content">
+                <span>{{ money_with_currency order.tip currency=order.currency }}</span>
+              </div>
+            </div>
+          {{/if}}
+          {{#if order.rounding}}
+            <div class="cost__item">
+              <div class="cost__label">{{ t 'order.order_details.adjust' }}</div>
+              <div class="cost__content">
+                <span>{{ money_with_currency order.rounding currency=order.currency }}</span>
+              </div>
+            </div>
+          {{/if}}
+          {{#if order.tax_price}}
+            <div class="cost__item">
+              <div class="cost__label">{{ t 'transaction.general.order_tax' }}</div>
+              <div class="cost__content">
+                <span>{{ money_with_currency order.tax_price currency=order.currency }}</span>
+              </div>
+            </div>
+          {{/if}}
+          {{#if order.total_discounts}}
+            <div class="cost__item">
+              <div class="cost__label">{{ t 'transaction.general.trade_coupon_discount' }}</div>
+              <div class="cost__content">
+                <span>-{{ money_with_currency order.total_discounts currency=order.currency }}</span>
+              </div>
+            </div>
+          {{/if}}
+          {{#for order.transactions as |transaction|}}
+            {{#if transaction.payment_details.gift_card}}
+              <div class="cost__item">
+                <div class="cost__label">{{ t 'trade.reduction_code.giftcard' }}(....{{ transaction.payment_details.gift_card.last_four_characters }})</div>
+                <div class="cost__content">
+                  <span>-{{ money_with_currency transaction.amount currency=order.currency }}</span>
+                </div>
+              </div>
+            {{/if}}
+          {{/for}}
+        </div>
+        <div class="cost__block body3">
+          <div class="cost__item">
+            <div class="cost__label fw-bold">{{ t 'transaction.payment.total' }}</div>
+            <div class="cost__content fw-bold">
+              <span>{{ money_with_currency order.total_price currency=order.currency }}</span>
+            </div>
+          </div>
+        </div>
+        <a href="{{order.rebuy_url}}" class="order-detail_rebuy button button--secondary">
+          {{t "transaction.order.rebuy"}}
+        </a>
+      </div>
+    </div>
+
+    
+    <div class="order-detail__panel">
+      <h3 class="panel__title body2 fw-bold">{{ t 'order.payment.payment' }}</h3>
+      <div class="panel__content body4 order-detail__pay-info">
+        <div class="pay-info">
+          <div class="pay-info__label">{{ t 'order.payment.payment_status' }}</div>
+          <div class="pay-info__content">{{ order.financial_status_label }}</div>
+        </div>
+        <div class="pay-info">
+          <div class="pay-info__label">{{ t 'order.payment.billing_address' }}</div>
+          {{ assign 'format_billing_address' (format_address order.billing_address) }}
+          <div class="pay-info__content">{{{ replace format_billing_address.string '<br>' ', ' }}}</div>
+        </div>
+      </div>
+    </div>
+
+    
+    {{#if order.note}}
+      <div class="order-detail__panel">
+        <h3 class="panel__title body2 fw-bold">{{ t 'order.order_details.remark' }}</h3>
+        <div class="panel__content body4">
+          {{ order.note }}
+        </div>
+      </div>
+    {{/if}}
+
+    
+    <div class="order-detail__panel">
+      <h3 class="panel__title body2 fw-bold">{{ t 'order.order_status.contact_us' }}</h3>
+      <div class="panel__content body4">
+        {{t 'order.order_status.help_tips' email=@root.shop.email }}
+      </div>
+    </div>
+  </section>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main-order-detail.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "group_header",
+      "label": "t:sections.main-order-detail.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-order-detail.settings.padding_top.label",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-order-detail.settings.padding_bottom.label",
+      "default": 80
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,66 @@
+.blog-breadcrumb {
+  align-items: center;
+  color: rgba(var(--color-text));
+  display: inline-flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.blog-breadcrumb-separator {
+  margin: 0 10px;
+}
+
+.blogslist__title {
+  margin-bottom: 60px;
+}
+
+@media (max-width: 959px) {
+  .blogslist__title {
+    margin-bottom: 30px;
+  }
+}
+
+.blogslist__list {
+  display: grid;
+  column-gap: 22px;
+  row-gap: 50px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.blogslist__list .blogslist__item {
+  grid-column: span 2;
+}
+
+@media (max-width: 959px) {
+  .blogslist__list .blogslist__item {
+    grid-column: span 2 !important;
+  }
+}
+
+.blogslist__list--grid .blogslist__item {
+  grid-column: span 1;
+}
+
+@media (min-width: 960px) {
+  .blogslist__list--grid {
+    grid-template-columns: repeat(var(--blog-list-columns, 2), 1fr);
+  }
+}
+
+.blog-item-grid-list .blogslist__item {
+  grid-column: span 2;
+}
+
+.blog-item-grid-list .blogslist__item:nth-child(3n - 1),
+.blog-item-grid-list .blogslist__item:nth-child(3n) {
+  grid-column: span 1;
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

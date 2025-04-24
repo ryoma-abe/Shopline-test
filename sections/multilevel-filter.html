@@ -1,0 +1,251 @@
+{{snippet "stylesheet" href=(asset_url "section-multilevel-filter.css")}}
+<script src="{{asset_url 'component-select.js'}}" defer></script>
+<script src="{{asset_url 'section-multilevel-filter.js'}}" defer></script>
+
+<multilevel-filter
+  class="multilevel-filter
+    {{#if section.settings.mobile_height == 'natural_text'}}multilevel-filter--natural-text{{/if}}
+    color-scheme-{{section.settings.color_scheme}}"
+  style="
+    --desktop-section-height: {{#if section.settings.desktop_height == 'natural' and (not section.settings.background_image)}}650px{{else}}{{section.settings.desktop_height}}{{/if}};
+    --mobile-section-height: {{#if section.settings.mobile_height == 'natural' and (not section.settings.background_image)}}500px{{else}}{{section.settings.mobile_height}}{{/if}};
+    --section-image-mask-opacity: {{section.settings.image_mask}}%;
+  "
+>
+  <div class="multilevel-filter__media">
+    {{#if section.settings.background_image}}
+      {{snippet "image" class="multilevel-filter__image" data=section.settings.background_image}}
+      <div class="multilevel-filter__image-mask"></div>
+    {{/if}}
+  </div>
+
+  <div class="multilevel-filter__content page-width">
+    <div class="multilevel-filter__head">
+      {{#if section.settings.title}}
+        <h2 class="multilevel-filter__title title3">{{section.settings.title}}</h2>
+      {{/if}}
+
+      {{#if section.settings.sub_title}}
+        <p class="multilevel-filter__sub-title body1">{{section.settings.sub_title}}</p>
+      {{/if}}
+    </div>
+
+    {{assign "selector_length" (size (where section.blocks "type" "item"))}}
+    <form
+      class="multilevel-filter__form body3
+        {{#if selector_length <= 4}}
+          multilevel-filter__form--one-line
+        {{else if selector_length < 8}}
+          multilevel-filter__form--two-line
+        {{else}}
+          multilevel-filter__form--three-line
+        {{/if}}
+        "
+      method="get"
+      action="{{default section.settings.collection.url routes.all_products_collection_url}}"
+    >
+      {{#for section.blocks as |block|}}
+        {{#if block.type == "item"}}
+          <div class="multilevel-filter__selector" {{{block.shopline_attributes}}}>
+            <span class="multilevel-filter__selector-label body3">{{block.settings.title}}</span>
+            <select-component
+              class="multilevel-filter__selector-input"
+              data-position="bottom"
+              data-filter="{{block.settings.title}}"
+              disabled="true"
+            >
+              <select title="{{block.settings.title}}" {{#if forloop.index0 == 0}}required{{/if}}>
+                <option value="" data-mobile-label="{{block.settings.title}}" selected hidden disabled>{{t
+                    "general.select.placeholder"
+                  }}</option>
+              </select>
+              {{render "icon-loading" class_name="select-component__loading"}}
+              {{render "icon-arrow" class_name="select-component__arrow"}}
+            </select-component>
+          </div>
+        {{/if}}
+      {{/for}}
+
+      <button type="submit" class="multilevel-filter__search-button button">
+        {{#if section.settings.button_text}}
+          {{section.settings.button_text}}
+        {{else}}
+          {{snippet "icon-search" classes="multilevel-filter__search-button-icon"}}
+        {{/if}}
+      </button>
+    </form>
+
+    {{#if section.settings.description}}
+      <p class="multilevel-filter__description body3 rte">{{{section.settings.description}}}</p>
+    {{/if}}
+  </div>
+</multilevel-filter>
+
+{{#schema}}
+{
+  "name": "t:sections.multilevel-filter.name",
+  "class": "section",
+  "settings": [
+    {
+      "id": "collection",
+      "type": "collection_picker",
+      "label": "t:sections.multilevel-filter.settings.collection.label",
+      "info": "t:sections.multilevel-filter.settings.collection.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "label": "t:sections.multilevel-filter.settings.title.label",
+      "default": "Search for products"
+    },
+    {
+      "id": "sub_title",
+      "type": "textarea",
+      "label": "t:sections.multilevel-filter.settings.sub_title.label",
+      "default": "Easy to find your favorite product"
+    },
+    {
+      "id": "button_text",
+      "type": "text",
+      "label": "t:sections.multilevel-filter.settings.button_text.label",
+      "default": "Search"
+    },
+    {
+      "id": "description",
+      "type": "richtext",
+      "label": "t:sections.multilevel-filter.settings.description.label",
+      "default": "SHOP BY PRODUCT 丨 SHOP BY BRAND 丨 SHOP BY SERVICE TYPE"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.multilevel-filter.settings.color_scheme.label",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.multilevel-filter.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.multilevel-filter.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.multilevel-filter.settings.color_scheme.options__2.label"
+        }
+      ]
+    },
+    {
+      "id": "background_image",
+      "type": "image_picker",
+      "label": "t:sections.multilevel-filter.settings.background_image.label"
+    },
+    {
+      "id": "image_mask",
+      "type": "range",
+      "label": "t:sections.multilevel-filter.settings.image_mask.label",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "id": "desktop_height",
+      "type": "select",
+      "label": "t:sections.multilevel-filter.settings.desktop_height.label",
+      "default": "650px",
+      "options": [
+        {
+          "label": "t:sections.multilevel-filter.settings.desktop_height.options__0.label",
+          "value": "natural"
+        },
+        {
+          "label": "t:sections.multilevel-filter.settings.desktop_height.options__1.label",
+          "value": "450px"
+        },
+        {
+          "label": "t:sections.multilevel-filter.settings.desktop_height.options__2.label",
+          "value": "550px"
+        },
+        {
+          "label": "t:sections.multilevel-filter.settings.desktop_height.options__3.label",
+          "value": "650px"
+        },
+        {
+          "label": "t:sections.multilevel-filter.settings.desktop_height.options__4.label",
+          "value": "750px"
+        },
+        {
+          "label": "t:sections.multilevel-filter.settings.desktop_height.options__5.label",
+          "value": "100vh"
+        }
+      ]
+    },
+    {
+      "id": "mobile_height",
+      "type": "select",
+      "label": "t:sections.multilevel-filter.settings.mobile_height.label",
+      "default": "natural_text",
+      "options": [
+        {
+          "label": "t:sections.multilevel-filter.settings.mobile_height.options__0.label",
+          "value": "natural"
+        },
+        {
+          "label": "t:sections.multilevel-filter.settings.mobile_height.options__1.label",
+          "value": "natural_text"
+        },
+        {
+          "label": "t:sections.multilevel-filter.settings.mobile_height.options__2.label",
+          "value": "500px"
+        },
+        {
+          "label": "t:sections.multilevel-filter.settings.mobile_height.options__3.label",
+          "value": "100vh"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:sections.multilevel-filter.blocks.item.name",
+      "icon": "normal",
+      "limit": 8,
+      "settings": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": "t:sections.multilevel-filter.blocks.item.settings.title.label",
+          "info": "t:sections.multilevel-filter.blocks.item.settings.title.info",
+          "default": "Filter title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 2,
+      "category": "t:sections.multilevel-filter.presets.presets__0.category",
+      "name": "t:sections.multilevel-filter.presets.presets__0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {}
+        },
+        {
+          "type": "item",
+          "settings": {}
+        },
+        {
+          "type": "item",
+          "settings": {}
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

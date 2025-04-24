@@ -1,0 +1,20 @@
+
+
+<div class="navbar__container">
+  <div class="navbar">
+    <a
+      href="{{routes.account_url}}"
+      class="body2 fw-bold navbar__item {{ternary (eq request.path routes.account_url) 'active' ''}}"
+    >{{t "customer.account.personal__info"}}</a>
+    <a
+      href="{{routes.account_order_list_url}}"
+      class="body2 fw-bold navbar__item {{ternary (eq request.path routes.account_order_list_url) 'active' ''}}"
+    >{{t "customer.general.orders"}}</a>
+  </div>
+
+  <div class="display-none-tablet">
+    <a href="{{routes.account_logout_url}}" class="logout-btn button button--link">
+      {{t "customer.general.sign__out"}}
+    </a>
+  </div>
+</div>

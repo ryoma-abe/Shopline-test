@@ -1,0 +1,61 @@
+cyclic-scroll {
+  display: block;
+  color: rgb(var(--color-announcement-bar-text));
+  background-color: rgb(var(--color-announcement-bar-background));
+}
+cyclic-scroll .cyclic-scroll__container {
+  display: inline-flex;
+  max-width: 100%;
+  overflow: hidden;
+}
+cyclic-scroll .cyclic-scroll__container.cyclic-scroll-stop *,
+cyclic-scroll .cyclic-scroll__container:hover * {
+  animation-play-state: paused !important;
+}
+cyclic-scroll .cyclic-scroll__container.cyclic-scroll-clear-animation * {
+  animation: none !important;
+}
+cyclic-scroll .cyclic-scroll__container .cyclic-scroll__inner {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  animation-play-state: running;
+  animation: sl-cyclic-scroll-move var(--scroll-speed-pc) linear infinite;
+}
+@media (max-width: 959px) {
+  cyclic-scroll .cyclic-scroll__container .cyclic-scroll__inner {
+    animation: sl-cyclic-scroll-move var(--scroll-speed-mb) linear infinite;
+  }
+}
+cyclic-scroll
+  .cyclic-scroll__container
+  .cyclic-scroll__inner
+  .cyclic-scroll__item {
+  width: max-content;
+  padding: 0 150px;
+}
+@media (max-width: 959px) {
+  cyclic-scroll
+    .cyclic-scroll__container
+    .cyclic-scroll__inner
+    .cyclic-scroll__item {
+    padding: 0 80px;
+  }
+}
+@keyframes sl-cyclic-scroll-move {
+  0% {
+    transform: translateZ(0);
+  }
+
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

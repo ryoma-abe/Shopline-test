@@ -1,0 +1,205 @@
+{{snippet "stylesheet" href=(asset_url "section-video.css")}}
+<script src="{{asset_url 'section-video.js'}}" defer></script>
+
+{{assign 'video' section.settings.internal_video }}
+{{assign 'external_video' section.settings.external_video }}
+{{assign 'autoplay' section.settings.video_auto_play}}
+
+{{assign 'cover' section.settings.cover }}
+{{assign 'title' section.settings.title}}
+{{assign 'title_size' section.settings.title_size}}
+{{assign 'pageWidth' settings.page_width}}
+{{#capture 'cover_sizes'}}{{#if section.settings.full_width }}100vw{{ else }}(min-width: {{ pageWidth }}px) {{ minus pageWidth 100 }}px, (min-width: 750px) calc(100vw - 100px), 100vw{{/if}}{{/capture}}
+
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+<video-section data-auto-play="{{ autoplay }}">
+  <div class="color-scheme-{{section.settings.color_scheme}}">
+    <div
+      class="video-section {{#unless section.settings.full_width }}page-width{{/unless}} section-padding"
+    >
+      <div {{#if section.settings.full_width }}class="page-width"{{/if}}>
+        {{#if title}}
+          <div class="video-section__title-wrapper">
+            <h2 class="{{title_size}} text-center text-uppercase">
+              {{title}}
+            </h2>
+          </div>
+        {{/if}}
+      </div>
+      <deferred-media
+        class="video-section__media deferred-media"
+        data-media-id="video-id"
+        {{#if cover }} style="padding-bottom: {{append (default (divide 100 cover.aspect_ratio) 56.25) '%'}}"{{/if}}
+      >
+        {{#if video or external_video}}
+          <button
+            id="Deferred-Poster-Modal-video-id"
+            class="video-section__poster media deferred-media__poster"
+            type="button"
+          >
+            {{#if cover}}
+              {{ snippet 'image' sizes=cover_sizes class="video-section__cover" data=section.settings.cover}}
+            {{else}}
+              {{placeholder_svg_tag "image" "placeholder"}}
+            {{/if}}
+            <span class="deferred-media__poster-button">
+              {{snippet "icon-play"}}
+            </span>
+          </button>
+        {{else}}
+          {{#if cover}}
+            {{ snippet 'image' sizes=cover_sizes class="video-section__cover" data=section.settings.cover}}
+          {{else}}
+            {{placeholder_svg_tag "image" "placeholder"}}
+          {{/if}}
+        {{/if}}
+        <template>
+          {{ snippet "video" muted=(ternary (if autoplay) true false) video=video external_video=external_video }}
+        </template>
+      </deferred-media>
+    </div>
+  </div>
+</video-section>
+
+{{#schema}}
+{
+  "name": "t:sections.video.name",
+  "icon": "video",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "",
+      "label": "t:sections.video.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "options": [
+        {
+          "value": "title5",
+          "label": "t:sections.video.settings.title_size.options__0.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.video.settings.title_size.options__1.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.video.settings.title_size.options__2.label"
+        }
+      ],
+      "default": "title3",
+      "label": "t:sections.video.settings.title_size.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "cover",
+      "label": "t:sections.video.settings.cover.label"
+    },
+    {
+      "type": "video",
+      "id": "internal_video",
+      "label": "t:sections.video.settings.internal_video.label"
+    },
+    {
+      "type": "video_url",
+      "id": "external_video",
+      "format": "video",
+      "label": "t:sections.video.settings.external_video.label",
+      "placeholder": "https://www.youtube.com/watch?v=V7BEzkRBp_g",
+      "info": "t:sections.video.settings.external_video.info"
+    },
+    {
+      "type": "switch",
+      "id": "video_auto_play",
+      "label": "t:sections.video.settings.video_auto_play.label",
+      "info": "t:sections.video.settings.video_auto_play.info",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "id": "full_width",
+      "label": "t:sections.video.settings.full_width.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.video.settings.color_scheme.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.video.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.video.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.video.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.video.settings.color_scheme.options__3.label"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.video.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.video.settings.padding_top.label",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.video.settings.padding_bottom.label",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 1,
+      "category": "t:sections.video.presets.presets__0.category",
+      "name": "t:sections.video.presets.presets__0.name",
+      "icon": "video",
+      "settings": {
+        "title": "",
+        "title_size": "title3",
+        "cover": {
+          "url": ""
+        },
+        "internal_video": "",
+        "external_video": "",
+        "full_width": true,
+        "color_scheme": "none",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  ]
+}
+{{/schema}}

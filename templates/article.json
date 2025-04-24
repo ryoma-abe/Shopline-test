@@ -1,0 +1,40 @@
+{
+  "sections": {
+    "main-article": {
+      "type": "main-article",
+      "disabled": false,
+      "blocks": {
+        "block1": {
+          "type": "title",
+          "settings": {
+            "blog_show_date": true,
+            "blog_show_author": true
+          }
+        },
+        "block2": {
+          "type": "select",
+          "settings": {
+            "image_height": "medium"
+          }
+        },
+        "block3": {
+          "type": "content",
+          "settings": {}
+        },
+        "block4": {
+          "type": "share",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "block1",
+        "block2",
+        "block3",
+        "block4"
+      ]
+    }
+  },
+  "order": [
+    "main-article"
+  ]
+}

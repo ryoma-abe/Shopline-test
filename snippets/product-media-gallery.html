@@ -1,0 +1,322 @@
+{{#comment}}
+  Renders a product media gallery. Should be used with 'media-gallery/index.js'
+  Also see 'product-media-modal'
+
+  Accepts:
+  - product: {Object} Product Handlebars object
+  - variant_images: {Array} Product images associated with a variant
+  - is_duplicate: {Boolean} Prevents rendering uneeded elements and duplicate ids for subsequent instances
+  - pc_magnifier_type: {click|hover} Commodity amplifier trigger method
+  - image_quality: {Number} Image compression ratio (optional) default 80.
+  - magnifier_interactive_type: {mode_1|mode_2 } Default: mode_1
+  - youtube_control: {Number} Enable YouTube controls (optional) 
+  - youtube_show_playlist: {Number} Enable YouTube playlist (optional)
+
+  Usage:
+  {{snippet 'product-media-gallery'}}
+{{/comment}}
+
+
+
+
+{{assign "hide_variants" (default section.settings.hide_variants false)}}
+{{assign "default_selected_variant" (default section.settings.default_selected_variant true)}}
+{{assign "is_selected_variant" product.selected_variant}}
+
+{{assign "media_count" product.media.length}}
+
+{{assign "featured_variant" ""}}
+{{assign "featured_media" ""}}
+{{#if default_selected_variant or is_selected_variant}}
+  {{assign "featured_variant" product.selected_or_first_available_variant}}
+  {{assign "featured_media" product.selected_or_first_available_variant.featured_media}}
+{{/if}}
+
+{{assign "youtube_control" (default youtube_control 1)}}
+{{assign "youtube_show_playlist" (default youtube_show_playlist 1)}}
+
+{{#if hide_variants and featured_variant and media_count > 1 and variant_images.length > 0}}
+  {{#if featured_media}}
+    {{assign "media_count" (plus (minus media_count variant_images.length) 1)}}
+  {{else}}
+    {{#comment}}
+      If the first media image is a variant image, it will be displayed on the page.
+    {{/comment}}
+    {{#if variant_images contains product.featured_media.src}}
+      {{assign "media_count" (plus (minus media_count variant_images.length) 1)}}
+    {{else}}
+      {{assign "media_count" (minus media_count variant_images.length)}}
+    {{/if}}
+  {{/if}}
+{{/if}}
+
+{{assign "media_width" 0.65}}
+
+{{#if section.settings.product_image_size "large"}}
+  {{assign "media_width" 0.65}}
+{{else if section.settings.product_image_size "medium"}}
+  {{assign "media_width" 0.55}}
+{{else if section.settings.product_image_size "small"}}
+  {{assign "media_width" 0.45}}
+{{/if}}
+
+{{assign "id_append" ""}}
+
+{{#if is_duplicate}}
+  {{assign "id_append" "-duplicate"}}
+{{/if}}
+
+{{assign "video_mute" 0}}
+{{#if section.settings.video_autoplay}}
+  {{assign "video_mute" 1}}
+{{/if}}
+
+{{assign "product_image_pc_thumbnail_postion" (default section.settings.product_image_pc_thumbnail_postion "bottom")}}
+{{assign "product_mobile_image_switch_style" (default section.settings.product_mobile_image_switch_style "number")}}
+{{assign "pc_style" section.settings.product_image_pc_show_style}}
+{{assign "pc_need_thumbnail" (if pc_style == "thumbnail_flatten" or pc_style == "carousel")}}
+{{assign "need_move_first_image" (if featured_media and (if (not pc_need_thumbnail) or hide_variants))}}
+{{assign "mobile_thumbnail_show" (if section.settings.product_mobile_thumbnail_image_hide == "show")}}
+{{assign "product_thumbnail_image_size" (default section.settings.product_thumbnail_image_size "large")}}
+{{assign "product_mobile_thumbnail_image_size" (default section.settings.product_mobile_thumbnail_image_size "large")}}
+
+<media-gallery
+  data-section-id="{{section.id}}"
+  id="MediaGallery-{{section.id}}{{id_append}}"
+  class="{{#if section.settings.product_info_sticky}}product__column-sticky{{/if}}
+    {{#if (size product.media) == 0}}product__media--empty{{/if}}
+    {{#if (isFalsey featured_variant)}}js-init-not-selected-variant{{/if}}"
+  data-desktop-layout="{{section.settings.product_image_pc_show_style}}"
+  data-video-autoplay="{{section.settings.video_autoplay}}"
+  data-desktop-thumbnail-postion="{{product_image_pc_thumbnail_postion}}"
+  data-hide-variants="{{hide_variants}}"
+  data-pagination-type="{{product_mobile_image_switch_style}}"
+  data-product-mobile-thumbnail-image-hide="{{section.settings.product_mobile_thumbnail_image_hide}}"
+>
+  <div id="GalleryStatus-{{section.id}}"></div>
+  <div
+    class="product__thumbnail-slider-group
+      product__thumbnail--{{product_image_pc_thumbnail_postion}}
+      product__thumbnail--{{product_thumbnail_image_size}}
+      product__mobile-thumbnail--{{product_mobile_thumbnail_image_size}}"
+  >
+    
+    <slider-component
+      id="GalleryViewer-{{section.id}}{{id_append}}"
+      class="thumbnail-preview slider-mobile-gutter {{#unless featured_media}}no-featured-media{{/unless}}"
+    >
+      <ul
+        id="Slider-Gallery-{{section.id}}{{id_append}}"
+        class="product__media-list contains-media grid grid--peek list-unstyled slider slider--mobile"
+      >
+        {{#if need_move_first_image}}
+          <li
+            id="Slide-{{section.id}}-{{featured_media.id}}{{id_append}}"
+            class="product__media-item grid__item slider__slide is-active
+              {{#if hide_variants}}{{#if variant_images contains featured_media.src}} product__media-item--variant{{/if}}{{/if}}"
+            data-media-id="{{section.id}}-{{featured_media.id}}"
+          >
+            {{snippet
+              "product-thumbnail"
+              media=featured_media
+              media_count=media_count
+              desktop_layout=section.settings.product_image_pc_show_style
+              mobile_layout=section.settings.product_mobile_thumbnail_image_hide
+              loop=section.settings.video_loop
+              modal_id=section.id
+              media_width=media_width
+              pc_magnifier_type=pc_magnifier_type
+              magnifier_interactive_type=magnifier_interactive_type
+              video_mute=video_mute
+              image_quality=image_quality
+              product_image_ratio=section.settings.product_image_ratio
+              product_image_fill_type=section.settings.product_image_fill_type
+              product_mobile_image_ratio=section.settings.product_mobile_image_ratio
+              product_mobile_image_fill_type=section.settings.product_mobile_image_fill_type
+              youtube_control=youtube_control
+              youtube_show_playlist=youtube_show_playlist
+            }}
+          </li>
+        {{else if (size product.media) == 0}}
+          <li class="product__media-item slider__slide is-active">
+            <div class="placeholder">
+              {{placeholder_svg_tag "image" "product-image-placeholder"}}
+            </div>
+          </li>
+        {{/if}}
+
+        {{#for product.media as |media|}}
+          {{#not (if need_move_first_image and (if media.id == featured_media.id))}}
+            <li
+              id="Slide-{{section.id}}-{{media.id}}{{id_append}}"
+              class="product__media-item slider__slide
+                {{#if (if media.id == featured_media.id) or (if (not featured_media) and forloop.index0 == 0)}} is-active{{/if}}
+                {{#if hide_variants}}
+                  {{#if variant_images contains media.src}} product__media-item--variant{{/if}}
+                {{/if}}
+                "
+              data-media-id="{{section.id}}-{{media.id}}"
+            >
+              {{snippet
+                "product-thumbnail"
+                media=media
+                media_count=media_count
+                desktop_layout=section.settings.product_image_pc_show_style
+                mobile_layout=section.settings.product_mobile_thumbnail_image_hide
+                loop=section.settings.video_loop
+                modal_id=section.id
+                media_width=media_width
+                pc_magnifier_type=pc_magnifier_type
+                magnifier_interactive_type=magnifier_interactive_type
+                video_mute=video_mute
+                image_quality=image_quality
+                product_image_ratio=section.settings.product_image_ratio
+                product_image_fill_type=section.settings.product_image_fill_type
+                product_mobile_image_ratio=section.settings.product_mobile_image_ratio
+                product_mobile_image_fill_type=section.settings.product_mobile_image_fill_type
+              }}
+            </li>
+          {{/not}}
+        {{/for}}
+      </ul>
+      {{#unless is_duplicate}}
+        {{snippet
+          "slider-button"
+          media_count=media_count
+          variant_images=variant_images
+          product_mobile_image_switch_style=product_mobile_image_switch_style
+          media=product.media
+          product_mobile_thumbnail_image_hide=section.settings.product_mobile_thumbnail_image_hide
+        }}
+      {{/unless}}
+    </slider-component>
+
+    
+    {{#if media_count > 0 and (if pc_need_thumbnail or mobile_thumbnail_show)}}
+      <slider-component
+        id="GalleryThumbnails-{{section.id}}{{id_append}}"
+        pc-direction="{{#if product_image_pc_thumbnail_postion == 'beside'}}vertical{{else}}horizontal{{/if}}"
+        class="thumbnail-slider slider-mobile-gutter
+          {{#unless pc_need_thumbnail}}display-none-desktop{{/unless}}
+          {{#unless mobile_thumbnail_show}} display-none-tablet{{/unless}}
+          "
+      >
+        <button
+          type="button"
+          class="slider-button slider-button--prev display-none-tablet {{#if media_count <= 4}}display-none{{/if}}"
+          name="previous"
+          data-step="3"
+        >
+          {{snippet "icon-arrow"}}
+        </button>
+        <ul
+          id="Slider-Thumbnails-{{section.id}}{{id_append}}"
+          class="thumbnail-list
+            thumbnail-list--{{pc_style}}
+            list-unstyled slider slider--mobile
+            {{#if pc_need_thumbnail}}thumbnail-list-grid{{/if}}
+            "
+        >
+          {{~#capture "sizes"~}}
+            (min-width: {{settings.page_width}}px) calc(({{round (times (minus settings.page_width 100) media_width)}} - 40px) / 4),
+            (min-width: 990px) calc(({{times media_width 100}}vw - 40px) / 4),
+            (min-width: 750px) calc((100vw - 150px) / 8),
+            calc((100vw - 80px) / 3)
+          {{~/capture~}}
+
+          {{#if hide_variants and featured_media}}
+            <li
+              id="Slide-Thumbnails-{{section.id}}-0{{id_append}}"
+              class="thumbnail-list__item
+                slider__slide{{#if hide_variants}}{{#if variant_images contains featured_media.src}} thumbnail-list_item--variant{{/if}}{{/if}}"
+              data-target="{{section.id}}-{{featured_media.id}}"
+            >
+              {{~#capture "thumbnail_id"~}}
+                Thumbnail-{{section.id}}-0{{id_append}}
+              {{~/capture~}}
+              {{assign "available_media_image" null}}
+
+              {{#if (hasOwn featured_media.preview_image "src") and (isTruthy featured_media.preview_image.src)}}
+                {{assign "available_media_image" featured_media.preview_image}}
+              {{else if (hasOwn featured_media "src") and (isTruthy featured_media.src)}}
+                {{assign "available_media_image" featured_media}}
+              {{/if}}
+
+              <button
+                class="thumbnail
+                  {{#if (gte (toFloat available_media_image.aspect_ratio) 1)}}thumbnail--wide{{else}}thumbnail--narrow{{/if}}"
+                data-current="true"
+              >
+                {{image_tag
+                  (image_url available_media_image width=416 quality=image_quality)
+                  loading=lazy
+                  sizes=sizes
+                  widths="54, 74, 104, 162, 208, 324, 416"
+                  id=thumbnail_id
+                  alt=featured_media.alt
+                }}
+              </button>
+            </li>
+          {{/if}}
+          {{#for product.media as |media|}}
+            {{#not (if hide_variants and (if media.id == featured_media.id))}}
+              {{assign "index" (plus forloop.index0 1)}}
+              <li
+                id="Slide-Thumbnails-{{section.id}}-{{index}}{{id_append}}"
+                class="thumbnail-list__item slider__slide
+                  {{#if (if media.id == featured_media.id) or (if (not featured_media) and forloop.index0 == 0)}} is-active{{/if}}
+                  {{#if hide_variants}}{{#if variant_images contains media.src}} thumbnail-list_item--variant{{/if}}{{/if}}"
+                data-target="{{section.id}}-{{media.id}}"
+              >
+                {{#if media.media_type == "video" or media.media_type == "external_video"}}
+                  <span class="thumbnail__badge">
+                    {{snippet "icon-play"}}
+                  </span>
+                {{/if}}
+
+                {{~#capture "thumbnail_id"~}}
+                  Thumbnail-{{section.id}}-{{index}}{{id_append}}
+                {{~/capture~}}
+                {{assign "available_media_image2" null}}
+
+                {{#if (hasOwn media.preview_image "src") and (isTruthy media.preview_image.src)}}
+                  {{assign "available_media_image2" media.preview_image}}
+                {{else if (hasOwn media "src") and (isTruthy media.src)}}
+                  {{assign "available_media_image2" media}}
+                {{/if}}
+                <button
+                  class="thumbnail
+                    {{#if (gte (toFloat available_media_image2.aspect_ratio) 1)}}thumbnail--wide{{else}}thumbnail--narrow{{/if}}"
+                  {{#if featured_media}}
+                    {{#if media.id == featured_media.id}}
+                      data-current="true"
+                    {{/if}}
+                  {{else}}
+                    {{#if forloop.index0 == 0}}data-current="true"{{/if}}
+                  {{/if}}
+                >
+                  {{image_tag
+                    (image_url available_media_image2 width=416 quality=image_quality)
+                    loading=lazy
+                    sizes=sizes
+                    widths="54, 74, 104, 162, 208, 324, 416"
+                    id=thumbnail_id
+                    alt=media.alt
+                  }}
+                </button>
+              </li>
+            {{/not}}
+          {{/for}}
+        </ul>
+        <button
+          type="button"
+          class="slider-button slider-button--next display-none-tablet {{#if media_count <= 4}}display-none{{/if}}"
+          name="next"
+          data-step="3"
+        >
+          {{snippet "icon-arrow"}}
+        </button>
+      </slider-component>
+    {{/if}}
+  </div>
+</media-gallery>

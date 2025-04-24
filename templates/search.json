@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-search",
+      "settings": {
+        "columns_desktop": 4,
+        "columns_mobile": 2,
+        "product_image_ratio": "150",
+        "image_fill_type": "contain",
+        "show_secondary_image": false,
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

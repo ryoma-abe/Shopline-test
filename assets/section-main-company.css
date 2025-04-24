@@ -1,0 +1,88 @@
+.main-company__section {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.main-company__section .company-form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.main-company__section .company-form__title {
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.main-company__section .company-form__footer {
+  margin-left: auto;
+}
+
+.main-company__section .company-form__header {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.main-company__section .company-form__address-cascade,
+.main-company__section .company-form__country,
+.main-company__section .company-form__province,
+.main-company__section .company-form__city,
+.main-company__section .company-form__district {
+  width: 100%;
+}
+
+.main-company__section .company-form__address-cascade {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.main-company__section .company-form__field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.main-company__section .company-form__field > label {
+  user-select: none;
+  cursor: pointer;
+}
+
+.main-company__section .company-form__success-info,
+.main-company__section .company-form__error-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.main-company__section .company-form__success-info > svg,
+.main-company__section .company-form__error-info > svg {
+  margin-bottom: 20px;
+}
+
+.main-company__section .company-bill-form__container {
+  width: 100%;
+  border-top: 1px solid rgba(var(--color-entry-line));
+  padding-top: 16px;
+}
+
+@media (max-width: 959px) {
+  .main-company__section {
+    padding: 40px 20px;
+  }
+}
+
+@media (min-width: 960px) {
+  .main-company__section .cols-2-desktop {
+    width: calc(50% - 8px);
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "disabled": false,
+      "type": "main-login",
+      "settings": {
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

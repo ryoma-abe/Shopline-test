@@ -1,0 +1,138 @@
+{{snippet "stylesheet" href=(asset_url "section-main-order-list.css")}}
+{{snippet "stylesheet" href=(asset_url "section-customer-nav-bar.css")}}
+{{snippet "stylesheet" href=(asset_url "section-user-center-message.css")}}
+
+{{
+  snippet "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+<div class="page-width section-padding">
+  {{snippet "user-center-message"}}
+  {{snippet "user-center-navbar-container"}}
+
+  <section class="customer-order-list-wrap">
+    {{#paginate customer.orders by=10}}
+      {{#if customer.orders_count > 0 }}
+        <ul class="customer-order-list list-unstyled">
+          {{#for customer.orders as |order|}}
+            <li>
+              <div class="customer-order-item">
+                <a class="customer-order-item__link" href="{{ routes.account_order_list_url }}/{{ order.id }}"></a>
+                <div class="customer-order-item__head body5">
+                  
+                  <span class="customer-order-item__seq fw-bold" >{{t 'order.order_status.sequence' id=(append '#' order.order_number) }}</span>
+                  
+                  <p class="customer-order-item__create-time">
+                    {{t 'order.order_details.time'}}
+                    {{ date order.created_at '%Y-%m-%d %H:%M' }}
+                  </p>
+                  
+                  {{#if order.cancelled}}
+                    <span class="customer-order-item__status fw-bold">
+                      {{t 'order.order_status.canceled'}}
+                    </span>
+                  {{/if}}
+                </div>
+                <div class="customer-order-item__body body4">
+                  
+                  <div class="customer-order-item__info">
+                    <div class="customer-order-item__cover">
+                      {{ assign 'product_image' (first (where order.line_items 'image')) }}
+                      {{#if product_image.image.src}}
+                        {{ snippet 'image' data=product_image pc_size='80px' mobile_size='64px' }}
+                      {{else}}
+                        {{ placeholder_svg_tag 'image' "image-fallback"}}
+                      {{/if}}
+                    </div>
+                    <div class="customer-order-item__total-content">
+                      <p class="customer-order-item__product-total">
+                        {{t 'order.order_list.total_amount' transPackages=order.item_count }}
+                      </p>
+                      <p class="customer-order-item__price-total body3 fw-bold">
+                        <span>{{t 'transaction.payment.total'}}</span>
+                        <span>{{ money_with_currency order.presentment_price currency=order.presentment_currency }}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  
+                  <div class="customer-order-item__pay-status">
+                    
+                    <p class="status-box">
+                      {{ snippet 'icon-pay' }}
+                      <span class="status-info">{{ order.financial_status_label }}</span>
+                    </p>
+                    <span class="status-divider display-none-desktop"></span>
+                    
+                    <p class="status-box">
+                      {{ snippet 'icon-delivery' }}
+                      <span class="status-info">{{ order.fulfillment_status_label }}</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="customer-order-item__foot">
+                  <a href="{{order.rebuy_url}}" class="customer-order-item__rebuy button button--secondary">
+                    {{t 'transaction.order.rebuy'}}
+                  </a>
+                </div>
+              </div>
+            </li>
+          {{/for}}
+        </ul>
+      {{else}}
+        
+        <div class="customer-order-list__empty">
+          <p class="empty-title body2">
+            {{t 'order.order_list.no_record'}}
+          </p>
+          <a href="{{ routes.all_products_collection_url }}" class="button">
+            {{t 'transaction.payment.continue_shopping' }}
+          </a>
+        </div>
+      {{/if}}
+
+      {{#if customer.orders_count > 0 }}
+        {{ snippet 'pagination' paginate=paginate anchor='' }}
+      {{/if}}
+    {{/paginate}}
+  </section>
+
+  {{snippet "user-center-navbar-footer"}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main-order-list.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "group_header",
+      "label": "t:sections.main-order-list.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-order-list.settings.padding_top.label",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-order-list.settings.padding_bottom.label",
+      "default": 80
+    }
+  ]
+}
+{{/schema}}

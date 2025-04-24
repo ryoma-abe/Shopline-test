@@ -1,0 +1,237 @@
+{{snippet "stylesheet" href=(asset_url "snippet-tips-card.css")}}
+{{snippet "stylesheet" href=(asset_url "section-sign-up-and-save.css")}}
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+{{assign "show_newsletter_full" section.settings.full_screen_width}}
+{{assign "color_scheme" section.settings.color_scheme}}
+<div data-section-type="sign-up-and-save" data-section-id="{{section.id}}">
+  <div
+    class="section section-padding section-newsletter
+      page-width{{#if show_newsletter_full}}-fluid{{/if}}
+      color-scheme-{{color_scheme}}"
+  >
+    <div class="newsletter-content">
+      {{#for section.blocks as |block|}}
+        {{#if block.type == "title"}}
+          <div {{{block.shopline_attributes}}} class="newsletter-title">
+            <h2 class="section-title text-center {{block.settings.fontSize}}">
+              {{block.settings.title}}
+            </h2>
+          </div>
+        {{/if}}
+        {{#if block.type == "desc"}}
+          <div
+            {{{block.shopline_attributes}}}
+            class="rte newsletter-desc body3 text-center"
+          >{{{block.settings.description}}}</div>
+        {{/if}}
+        {{#if block.type == "button"}}
+          {{#form "customer"}}
+            <div {{{block.shopline_attributes}}} class="newsletter-button-group">
+              <div class="field newsletter--field">
+                {{snippet
+                  "input-email"
+                  input_class="field__input"
+                  input_required=true
+                  input_name="contact[email]"
+                  input_placeholder=block.settings.placeholder
+                }}
+                <label class="field__label body3">
+                  {{block.settings.placeholder}}
+                </label>
+              </div>
+              <button type="submit" class="button newsletter--button display-none display-inline-flex-desktop">
+                {{#if (isTruthy block.settings.button_text)}}
+                  {{block.settings.button_text}}
+                {{else}}
+                  {{snippet "icon-mail"}}
+                {{/if}}
+              </button>
+              <button type="submit" class="button newsletter--button display-inline-flex display-none-desktop">
+                {{snippet "icon-mail"}}
+              </button>
+            </div>
+            {{#if form.posted_successfully}}
+              {{snippet "tips-card" type="success" text=(t "general.footer.subscribe_success")}}
+            {{/if}}
+            {{#if form.errors.messages}}
+              {{snippet "tips-card" type="error" text=form.errors.messages}}
+            {{/if}}
+          {{/form}}
+        {{/if}}
+      {{/for}}
+    </div>
+  </div>
+</div>
+{{#schema}}
+{
+  "name": "t:sections.sign-up-and-save.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.sign-up-and-save.settings.color_scheme.label",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.sign-up-and-save.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.sign-up-and-save.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.sign-up-and-save.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.sign-up-and-save.settings.color_scheme.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "full_screen_width",
+      "label": "t:sections.sign-up-and-save.settings.full_screen_width.label",
+      "default": true
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sign-up-and-save.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.sign-up-and-save.settings.padding_top.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.sign-up-and-save.settings.padding_bottom.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "max_blocks": 3,
+  "blocks": [
+    {
+      "limit": 1,
+      "type": "title",
+      "icon": "title",
+      "name": "t:sections.sign-up-and-save.blocks.title.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.sign-up-and-save.blocks.title.settings.title.label",
+          "default": "Sign up and save"
+        },
+        {
+          "type": "select",
+          "id": "fontSize",
+          "label": "t:sections.sign-up-and-save.blocks.title.settings.fontSize.label",
+          "default": "title3",
+          "options": [
+            {
+              "value": "title2",
+              "label": "t:sections.sign-up-and-save.blocks.title.settings.fontSize.options__0.label"
+            },
+            {
+              "value": "title3",
+              "label": "t:sections.sign-up-and-save.blocks.title.settings.fontSize.options__1.label"
+            },
+            {
+              "value": "title5",
+              "label": "t:sections.sign-up-and-save.blocks.title.settings.fontSize.options__2.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "limit": 1,
+      "type": "desc",
+      "icon": "paragraph",
+      "name": "t:sections.sign-up-and-save.blocks.desc.name",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "t:sections.sign-up-and-save.blocks.desc.settings.description.label",
+          "default": "Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals."
+        }
+      ]
+    },
+    {
+      "limit": 1,
+      "type": "button",
+      "icon": "normal",
+      "name": "t:sections.sign-up-and-save.blocks.button.name",
+      "settings": [
+        {
+          "id": "button_text",
+          "type": "text",
+          "label": "t:sections.sign-up-and-save.blocks.button.settings.button_text.label",
+          "default": "Subscribe"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "t:sections.sign-up-and-save.blocks.button.settings.placeholder.label",
+          "default": "Enter your email"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 3,
+      "category": "t:sections.sign-up-and-save.presets.presets__0.category",
+      "name": "t:sections.sign-up-and-save.presets.presets__0.name",
+      "settings": {
+        "full_screen_width": true,
+        "color_scheme": "none",
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": [
+        {
+          "type": "title",
+          "settings": {
+            "title": "Sign up and save",
+            "fontSize": "title3"
+          }
+        },
+        {
+          "type": "desc",
+          "settings": {
+            "description": "Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals."
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "button_text": "Subscribe",
+            "placeholder": "Enter your email"
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

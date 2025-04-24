@@ -1,0 +1,68 @@
+.rich-text .rich-text__layout--normal-width {
+  max-width: 920px;
+}
+
+.rich-text__wrapper--center {
+  text-align: center;
+}
+
+.rich-text__wrapper--left {
+  text-align: left;
+}
+
+.rich-text__wrapper--right {
+  text-align: right;
+}
+
+.rich-text__blocks > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.rich-text__blocks > * + * {
+  margin-top: 30px;
+}
+
+.rich-text {
+  position: relative;
+}
+
+.rich-text .rich-text__buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.rich-text .rich-text__buttons > *:first-child {
+  margin-right: 20px;
+}
+
+.rich-text .rich-text__decoration {
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  transform: translateY(-50%);
+  color: rgb(var(--color-entry-line));
+}
+
+.rich-text .rich-text__decoration.rich-text__decoration--right {
+  right: 0px;
+  transform: translateY(-50%) rotate(180deg);
+}
+
+@media screen and (max-width: 959px) {
+  .rich-text .rich-text__layout--normal-width {
+    max-width: 100%;
+  }
+
+  .rich-text__blocks > * + * {
+    margin-top: 20px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

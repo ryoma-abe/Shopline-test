@@ -1,0 +1,280 @@
+{{snippet "stylesheet" href=(asset_url "section-rich-text.css")}}
+
+{{assign "settings" section.settings}}
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=settings.padding_top
+  padding_bottom=settings.padding_bottom
+}}
+
+<div class="rich-text section-padding {{#if settings.color_scheme}}color-scheme-{{settings.color_scheme}}{{/if}} ">
+  {{#if settings.show_decoration}}
+    <div class="rich-text__decoration rich-text__decoration--left">
+      {{snippet "icon-rich-text-decoration"}}
+    </div>
+    <div class="rich-text__decoration rich-text__decoration--right">
+      {{snippet "icon-rich-text-decoration"}}
+    </div>
+  {{/if}}
+  <div
+    class="page-width
+      {{#unless settings.normal_width}}rich-text__layout--normal-width{{/unless}}
+      rich-text__wrapper--{{settings.desktop_content_position}}
+      rich-text__blocks"
+  >
+    {{#for section.blocks as |block|}}
+      {{#if block.type == "heading"}}
+        <h2 {{{block.shopline_attributes}}} class="rte rich-text__heading {{block.settings.heading_size}}">{{{block.settings.heading}}}</h2>
+      {{/if}}
+      {{#if block.type == "text"}}
+        <div {{{block.shopline_attributes}}} class="rte rich-text__text body2">{{{block.settings.text}}}</div>
+      {{/if}}
+      {{#if block.type == "button"}}
+        <div class="rich-text__buttons" {{{block.shopline_attributes}}}>
+          {{#if block.settings.button_text}}
+            <a
+              class="button body2 {{#if block.settings.button_style_secondary}}button--secondary{{/if}}"
+              href="{{#if block.settings.button_link}}{{block.settings.button_link}}{{else}}javascript:;{{/if}}"
+            >
+              {{block.settings.button_text}}
+            </a>
+          {{/if}}
+          {{#if block.settings.button_text_2}}
+            <a
+              class="button body2 {{#if block.settings.button_style_secondary_2}}button--secondary{{/if}}"
+              href="{{#if block.settings.button_link_2}}{{block.settings.button_link_2}}{{else}}javascript:;{{/if}}"
+            >
+              {{block.settings.button_text_2}}
+            </a>
+          {{/if}}
+        </div>
+      {{/if}}
+    {{/for}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.rich-text.name",
+  "max_blocks": 3,
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__0.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__2.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.desktop_content_position.label",
+      "info": "t:sections.rich-text.settings.desktop_content_position.info"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.rich-text.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.rich-text.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.rich-text.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.rich-text.settings.color_scheme.options__3.label"
+        }
+      ],
+      "default": "none",
+      "label": "t:sections.rich-text.settings.color_scheme.label"
+    },
+    {
+      "type": "switch",
+      "id": "normal_width",
+      "default": true,
+      "label": "t:sections.rich-text.settings.normal_width.label"
+    },
+    {
+      "type": "switch",
+      "id": "show_decoration",
+      "default": false,
+      "label": "t:sections.rich-text.settings.show_decoration.label"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.rich-text.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.rich-text.settings.padding_top.label",
+      "default": 60,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.rich-text.settings.padding_bottom.label",
+      "default": 60,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "icon": "title",
+      "limit": 1,
+      "name": "t:sections.rich-text.blocks.heading.name",
+      "settings": [
+        {
+          "id": "heading",
+          "type": "richtext",
+          "default": "",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading.label"
+        },
+        {
+          "id": "heading_size",
+          "type": "select",
+          "options": [
+            {
+              "value": "title5",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__0.label"
+            },
+            {
+              "value": "title3",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__1.label"
+            },
+            {
+              "value": "title2",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__2.label"
+            }
+          ],
+          "default": "title3",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading_size.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.rich-text.blocks.text.name",
+      "icon": "paragraph",
+      "limit": 1,
+      "settings": [
+        {
+          "id": "text",
+          "type": "richtext",
+          "default": "<p>A sentence or two introducing your brand, what you sell, and what makes your brand compelling to customers.</p>",
+          "label": "t:sections.rich-text.blocks.text.settings.text.label"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "t:sections.rich-text.blocks.button.name",
+      "icon": "button",
+      "limit": 1,
+      "settings": [
+        {
+          "id": "button_text",
+          "type": "text",
+          "default": "",
+          "label": "t:sections.rich-text.blocks.button.settings.button_text.label"
+        },
+        {
+          "id": "button_link",
+          "type": "url",
+          "label": "t:sections.rich-text.blocks.button.settings.button_link.label"
+        },
+        {
+          "type": "switch",
+          "id": "button_style_secondary",
+          "default": false,
+          "label": "t:sections.rich-text.blocks.button.settings.button_style_secondary.label"
+        },
+        {
+          "id": "button_text_2",
+          "type": "text",
+          "default": "",
+          "label": "t:sections.rich-text.blocks.button.settings.button_text_2.label"
+        },
+        {
+          "id": "button_link_2",
+          "type": "url",
+          "label": "t:sections.rich-text.blocks.button.settings.button_link_2.label"
+        },
+        {
+          "type": "switch",
+          "id": "button_style_secondary_2",
+          "default": false,
+          "label": "t:sections.rich-text.blocks.button.settings.button_style_secondary_2.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 1,
+      "category": "t:sections.rich-text.presets.presets__0.category",
+      "name": "t:sections.rich-text.presets.presets__0.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "color_scheme": "none",
+        "normal_width": true,
+        "show_decoration": false,
+        "padding_top": 60,
+        "padding_bottom": 60
+      },
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "heading",
+            "heading_size": "title3"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>A sentence or two introducing your brand, what you sell, and what makes your brand compelling to customers.</p>"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "button_text": "Button",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_text_2": "Button 2",
+            "button_link_2": "",
+            "button_style_secondary_2": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

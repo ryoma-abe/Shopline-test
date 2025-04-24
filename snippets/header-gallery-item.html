@@ -1,0 +1,21 @@
+{{#if url}}
+  <div class="gallery__item {{ternary has_imgs 'gallery__item--images' ''}} {{image_size}} ">
+    <div class="gallery__box {{ternary image_link 'gallery__box--hover' ''}}">
+      {{snippet "image" data=image}}
+      <div class="gallery__box__mark" style="--bg-opacity:{{divide opacity 100}}"></div>
+      {{#if image_link}}
+        <a
+          class="gallery__box__title title6"
+          href="{{image_link}}"
+          style="color:{{title_color}}"
+        >
+          {{image_title}}
+        </a>
+      {{else}}
+        <div class="gallery__box__title title6" style="color:{{title_color}}">
+          {{image_title}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+{{/if}}

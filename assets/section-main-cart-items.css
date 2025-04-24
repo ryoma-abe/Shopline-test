@@ -1,0 +1,61 @@
+cart-items {
+  display: block;
+}
+
+.cart-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 30px;
+}
+
+.cart-title-wrapper a {
+  text-decoration: underline;
+}
+
+.main-cart-items-header {
+  display: flex;
+  padding-bottom: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgb(var(--color-light-text));
+}
+
+.main-cart-items-wrapper {
+  border-top: 1px solid rgb(var(--color-entry-line));
+}
+
+.cart__header-item {
+  flex-grow: 1;
+}
+
+.cart__header-quantity {
+  min-width: 200px;
+  width: 18.3%;
+  flex-shrink: 0;
+  margin: 0 20px;
+}
+
+.cart__header-total {
+  width: 16.2%;
+  flex-shrink: 0;
+  min-width: 140px;
+  text-align: right;
+}
+
+@media (max-width: 959px) {
+  .main-cart-items-header {
+    display: none;
+  }
+  .cart-title-wrapper {
+    padding-bottom: 20px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

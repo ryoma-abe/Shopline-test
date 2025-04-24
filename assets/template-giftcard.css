@@ -1,0 +1,183 @@
+#giftCardPage {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 80px;
+  box-sizing: border-box;
+}
+
+#giftCardPage .store-name {
+  text-align: center;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
+  color: #1e1e1e;
+}
+
+#giftCardPage .gift-card-status {
+  text-align: center;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.5;
+  color: #1e1e1e;
+  margin: 20px 0;
+}
+
+#giftCardPage .gift-card-wrapper {
+  background: #ffffff;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 8px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-box {
+  width: 100%;
+  position: relative;
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-box .gift-card-bg {
+  width: 100%;
+  padding-bottom: 47.7%;
+  background-image: url("https://img.myshopline.com/image/official/a4277ef9ce9744809be9bde7b1495a93.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-box .gift-card-code {
+  width: 54.8%;
+  padding: 16px 24px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 20px;
+  color: #1e1e1e;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px dashed #000000;
+  border-radius: 4px;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 8%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  user-select: all;
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-info {
+  padding: 16px 20px;
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-info .item {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  align-items: center;
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-info .item:first-child {
+  margin-top: 0;
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-info .item .name {
+  font-size: 14px;
+  line-height: 16px;
+  color: rgba(30, 30, 30, 0.6);
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-info .item .content {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #1e1e1e;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-info .item .content .date-hms {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(30, 30, 30, 0.6);
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-info .item .content .date-ymd {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#giftCardPage .gift-card-wrapper .gift-card-info .item .content .date-ymd em {
+  margin: 0 5px;
+  font-style: normal;
+}
+
+#giftCardPage .gift-card-wrapper.disabled .gift-card-box .gift-card-bg {
+  background-image: url("https://img.myshopline.com/image/official/b26a6aa580dd4d2c8708ca4352d52a87.jpeg");
+}
+
+#giftCardPage .gift-card-wrapper.disabled .gift-card-box .gift-card-code {
+  opacity: 0.6;
+  border-color: rgba(0, 0, 0, 0.6);
+  text-decoration-line: line-through;
+}
+
+#giftCardPage .gift-card-use-box {
+  padding: 40px 0;
+  text-align: center;
+}
+
+#giftCardPage .gift-card-use-box .btn-use {
+  margin: 0 auto;
+  padding: 16px 60px;
+  color: #fff;
+  background: #1e1e1e;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.4;
+  display: inline-block;
+  min-width: 200px;
+  text-decoration: none;
+}
+
+#giftCardPage .gift-card-use-box .use-explain {
+  font-size: 14px;
+  line-height: 20px;
+  color: rgba(30, 30, 30, 0.6);
+  margin-top: 12px;
+}
+
+@media screen and (max-width: 750px) {
+  #giftCardPage {
+    max-width: 520px;
+    padding: 40px 20px;
+  }
+  #giftCardPage .store-name {
+    font-size: 28px;
+    line-height: 34px;
+  }
+  #giftCardPage .gift-card-status {
+    font-size: 20px;
+  }
+  #giftCardPage .gift-card-wrapper .gift-card-box .gift-card-code {
+    width: 66.2%;
+    padding: 8px 16px;
+    font-size: 16px;
+  }
+  #giftCardPage .gift-card-wrapper .gift-card-info .item .name {
+    font-size: 12px;
+    line-height: 16px;
+  }
+  #giftCardPage .gift-card-wrapper .gift-card-info .item .content {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  #giftCardPage .gift-card-wrapper .gift-card-info .item .content .date-hms {
+    font-size: 12px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

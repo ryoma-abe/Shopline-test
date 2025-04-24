@@ -1,0 +1,79 @@
+<div class="card-container">
+  <div class="body2 card__title">
+    <p class="fw-bold">{{t "customer.account.personal__information"}}</p>
+    <div class="edit-entry" id="js-personal-edit">{{ snippet 'icon-edit' }}</div>
+  </div>
+
+  <div class="card__detail">
+    {{#form 'update_customer' id='update_personal_info_customer'}}
+      <div id="personal">
+        
+        <div class="info-item birthday">
+          <div class="body4 info-label">{{t "customer.account.birthday"}}</div>
+          <div class="body4 info-value">
+            {{#if customer.birthday}}
+              {{date customer.birthday "%Y-%m-%d"}}
+            {{else}}
+              {{t "customer.account.gender_secret"}}
+            {{/if}}
+          </div>
+          
+          <div class="birthday-edit">
+            <input
+              value="{{ ternary customer.birthday (date customer.birthday "%Y-%m-%d") ''}}"
+              name="customer[birthday]"
+              id="editBirthday"
+              class="body4"
+              autocomplete="off"
+              placeholder="{{t "customer.account.select__date"}}"
+            />
+            {{ snippet 'icon-calendar' }}
+          </div>
+        </div>
+
+        
+        <div class="info-item gender">
+          <div class="body4 info-label">{{t "customer.account.gender"}}</div>
+          <div class="body4 info-value">
+            {{#if customer.gender == 1}}
+              {{t "customer.account.gender_male"}}
+            {{else if customer.gender == 2}}
+              {{t "customer.account.gender_female"}}
+            {{else}}
+              {{t "customer.account.gender_secret"}}
+            {{/if}}
+          </div>
+          
+          <div class="gender-edit body4">
+            <label class="gender-radio__wrapper">
+              <span class="gender-radio">
+                <input type="radio" name="customer[gender]" value="male" {{#if customer.gender == 1}}checked{{/if}}>
+                <span class="gender-radio__inner"></span>
+              </span>
+              <span>{{t "customer.account.gender_male"}}</span>
+            </label>
+            <label class="gender-radio__wrapper">
+              <span class="gender-radio">
+                <input type="radio" name="customer[gender]" value="female" {{#if customer.gender == 2}}checked{{/if}}>
+                <span class="gender-radio__inner"></span>
+              </span>
+              <span>{{t "customer.account.gender_female"}}</span>
+            </label>
+            <label class="gender-radio__wrapper">
+              <span class="gender-radio">
+                <input type="radio" name="customer[gender]" value="prefer not to say" {{#if customer.gender == 3}}checked{{/if}}>
+                <span class="gender-radio__inner"></span>
+              </span>
+              <span>{{t "customer.account.gender_secret"}}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="edit__action-buttons">
+          <div class="button button--secondary cancel-edit">{{t "customer.general.cancel_common"}}</div>
+          <button type="submit" form="update_personal_info_customer" class="button confirm-edit">{{t "customer.account.confirm_btn"}}</button>
+        </div>
+      </div>
+    {{/form}}
+  </div>
+</div>

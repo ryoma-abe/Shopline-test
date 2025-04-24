@@ -1,0 +1,305 @@
+{{#if customer.phone}}
+  {{assign
+    "customer_without_dialing_code_phone"
+    (remove_first customer.phone (append "+" customer.phone_dialing_code))
+  }}
+{{/if}}
+
+<div class="card-container">
+  <script src="{{asset_url 'component-phone-input.js'}}" defer></script>
+  <script src="{{asset_url 'component-checkbox-group.js'}}" defer></script>
+
+  <div class="body2 card__title">
+    <div>
+      <p class="fw-bold">{{t "customer.subscription.subscription_title"}}</p>
+      <p class="body4 card__title-hint">{{t "customer.general.subscription_desc"}}</p>
+    </div>
+  </div>
+
+  <div class="card__detail">
+    <div class="subscribe-wrapper">
+      {{#if customer.accepts_email_marketing}}
+        <div class="info-row unsubscribe-info">
+          <span class="body4">{{t "customer.subscription.email"}}</span>
+          
+          <details-modal>
+            <details>
+              <summary>
+                <button class="unsubscribe-button body4">
+                  <span class="unsubscribe-button__status">
+                    <span>{{t "customer.subscription.subscription_hint"}}</span>
+                    {{snippet "icon-check"}}
+                  </span>
+                  <span class="unsubscribe-button__status">
+                    {{snippet "icon-minus-circle"}}
+                    <span>{{t "customer.subscription.unsubscribe_confirm_text"}}</span>
+                  </span>
+                </button>
+              </summary>
+
+              <div class="modal__overlay"></div>
+              <div class="modal__content modify-info__modal">
+                <button class="modify-info__close" name="close">
+                  {{snippet "icon-close"}}
+                </button>
+
+                <h5 class="modify-info__title body3 fw-bold">{{t "customer.subscription.unsubscribe_title"}}</h5>
+
+                <unsubscribe-email-form>
+                  {{#form "customer_unsubscribe"}}
+                    <input type="hidden" name="customer[unsubscribe_type]" value="email" />
+
+                    <div class="modify-info__desc body4">
+                      {{t "customer.subscription.unsubscribe_subtitle"}}
+                    </div>
+
+                    <div class="modify-info__content body4">
+                      <checkbox-group class="unsubscribe-reasons" type="radio">
+                        {{#for form.unsubscribe_reasons as |reason|}}
+                          <label class="unsubscribe-reason">
+                            <span class="field-radio">
+                              <input type="radio" name="customer[unsubscribe_reason]" value="{{reason.value}}" />
+                              <span class="radio"></span>
+                            </span>
+                            <span>{{t reason.text}}</span>
+                            {{#if reason.show_other_reason}}
+                              <input
+                                class="unsubscribe-reason__input body4"
+                                type="text"
+                                name="customer[other_reason]"
+                                placeholder="{{t 'customer.subscription.reason_other_placeholder'}}"
+                              />
+                            {{/if}}
+                          </label>
+                        {{/for}}
+                      </checkbox-group>
+                    </div>
+
+                    <div class="modify-info__action-buttons">
+                      <button class="button button--secondary modify-info_cancel-button" name="close">{{t
+                          "customer.general.cancel_common"
+                        }}</button>
+                      <button type="submit" class="button modify-info_confirm-button" disabled>
+                        <span>{{t "customer.subscription.unsubscribe_confirm_text"}}</span>
+                      </button>
+                    </div>
+                  {{/form}}
+                </unsubscribe-email-form>
+              </div>
+            </details>
+          </details-modal>
+        </div>
+      {{else}}
+        
+        {{#form "customer_subscribe" return_to=(append routes.account_url '?type=email')}}
+          <div class="subscribe-form__inner">
+            <div class="subscribe-form__wrapper">
+              <span class="body4">
+                {{t "customer.subscription.email"}}
+              </span>
+              {{#if form.errors.messages and form.type == "email"}}
+                <div class="subscribe-form__error body6">{{t "customer.subscription.email_subscribe_error_tip"}}</div>
+              {{/if}}
+            </div>
+            <details-modal>
+              <details>
+                <summary>
+                  <button class="button button--secondary modify-info__button">{{downcase
+                      (t "customer.subscription.subscribe_button")
+                    }}</button>
+                </summary>
+
+                <div class="modal__overlay"></div>
+                <div class="modal__content modify-info__modal">
+                  <button class="modify-info__close" name="close">
+                    {{snippet "icon-close"}}
+                  </button>
+
+                  <h5 class="modify-info__title body3 fw-bold">{{t "customer.subscription.email_subscription_text"}}</h5>
+
+                    <div class="modify-info__content">
+                      <div class="modify-info__input {{#if customer.email}}disabled{{/if}}">
+                        {{snippet
+                          "input-email"
+                          input_autocomplete="email"
+                          input_class="body4"
+                          input_id="subscription-email"
+                          input_name=(ternary customer.email "" "customer[email]")
+                          input_spellcheck="false"
+                          input_autocapitalize="off"
+                          input_required=(ternary customer.email false true)
+                          input_disabled=(ternary customer.email true false)
+                          input_value=customer.email
+                          input_placeholder=(t "customer.general.email")
+                        }}
+                        {{#if customer.email}}
+                          <input type="text" name="customer[email]" hidden value="{{customer.email}}" />
+                        {{/if}}
+                      </div>
+                    </div>
+
+                    <div class="modify-info__action-buttons">
+                      <button class="button button--secondary modify-info_cancel-button" name="close">{{t
+                          "customer.general.cancel_common"
+                        }}</button>
+                      <button type="submit" class="button modify-info_confirm-button">
+                        <span>{{t "customer.subscription.save_button"}}</span>
+                      </button>
+                    </div>
+                </div>
+              </details>
+            </details-modal>
+          </div>
+        {{/form}}
+      {{/if}}
+    </div>
+
+    <div class="subscribe-wrapper">
+      {{#if customer.accepts_sms_marketing}}
+        <div class="info-row unsubscribe-info">
+          <span class="body4">{{t "customer.subscription.phone"}}</span>
+          
+          <details-modal>
+            <details>
+              <summary>
+                <button class="unsubscribe-button body4">
+                  <span class="unsubscribe-button__status">
+                    <span>{{t "customer.subscription.subscription_hint"}}</span>
+                    {{snippet "icon-check"}}
+                  </span>
+                  <span class="unsubscribe-button__status">
+                    {{snippet "icon-minus-circle"}}
+                    <span>{{t "customer.subscription.unsubscribe_confirm_text"}}</span>
+                  </span>
+                </button>
+              </summary>
+
+              <div class="modal__overlay"></div>
+              <div class="modal__content modify-info__modal">
+                <button class="modify-info__close" name="close">
+                  {{snippet "icon-close"}}
+                </button>
+
+                <h5 class="modify-info__title body3 fw-bold">{{t "customer.subscription.unsubscribe_title"}}</h5>
+
+                {{#form "customer_unsubscribe"}}
+                  <input type="hidden" name="customer[unsubscribe_type]" value="phone" />
+
+                  <div class="modify-info__desc body4">
+                    {{t "customer.subscription.unsubscribe_tip"}}
+                  </div>
+
+                  <div class="modify-info__action-buttons">
+                    <button class="button button--secondary modify-info_cancel-button" name="close">{{t
+                        "customer.general.cancel_common"
+                      }}</button>
+                    <button type="submit" class="button modify-info_confirm-button">
+                      <span>{{t "customer.subscription.unsubscribe_confirm_text"}}</span>
+                    </button>
+                  </div>
+                {{/form}}
+              </div>
+            </details>
+          </details-modal>
+        </div>
+      {{else}}
+        
+        {{#form "customer_subscribe" return_to=(append routes.account_url '?type=phone')}}
+          <div class="subscribe-form__inner">
+            <div class="subscribe-form__wrapper">
+              <span class="body4">{{t "customer.subscription.phone"}}</span>
+              {{#if form.errors.messages and form.type == "phone"}}
+                <div class="subscribe-form__error body6">{{t "customer.subscription.phone_subscribe_error_tip"}}</div>
+              {{/if}}
+            </div>
+            <details-modal>
+              <details>
+                <summary>
+                  <button class="button button--secondary modify-info__button">{{downcase
+                      (t "customer.subscription.subscribe_button")
+                    }}</button>
+                </summary>
+
+                <div class="modal__overlay"></div>
+                <div class="modal__content modify-info__modal">
+                  <button class="modify-info__close" name="close">
+                    {{snippet "icon-close"}}
+                  </button>
+
+                  <h5 class="modify-info__title body3 fw-bold">{{t "customer.subscription.phone_subscription_text"}}</h5>
+
+                    <div class="modify-info__content">
+                      <phone-input class="modify-info__input {{#if customer_without_dialing_code_phone}}disabled{{/if}}">
+                        <input
+                          class="body4"
+                          type="tel"
+                          placeholder="{{t 'customer.phone.mobile_common'}}"
+                          value="{{customer_without_dialing_code_phone}}"
+                          {{#if customer_without_dialing_code_phone}}
+                            disabled
+                          {{else}}
+                            name="customer[phone]" required
+                          {{/if}}
+                        />
+                        <div class="modify-code-select__container">
+                          <div class="modify-code-select__wrapper">
+                            <span class="modify-code-select__value" data-id="country-select-label"></span>
+                            {{snippet "icon-arrow"}}
+                          </div>
+                          <select
+                            class="country-select"
+                            name="customer[code]"
+                            autocomplete="off"
+                            {{#if customer_without_dialing_code_phone}}disabled{{/if}}
+                          >
+                            {{#for all_country_dialing_code as |country_dialing_code|}}
+                              <option
+                                value="{{country_dialing_code.dialing_code}}"
+                                data-iso-code="{{country_dialing_code.iso_code}}"
+                                {{#if
+                                  (ternary
+                                    customer.phone_dialing_code
+                                    (if customer.phone_dialing_code == country_dialing_code.dialing_code)
+                                    (if localization.country.iso_code == country_dialing_code.iso_code)
+                                  )
+                                }}
+                                  selected="selected"
+                                {{/if}}
+                              >{{country_dialing_code.name}}</option>
+                            {{/for}}
+                          </select>
+                        </div>
+                        {{#if customer_without_dialing_code_phone}}
+                          <input
+                            type="text"
+                            name="customer[phone]"
+                            hidden
+                            value="{{customer_without_dialing_code_phone}}"
+                          />
+                          <input
+                            type="text"
+                            name="customer[code]"
+                            hidden
+                            value="{{customer.phone_dialing_code}}"
+                          />
+                        {{/if}}
+                      </phone-input>
+                    </div>
+
+                    <div class="modify-info__action-buttons">
+                      <button class="button button--secondary modify-info_cancel-button" name="close">{{t
+                          "customer.general.cancel_common"
+                        }}</button>
+                      <button type="submit" class="button modify-info_confirm-button">
+                        <span>{{t "customer.subscription.save_button"}}</span>
+                      </button>
+                    </div>
+                </div>
+              </details>
+            </details-modal>
+          </div>
+        {{/form}}
+      {{/if}}
+    </div>
+  </div>
+</div>

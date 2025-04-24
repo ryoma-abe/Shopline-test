@@ -1,0 +1,367 @@
+{{#comment}}
+     Renders facets (filtering and sorting)
+
+    Accepts:
+    - results: {Object} Collection or Search object
+    - enable_filtering: {Boolean} Show filtering when true
+    - enable_sorting: {Boolean} Show sorting when true
+    - filter_type: {String} Type of filter
+    - enable_sticky: {Boolean} filtering sticky
+
+    Usage:
+    {{ snippet 'facets' results=collection enable_filtering=true enable_sorting=true filter_type='vertical' }}
+{{/comment}}
+
+
+
+
+{{#if results.url}}
+  {{assign 'results_url' results.url}}
+{{else}}
+  {{assign 'terms' results.terms}}
+  {{#capture 'results_url'}}?keyword={{terms}}{{/capture}}
+{{/if}}
+<script>
+  window.preview_query = "{{{request.preview_query}}}";
+</script>
+
+{{assign "products_count" (default results.products_count results.results_count)}}
+
+<div class="{{#if enable_sticky}}facets-enabled-sticky{{/if}} facets-container{{#if filter_type == 'drawer' }} facets-container-drawer{{/if}}">
+
+  
+  {{#if filter_type == "vertical" or filter_type == "horizontal"}}
+    <facet-filters-form class="facets display-none-tablet">
+      <form id="FacetFiltersForm" class="{{#if filter_type == 'horizontal' }}facets__form{{else}}facets__form-vertical{{/if}}" data-form-type="Tiled">
+        {{#if results.terms }}
+          <input type="hidden" name="keyword" value="{{ results.terms }}">
+        {{/if}}
+        <div id="FacetsWrapperDesktop" {{#if filter_type == 'horizontal' }} class="facets__wrapper"{{/if}}>
+          {{#if enable_filtering}}
+            {{#for results.filters as |filter|}}
+              {{#case filter.type}}
+                {{#when "boolean" "list"}}
+                  <details class="{{#if filter_type == 'horizontal' }}disclosure-has-popup facets__disclosure{{else}} facets__disclosure-vertical{{/if}} js-filter" data-index="{{forloop.index0}}">
+                    <summary class="facets__summary body2">
+                      <div>
+                        <span>{{ filter.label }}</span>
+                        {{snippet "icon-arrow"}}
+                      </div>
+                    </summary>
+                    {{assign 'class_layout' (ternary (if filter_type == 'horizontal') 'facets__display global-modal-border-shadow' 'facets__display-vertical')}}
+                    {{assign 'class_style' (ternary (if filter.param_name == "filter.v.availability") 'auto-width' '')}}
+                    <div class="{{class_layout}} {{class_style}}">
+                      {{#if filter.param_name == "filter.v.availability"}}
+                        {{#for filter.values as |value|}}
+                          {{#if value.value == "1"}}
+                            <div class="stock-filter">
+                              {{snippet "switch" name=value.param_name value=value.value on=value.active}}
+                              <span class="body3 fw-bold stock-filter-text">
+                                {{t 'products.facets.in_stock_only'}}
+                              </span>
+                            </div>
+                          {{/if}}
+                        {{/for}}
+                      {{else}}
+                        {{#if filter_type != "vertical"}}
+                          <div class="facets__header">
+                            <span class="facets__selected">
+                              {{t "products.product_list.filters_selected" count=filter.active_values.length}}
+                            </span>
+                            <facet-remove>
+                              <a href="{{filter.url_to_remove}}" class="facets__reset body4">
+                                {{t "products.facets.reset"}}
+                              </a>
+                            </facet-remove>
+                          </div>
+                        {{/if}}
+                        <fieldset>
+                          <ul class="facets__list">
+                            {{#for filter.values as |value|}}
+                              <li class="facets__item">
+                                <label for="Filter-{{filter.param_name}}-{{forloop.index0}}" class="facet-checkbox">
+                                  <input
+                                    id="Filter-{{filter.param_name}}-{{forloop.index0}}"
+                                    type="checkbox"
+                                    name="{{value.param_name}}"
+                                    value="{{value.value}}"
+                                    {{#if value.active}}checked{{/if}}
+                                    {{#if (not value.active) and value.count == 0}}disabled{{/if}}
+                                  />
+                                  <span class="body3">
+                                    {{value.label}} ({{ value.count }})
+                                  </span>
+                                </label>
+                              </li>
+                            {{/for}}
+                          </ul>
+                        </fieldset>
+                      {{/if}}
+                    </div>
+                  </details>
+                {{/when}}
+                {{#when "price_range"}}
+                  <details class="facets__price-details {{#if filter_type == 'horizontal' }}disclosure-has-popup facets__disclosure{{else}} facets__disclosure-vertical{{/if}} js-filter" data-index="{{ forloop.index0 }}">
+                    <summary class="facets__summary body2">
+                      <div>
+                        <span>
+                          {{filter.label}}
+                        </span>
+                        {{snippet "icon-arrow"}}
+                      </div>
+                    </summary>
+                    <div class="facets__price-content {{#if filter_type == 'horizontal' }}facets__display global-modal-border-shadow{{else}}facets__display-vertical{{/if}}">
+                      <div class="facets__header">
+                        <div class="facets__selected">{{{t 'products.facets.max_price' price=(money filter.range_max)}}}</div>
+                        {{#if filter_type != 'vertical'}}
+                          <facet-remove>
+                            <a href="{{filter.url_to_remove}}" class="facets__reset body4">
+                              {{t "products.facets.reset"}}
+                            </a>
+                          </facet-remove>
+                        {{/if}}
+                      </div>
+                    
+                      {{snippet 
+                        'price-range-filter' 
+                        iso_code=cart.currency.iso_code 
+                        symbol=cart.currency.symbol 
+                        filter=filter
+                      }}
+                    </div>
+                  </details>
+                {{/when}}
+              {{/case}}
+            {{/for}}
+          {{/if}}
+        </div>
+
+        {{#if filter_type == "horizontal"}}
+          {{#if enable_sorting}}
+            {{ snippet 'facet-sort' data=results product_count=products_count}}
+          {{/if}}
+          <div id="ProductCountDesktop" class="product-count body3">
+            {{#if products_count > 0}}
+              <span>
+                {{t "products.facets.product_count" product_count=products_count}}
+              </span>
+            {{/if}}
+          </div>
+        {{/if}}
+      </form>
+    </facet-filters-form>
+  {{/if}}
+
+  
+  <div class="facets-sort-filter__wrapper {{#if enable_filtering and enable_sorting and products_count > 0}}has-middle-line{{/if}}">
+    {{#if enable_filtering}}
+      <menu-drawer class="facets-drawer mobile-facets__wrapper{{#if filter_type == 'horizontal' or filter_type == 'vertical' }} display-none-desktop{{/if}}">
+        <details class="mobile-facets__disclosure disclosure-has-popup">
+          <summary class="mobile-facets__open-wrapper focus-offset">
+            <span class="mobile-facets__open {{#if filter_type == 'drawer' and enable_filtering == false}} display-none-desktop{{/if}}">
+              {{snippet "icon-filter"}}
+
+              <span class="mobile-facets__open-label body3">
+                {{t "products.facets.filter_button"}}
+              </span>
+            </span>
+          </summary>
+
+          <facet-filters-form>
+            <form id="FacetFiltersFormMobile" class="mobile-facets" data-form-type="drawer">
+              {{#if results.terms }}
+                <input type="hidden" name="keyword" value="{{ results.terms }}">
+              {{/if}}
+              <div class="mobile-facets__inner">
+                <div class="mobile-facets__header">
+                  <div class="mobile-facets__header-inner">
+
+                    <h2 class="mobile-facets__heading body1 fw-bold">{{t "products.facets.filter_button"}}</h2>
+                    <span class="mobile-facets__close">{{snippet "icon-close"}}</span>
+
+                  </div>
+                </div>
+                <div class="mobile-facets__main has-submenu">
+                  {{#for results.filters as |filter|}}
+                    {{#case filter.type}}
+                      {{#when "boolean" "list"}}
+                        <details class="mobile-facets__details js-filter" data-index="mobile-{{forloop.index0}}">
+                          <summary class="mobile-facets__summary body2 fw-bold focus-inset">
+                            <div>
+                              <span>
+                                {{filter.label}}
+                              </span>
+                              <span class="mobile-facets__arrow">
+                                {{snippet "icon-arrow"}}
+                              </span>
+                            </div>
+                          </summary>
+                          <div class="mobile-facets__submenu">
+
+                            {{#if filter.param_name == "filter.v.availability"}}
+                              {{#for filter.values as |value|}}
+                                {{#if value.value == "1"}}
+                                  <div class="stock-filter">
+                                    {{snippet "switch" name=value.param_name value=value.value on=value.active}}
+                                    <span class="body3 fw-bold">
+                                      {{t 'products.facets.in_stock_only'}}
+                                    </span>
+                                  </div>
+                                {{/if}}
+                              {{/for}}
+                            {{else}}
+                            <ul class="facets__list mobile-facets__list">
+                              {{#for filter.values as |value|}}
+                                <li class="facets__item mobile-facets__item">
+                                  <label for="Mobile-Filter-{{filter.param_name}}-mobile-{{forloop.index0}}" class="facet-checkbox">
+                                    <input
+                                      id="Mobile-Filter-{{filter.param_name}}-mobile-{{forloop.index0}}"
+                                      type="checkbox"
+                                      name="{{value.param_name}}"
+                                      value="{{value.value}}"
+                                      {{#if value.active}}checked{{/if}}
+                                      {{#if (not value.active) and value.count == 0}}disabled{{/if}}
+                                    />
+                                    <span class="body3">
+                                      {{value.label}} ({{ value.count }})
+                                    </span>
+                                  </label>
+                                </li>
+                              {{/for}}
+                            </ul>
+                            {{/if}}
+                          </div>
+                        </details>
+                      {{/when}}
+                      {{#when "price_range"}}
+                        <details class="mobile-facets__details js-filter" data-index="mobile-{{forloop.index0}}">
+                          <summary class="mobile-facets__summary body2 fw-bold focus-inset">
+                            <div>
+                              <span>
+                                {{filter.label}}
+                              </span>
+                              <span class="mobile-facets__arrow">
+                                {{snippet "icon-arrow"}}
+                              </span>
+                            </div>
+                          </summary>
+                          <div class="mobile-facets__submenu">
+                            <div style="margin-bottom:20px">{{{t 'products.facets.max_price' price=(money filter.range_max)}}}</div>
+
+                            {{snippet 
+                              'price-range-filter' 
+                              iso_code=cart.currency.iso_code 
+                              symbol=cart.currency.symbol 
+                              filter=filter
+                            }}
+                          </div>
+                        </details>
+                      {{/when}}
+                    {{/case}}
+                  {{/for}}
+                </div>
+                <div class="mobile-facets__footer">
+                  <p class="mobile-facets__count body3">
+                    {{t "products.facets.product_count" product_count=products_count}}
+                  </p>
+                  <facet-remove class="mobile-facets__clear-wrapper">
+                    <a href="{{results_url}}" class="mobile-facets__clear button button--secondary">
+                      {{t "products.facets.clear"}}
+                    </a>
+                  </facet-remove>
+                  <button type="button" class="button facets-js-confirm">
+                    {{t "products.facets.confirm"}}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </facet-filters-form>
+        </details>
+      </menu-drawer>
+    {{else}}
+      <div class="facets-drawer mobile-facets__wrapper--empty{{#if filter_type == 'horizontal' or filter_type == 'vertical' }} display-none-desktop{{/if}}"></div>
+    {{/if}}
+
+    
+    {{#if enable_sorting}}
+      
+      <facet-filters-form class="display-none-desktop mobile-facets__sort">
+        <form class="facetSortDrawerForm" data-device="tablet" data-form-type="drawer">
+          {{#if results.terms }}
+            <input type="hidden" name="keyword" value="{{ results.terms }}">
+          {{/if}}
+          {{ snippet 'facet-sort' device="tablet" data=results product_count=products_count }}
+        </form>
+      </facet-filters-form>
+      
+      <facet-filters-form class="display-none-tablet facetSortDrawerFormPcWrapper {{#if filter_type != "drawer"}}display-none-desktop{{/if}}">
+        <form class="facetSortDrawerForm" data-device="desktop" data-form-type="drawer">
+          {{#if results.terms }}
+            <input type="hidden" name="keyword" value="{{ results.terms }}">
+          {{/if}}
+          {{ snippet 'facet-sort' wrapper_class="drawer-pc-sorting" data=results product_count=products_count}}
+        </form>
+        <div id="ProductCountDesktopDrawer" class="product-count body3">
+          {{#if products_count > 0}}
+            <span>{{t "products.facets.product_count" product_count=products_count}}</span>
+          {{/if}}
+        </div>
+      </facet-filters-form>
+    {{/if}}
+  </div>
+
+  <div class="active-facets {{#if filter_type == 'vertical'}}display-none-desktop{{/if}}">
+    {{#for results.filters as |filter|}}
+      {{#for filter.active_values as |value|}}
+        <facet-remove>
+          <a href="{{value.url_to_remove}}" class="active-facets__button active-facets__button--light body4">
+            <span class="active-facets__button-inner">
+              {{snippet "icon-close"}}
+              {{filter.label}}: {{value.label}}
+            </span>
+          </a>
+        </facet-remove>
+      {{/for}}
+      {{#if filter.type == "price_range"}}
+        {{#if
+          filter.min_value.value or
+          filter.max_value.value or
+          filter.min_value.value == 0 or
+          filter.max_value.value == 0
+        }}
+          <facet-remove>
+            <a href="{{filter.url_to_remove}}" class="active-facets__button active-facets__button--light body4">
+              <span class="active-facets__button-inner">
+                {{snippet "icon-close"}}
+                {{#if filter.min_value.value or filter.min_value.value == 0}}
+                  {{money filter.min_value.value}}
+                {{else}}
+                  {{money 0}}
+                {{/if}}
+                -
+                {{#if filter.max_value.value or filter.max_value.value == 0}}
+                  {{money filter.max_value.value}}
+                {{else}}
+                  {{money filter.range_max}}
+                {{/if}}
+              </span>
+            </a>
+          </facet-remove>
+        {{/if}}
+      {{/if}}
+    {{/for}}
+    <facet-remove class="active-facets__button-wrapper">
+      <a href="{{results_url}}" class="active-facets__button-remove body4 fw-bold button button--link">
+        <span>
+          {{t "products.facets.clear_all_filter"}}
+        </span>
+      </a>
+    </facet-remove>
+  </div>
+
+  <div id="ProductCount" class="product-count body3 display-none-desktop">
+    {{#if products_count > 0}}
+      <span>{{t "products.facets.product_count" product_count=products_count}}</span>
+    {{/if}}
+  </div>
+</div>

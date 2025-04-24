@@ -1,0 +1,56 @@
+{{assign "default_selected_variant" (default section.settings.default_selected_variant true)}}
+{{assign "is_selected_variant" product.selected_variant}}
+{{assign "is_single_specification_product" product.has_only_default_variant}}
+
+{{#capture "default_variant_id"}}
+  {{~#if default_selected_variant or is_selected_variant or is_single_specification_product~}}
+    {{default product.selected_or_first_available_variant.id (get "id" (first product.variants))}}
+  {{~/if~}}
+{{/capture}}
+
+<product-form
+  id="{{append product_form_id '__wrapper'}}"
+  class="product-form"
+  data-default-error-message="{{t 'products.general.no_product_data_found'}}"
+>
+  <div class="product-form__error-message-wrapper" hidden>
+    {{snippet "icon-error"}}
+    <span class="product-form__error-message body6"></span>
+  </div>
+  {{#unless product}}
+    <button class="product-form__submit button button--full-width button--secondary" disabled>
+      <span>
+        {{t "products.general.sold_out"}}
+      </span>
+    </button>
+  {{/unless}}
+  {{#form "product" product id=product_form_id}}
+    <input type="hidden" name="id" value="{{default_variant_id}}" />
+    <div class="product-form__buttons">
+      <button
+        id="{{product_form_id}}-submit"
+        type="submit"
+        name="add"
+        class="product-form__submit button button--full-width button--secondary"
+        data-selected_or_first_available_variant="{{product.selected_or_first_available_variant.available}}"
+        {{#unless product.selected_or_first_available_variant.available}}
+          disabled
+        {{/unless}}
+        {{#unless default_variant_id}}
+          disabled
+        {{/unless}}
+      >
+        <span>
+          {{#if product.selected_or_first_available_variant.available}}
+            {{t "products.product_list.add_to_cart"}}
+          {{else}}
+            {{t "products.general.sold_out"}}
+          {{/if}}
+        </span>
+        {{snippet "loading-overlay-spinner"}}
+      </button>
+
+      {{payment_button}}
+    </div>
+  {{/form}}
+</product-form>

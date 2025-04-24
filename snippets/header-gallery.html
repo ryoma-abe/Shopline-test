@@ -1,0 +1,169 @@
+{{#comment}}
+Renders a blog header-gallery
+  Accepts:
+  - settings: {Object} blocks(menuGallery) item object.
+    - menu_title: {String} menu tilte.
+    - menu_url: {String} menu jump url.
+    - image_1: {String} image1 url.
+    - image_1_title: {String} image1 title.
+    - image_1_link: {String} image1 jump url.
+    - image_2: {String} image2 url.
+    - image_2_title: {String} image2 title.
+    - image_2_link: {String} image2 jump url.
+    - image_3: {String} image3 url.
+    - image_3_title: {String} image3 title.
+    - image_3_link: {String} image3 jump url.
+    - image_4: {String} image4 url.
+    - image_4_title: {String} image4 title.
+    - image_4_link: {String} image4 jump url.
+    - image_size: {String} image show style.<"square"|"adapt">
+    - title_color: {String} The title color overlaid on the image, the default is white.
+    - opacity: {String} Overlay the image with a layer of transparency
+    - highlight_menus_list: {array} highlight menus
+
+  Usage:
+  {{snippet "header-gallery" settings=block.settings}}
+
+ {{/comment}}
+{{assign "has_imgs" (if settings.image_1.url or settings.image_2.url or settings.image_3.url or settings.image_4.url) }}
+{{assign  "placeholder_arr" (JSONparse "[1,2,3,4]")}}
+{{#if settings.menu_title}}
+<li class="header-inline-menus__item header-inline-menus__item--has-submenu is-megamenu gallery display-none-tablet" data-item-title="{{settings.menu_title}}" {{{shopline_attributes}}}>
+  {{assign 'highlight_class' ''}}
+  {{#for highlight_menus_list as |hight_item|}} 
+    {{#if (uppercase settings.menu_title) == (uppercase hight_item)}}
+      {{assign 'highlight_class' 'menu-item--highlight'}}
+      {{break}}
+    {{/if}}
+  {{/for}}
+  {{snippet
+    "link"
+    classes=(append "header-inline-menus__link menus__link body4 " highlight_class)
+    href=settings.menu_url
+    text=settings.menu_title
+  }}
+  <div class="header__inline-submenus header-nav-list">
+    <ul class="gallery__list">
+      {{#if has_imgs}}
+        {{snippet "header-gallery-item"
+          url=settings.image_1.url
+          has_imgs=has_imgs
+          image_size=settings.image_size
+          image_link=settings.image_1_link
+          image=settings.image_1
+          opacity=settings.opacity
+          title_color=settings.title_color
+          image_title=settings.image_1_title
+        }}
+        {{snippet "header-gallery-item"
+          url=settings.image_2.url
+          has_imgs=has_imgs
+          image_size=settings.image_size
+          image_link=settings.image_2_link
+          image=settings.image_2
+          opacity=settings.opacity
+          title_color=settings.title_color
+          image_title=settings.image_2_title
+        }}
+        {{snippet "header-gallery-item"
+          url=settings.image_3.url
+          has_imgs=has_imgs
+          image_size=settings.image_size
+          image_link=settings.image_3_link
+          image=settings.image_3
+          opacity=settings.opacity
+          title_color=settings.title_color
+          image_title=settings.image_3_title
+        }}
+        {{snippet "header-gallery-item"
+          url=settings.image_4.url
+          has_imgs=has_imgs
+          image_size=settings.image_size
+          image_link=settings.image_4_link
+          image=settings.image_4
+          opacity=settings.opacity
+          title_color=settings.title_color
+          image_title=settings.image_4_title
+        }}
+      {{else}}
+        {{#for placeholder_arr}}
+        <div class="gallery__item gallery__item--empty">
+          <div class="gallery__box">
+            {{placeholder_svg_tag "image" "placeholder"}}
+          </div>
+        </div>
+        {{/for}}
+      {{/if}}
+    </ul>
+  </div>
+</li>
+{{/if}}
+{{#if settings.menu_title}}
+<li {{{shopline_attributes}}}>
+  <details>
+    <summary class="drawer-menus__item display-none-desktop">
+      <a class="body4" href="{{settings.menu_url}}">
+        {{settings.menu_title}}
+      </a>
+      <span class="drawer-menus__item-icon drawer-menus__item-icon-on">
+        {{ snippet 'icon-arrow' }}
+      </span>
+      <span class="drawer-menus__item-icon drawer-menus__item-icon-off">
+        {{ snippet 'icon-minus' }}
+      </span>
+    </summary>
+    <ul class="gallery__list">
+      {{#if has_imgs}}
+        {{snippet "header-gallery-item"
+          url=settings.image_1.url
+          has_imgs=has_imgs
+          image_size=settings.image_size
+          image_link=settings.image_1_link
+          image=settings.image_1
+          opacity=settings.opacity
+          title_color=settings.title_color
+          image_title=settings.image_1_title
+        }}
+        {{snippet "header-gallery-item"
+          url=settings.image_2.url
+          has_imgs=has_imgs
+          image_size=settings.image_size
+          image_link=settings.image_2_link
+          image=settings.image_2
+          opacity=settings.opacity
+          title_color=settings.title_color
+          image_title=settings.image_2_title
+        }}
+        {{snippet "header-gallery-item"
+          url=settings.image_3.url
+          has_imgs=has_imgs
+          image_size=settings.image_size
+          image_link=settings.image_3_link
+          image=settings.image_3
+          opacity=settings.opacity
+          title_color=settings.title_color
+          image_title=settings.image_3_title
+        }}
+        {{snippet "header-gallery-item"
+          url=settings.image_4.url
+          has_imgs=has_imgs
+          image_size=settings.image_size
+          image_link=settings.image_4_link
+          image=settings.image_4
+          opacity=settings.opacity
+          title_color=settings.title_color
+          image_title=settings.image_4_title
+        }}
+      {{else}}
+        {{#for placeholder_arr}}
+        <div class="gallery__item  gallery__item--empty">
+          <div class="gallery__box">
+            {{placeholder_svg_tag "image" "placeholder"}}
+          </div>
+        </div>
+        {{/for}}
+      {{/if}}
+    </ul>
+  </details>
+</li>
+{{/if}}

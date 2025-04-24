@@ -1,0 +1,89 @@
+{{
+  snippet "section-padding-creator" 
+  section_id=section.id 
+  padding_top=section.settings.padding_top 
+  padding_bottom=section.settings.padding_bottom
+}}
+<div class="section-padding rte color-scheme-{{section.settings.color_scheme}}">
+    {{{section.settings.html}}}
+</div>
+{{#schema}}
+{
+  "name": "t:sections.custom-html.name",
+  "class": "section",
+  "settings": [
+    {
+      "id": "html",
+      "type": "handlebars",
+      "limit": 0,
+      "options": {
+        "style": {
+          "height": "432px"
+        }
+      },
+      "label": "t:sections.custom-html.settings.html.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.custom-html.settings.color_scheme.label",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.custom-html.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.custom-html.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.custom-html.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.custom-html.settings.color_scheme.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.custom-html.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.custom-html.settings.padding_top.label",
+      "default": 60,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.custom-html.settings.padding_bottom.label",
+      "default": 60,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 7,
+      "category": "t:sections.custom-html.presets.presets__0.category",
+      "name": "t:sections.custom-html.presets.presets__0.name",
+      "settings": {
+        "html": "<div style=\"text-align:center;\"><h2>Use HTML to format your text so it can be easily read.</h2>This text can be used to share information about your brand with customers.</div>",
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "color_scheme": "none"
+      }
+    }
+  ]
+}
+{{/schema}}

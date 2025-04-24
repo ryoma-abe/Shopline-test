@@ -1,0 +1,197 @@
+.multi-media-splicing {
+  display: grid;
+}
+
+.multi-media-splicing__title {
+  margin-top: 0;
+  margin-bottom: 40px;
+}
+
+.multi-media-splicing__item > * {
+  width: 100%;
+}
+
+.multi-media-splicing__item .collection__scroll__item {
+  width: 100%;
+}
+
+.multi-media-splicing__card {
+  background: rgb(var(--color-page-background));
+  height: 100%;
+  position: relative;
+}
+
+.multi-media-splicing__card .media {
+  height: 100%;
+  overflow: hidden;
+  background-color: rgb(var(--color-image-background));
+}
+
+.multi-media-splicing__card .media > img {
+  display: block;
+  max-width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.multi-media-splicing__card .deferred-media {
+  height: 100%;
+  width: 100%;
+}
+
+.multi-media-splicing__card .deferred-media video,
+.multi-media-splicing__card .deferred-media iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.multi-media-splicing__card .deferred-media__poster {
+  position: absolute;
+}
+
+.multi-media-splicing-image__contain .media > img {
+  object-fit: contain;
+}
+
+.multi-media-splicing .placeholder {
+  background-color: rgba(var(--color-text), 0.05);
+}
+
+.multi-media-splicing .modal-video__video video {
+  cursor: default;
+}
+
+.multi-media-splicing .media-modal {
+  cursor: zoom-out;
+}
+
+/* PC */
+
+@media screen and (min-width: 960px) {
+  .multi-media-splicing {
+    grid-auto-flow: column;
+    grid-column-gap: var(--grid-horizontal-space);
+    grid-row-gap: var(--grid-vertical-space);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .multi-media-splicing__item--left:nth-child(3n - 2) {
+    grid-column: 1 / span 2;
+    grid-row: span 2;
+  }
+
+  .multi-media-splicing__item--left:nth-child(3n - 2):last-child {
+    grid-column: 1 / span 3;
+  }
+
+  .multi-media-splicing__item--left:nth-child(3n - 1),
+  .multi-media-splicing__item--left:nth-child(3n) {
+    grid-column-start: 3;
+  }
+
+  .multi-media-splicing__item--left:nth-child(3n - 1):last-child {
+    grid-row: span 2;
+  }
+  .multi-media-splicing__item--right:nth-child(3n - 2) {
+    grid-column: 1 / span 1;
+    grid-row: span 1;
+  }
+
+  .multi-media-splicing__item--right:nth-child(3n - 2):last-child {
+    grid-column: 1 / span 3;
+  }
+
+  .multi-media-splicing__item--right:nth-child(3n - 1) {
+    grid-column-start: 1;
+  }
+
+  .multi-media-splicing__item--right:nth-child(3n - 1):last-child {
+    grid-column: span 2;
+  }
+
+  .multi-media-splicing__item--right:nth-child(3n) {
+    grid-column: 2 / span 2;
+    grid-row: span 2;
+  }
+
+  .multi-media-splicing__item--collection:only-child,
+  .multi-media-splicing__item--product:only-child {
+    justify-self: center;
+    max-width: 730px;
+    width: 100%;
+  }
+  .multi-media-splicing .product-card-wrapper > a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .multi-media-splicing .product-card-wrapper .card__inner,
+  .multi-media-splicing .collection-item .card__inner {
+    flex-grow: 1;
+  }
+}
+
+/* Mobile */
+
+@media screen and (max-width: 959px) {
+  .multi-media-splicing {
+    grid-column-gap: var(--grid-horizontal-space);
+    grid-row-gap: var(--grid-vertical-space);
+  }
+
+  .multi-media-splicing--mobile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .multi-media-splicing--mobile
+    .multi-media-splicing__item--left:nth-child(3n - 2) {
+    grid-column: span 2;
+  }
+
+  .multi-media-splicing--mobile
+    .multi-media-splicing__item--left:nth-child(3n - 2):nth-last-child(2) {
+    grid-column: span 1;
+  }
+
+  .multi-media-splicing--mobile
+    .multi-media-splicing__item--left:nth-child(3n) {
+    grid-column-start: 2;
+  }
+  .multi-media-splicing--mobile
+    .multi-media-splicing__item--right:nth-child(3n - 2) {
+    grid-column-start: 1;
+  }
+
+  .multi-media-splicing--mobile
+    .multi-media-splicing__item--right:nth-child(3n - 2):last-child {
+    grid-column: span 2;
+  }
+
+  .multi-media-splicing--mobile
+    .multi-media-splicing__item--right:nth-child(3n - 1) {
+    grid-column-start: 2;
+  }
+
+  .multi-media-splicing--mobile
+    .multi-media-splicing__item--right:nth-child(3n) {
+    grid-column: 1 / span 2;
+  }
+
+  .multi-media-splicing__title {
+    margin-bottom: 20px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

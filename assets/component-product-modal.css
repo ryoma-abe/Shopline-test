@@ -1,0 +1,123 @@
+.media-modal {
+  cursor: zoom-out;
+}
+
+.product-media-modal {
+  background-color: rgb(var(--color-page-background));
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  z-index: -1;
+}
+
+.product-media-modal[open] {
+  visibility: visible;
+  opacity: 1;
+  z-index: 101;
+}
+
+.product-media-modal__dialog {
+  --modal-toggle-width: 58px;
+  --modal-toggle-offset-x: 150px;
+  --modal-toggle-offset-y: 40px;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
+.product-media-modal__toggle {
+  background-color: rgb(var(--color-page-background));
+  border: 1px solid rgba(var(--color-text), 0.05);
+  border-radius: 50%;
+  color: rgb(var(--color-text));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  right: var(--modal-toggle-offset-x);
+  top: var(--modal-toggle-offset-y);
+  padding: 20px;
+  position: fixed;
+  z-index: 2;
+  width: var(--modal-toggle-width);
+  height: var(--modal-toggle-width);
+}
+
+.product-media-modal__toggle .icon {
+  height: auto;
+  margin: 0;
+  width: 1em;
+}
+
+.product-media-modal__content {
+  max-height: 100vh;
+  width: 100%;
+  overflow: auto;
+}
+
+.product-media-modal__content > * {
+  display: block;
+  height: auto;
+  margin: auto;
+}
+
+.product-media-modal__content > *:not(.active) {
+  display: none;
+}
+
+.product-media-modal__content .media {
+  background: none;
+}
+
+.product-media-modal__content .deferred-media {
+  width: 100%;
+}
+
+@media screen and (min-width: 960px) {
+  .product-media-modal__content {
+    padding: 40px 250px;
+  }
+
+  .product-media-modal__content > * {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .product-media-modal__content > * + * {
+    margin-top: 20px;
+  }
+
+  .product-media-modal__content > *:not(.active) {
+    display: block;
+  }
+
+  .product-media-modal__dialog .slider-buttons {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 959px) {
+  .product-media-modal__dialog {
+    --modal-toggle-width: 38px;
+    --modal-toggle-offset-x: 20px;
+    --modal-toggle-offset-y: 20px;
+    --modal-slider-height: 60px;
+    position: relative;
+  }
+
+  .product-media-modal__toggle {
+    padding: 10px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

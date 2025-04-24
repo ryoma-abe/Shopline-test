@@ -1,0 +1,120 @@
+.icon-list .title4 {
+  margin-bottom: 30px;
+  text-align: center;
+}
+@media (max-width: 959px) {
+  .icon-list .title4 {
+    margin-bottom: 20px;
+  }
+}
+.icon-list .slider-button {
+  position: absolute;
+  top: var(--grid-vertical-space);
+  bottom: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+}
+.icon-list .slider-button :hover {
+  opacity: 0.8;
+}
+.icon-list .slider-button svg {
+  width: 20px;
+  height: 20px;
+}
+.icon-list .slider-button--prev {
+  left: -20px;
+}
+.icon-list .slider-button--next {
+  right: -20px;
+}
+@media screen and (max-width: 959px) {
+  .icon-list .icon-list__wrapper:not(.slider) {
+    justify-content: center;
+  }
+  .icon-list .slider:not(.slider--mobile) {
+    flex-wrap: wrap;
+  }
+
+  .icon-list .icon-list__wrapper.special-slide--mobile {
+    flex-wrap: inherit;
+  }
+  .icon-list .icon-list__wrapper.special-slide--mobile .icon-list__item {
+    width: 28.57%;
+  }
+}
+@media screen and (min-width: 960px) {
+  .icon-list .layout-center--desktop {
+    justify-content: center;
+  }
+}
+.icon-list .icon-list__wrapper {
+  margin-bottom: 0;
+}
+.icon-list .icon-list__wrapper .icon-list__item {
+  display: flex;
+}
+.icon-list .icon-list__wrapper .icon-list__item .icon-list__main-wrapper {
+  width: 100%;
+}
+.icon-list .icon-list__wrapper .icon-list__item .icon-list__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+.icon-list
+  .icon-list__wrapper
+  .icon-list__item
+  .icon-list__link
+  .icon-list__text {
+  cursor: default;
+}
+.icon-list .icon-list__wrapper .icon-list__item .icon-list__link img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background-color: transparent;
+  opacity: 0;
+  animation: fadeIn 1s cubic-bezier(0.26, 0.54, 0.32, 1) 0s forwards;
+}
+.icon-list .icon-list__wrapper .icon-list__item .icon-list__empty-wraper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(var(--color-mask), 0.05);
+}
+.icon-list .icon-list__wrapper .icon-list__item .icon-list__empty-wraper > svg {
+  width: 100%;
+  height: 100%;
+}
+/* To fix the issue that negative margin in flex containers does not take effect in non-padding containers  */
+.icon-list .icon-list__wrapper {
+  margin-top: 0px;
+}
+.icon-list .icon-list__wrapper.slider .icon-list__item {
+  margin-top: 0;
+}
+@media screen and (min-width: 960px) {
+  .icon-list .icon-list__wrapper .icon-list__item:nth-child(-n + 6) {
+    margin-top: 0;
+  }
+}
+@media screen and (max-width: 959px) {
+  .icon-list .icon-list__wrapper .icon-list__item:nth-child(-n + 2) {
+    margin-top: 0;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

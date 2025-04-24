@@ -1,0 +1,345 @@
+<div class="card-container">
+  <div class="body2 card__title">
+    <p class="fw-bold">{{t "customer.account.account_information"}}</p>
+    <div class="edit-entry" id="js-account-edit">{{ snippet 'icon-edit' }}</div>
+  </div>
+
+  <div class="card__detail">
+    <div id="account">
+      
+      <div class="info-item username">
+        <div class="body4 info-label">{{t "customer.account.username"}}</div>
+        <div class="body4 info-value">{{ternary customer.name customer.name (t "customer.account.not_set")}}</div>
+
+        
+        {{#form 'update_customer' id='update_username_customer'}}
+          <div class="account-edit__name--wrapper">
+            <div class="account-edit__firstname">
+              <div class="account-edit__name--title body4">{{t 'customer.account.first_name'}}</div>
+              <input class="body4" type="text" name="customer[first_name]" maxlength="128" value="{{ternary customer.first_name customer.first_name  ''}}">
+            </div>
+            <div class="account-edit__lastname">
+              <div class="account-edit__name--title body4">{{t 'customer.account.last_name'}}</div>
+              <input class="body4" type="text" name="customer[last_name]" maxlength="128" value="{{ternary customer.last_name customer.last_name  ''}}">
+            </div>
+          </div>
+        {{/form}}
+      </div>
+
+      
+      <div class="info-item email">
+        <div class="body4 info-label">{{t "customer.account.email"}}</div>
+        <div class="body4 info-value">
+          {{#if customer.email}}
+            <span>{{customer.email}}</span>
+            <div class="info-value__edit">
+              {{snippet 'icon-edit'}}
+              <span>{{t "customer.account.modify_email"}}</span>
+            </div>
+          {{else}}
+            <div class="bind-info">
+              {{snippet 'icon-add'}}
+              <span>{{t "customer.general.bind_email"}}</span>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+
+      
+      <div class="info-item phone">
+        <div class="body4 info-label">{{t "customer.account.phone"}}</div>
+        <div class="body4 info-value">
+          {{#if customer.phone}}
+            <span>{{customer.phone}}</span>
+            <div class="info-value__edit">
+              {{snippet 'icon-edit'}}
+              <span>{{t "customer.account.modify_phone"}}</span>
+            </div>
+          {{else}}
+            <div class="bind-info">
+              {{snippet 'icon-add'}}
+              <span>{{t "customer.general.bind_phone"}}</span>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+
+      
+      <template id="modify-phone__modal">
+        <details-modal>
+          <details open disabled-body-click-close>
+            <div class="modal__overlay"></div>
+            <modify-customer-modal data-type="phone" class="modal__content modify-info__modal">
+              <div class="modify-info__close js-modify-info__close_modal">
+                {{snippet 'icon-close'}}
+              </div>
+              <div class="modify-info__title body3 fw-bold">{{#if customer.phone}}{{t "customer.account.modify_phone"}}{{else}}{{t "customer.general.bind_phone"}}{{/if}}</div>
+              {{#form 'bind_customer_phone' id="bind-customer-phone"}}
+                {{#if form.register_config.check_tag}}
+                  <div class="modify-info__step1">
+                    <div class="modify-info__desc body4"></div>
+                    <div class="modify-info__content">
+                      <div class="modify-info__input">
+                        <input class="body4" type="text" name="customer[verifycode1]" placeholder="{{t "customer.general.verification_code"}}">
+                        <button class="button button--link modify-info__send-code">
+                          {{t "customer.general.send"}}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="modify-info__action-buttons">
+                      <div class="button button--secondary modify-info_cancel-button js-modify-info__close_modal">{{t "customer.general.cancel_common"}}</div>
+                      <div class="button modify-info_next-button">
+                        <span>{{t "customer.account.next"}}</span>
+                        {{snippet "loading-overlay-spinner"}}
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="modify-info__step2" style="display: none;">
+                    <div class="modify-info__desc body4"></div>
+                    <div class="modify-info__content">
+                      <div class="modify-info__input">
+                        <input class="body4" type="tel" name="customer[phone]" placeholder="{{t "customer.general.new_phone"}}">
+                        <div class="modify-code-select__container">
+                          <div class="modify-code-select__wrapper">
+                            <span class="modify-code-select__value"></span>
+                            {{ snippet 'icon-arrow'}}
+                          </div>
+                          <select name="customer[code]" autocomplete="off">
+                            {{#for all_country_dialing_code as |country_dialing_code|}}
+                              {{#if localization.country.iso_code == country_dialing_code.iso_code}}
+                                <option value="{{country_dialing_code.dialing_code}}" data-iso-code="{{country_dialing_code.iso_code}}" selected="selected">{{country_dialing_code.name}}</option>
+                              {{else}}
+                                <option value="{{country_dialing_code.dialing_code}}" data-iso-code="{{country_dialing_code.iso_code}}">{{country_dialing_code.name}}</option>
+                              {{/if}}
+                            {{/for}}
+                          </select>
+                        </div>
+                      </div>
+                      <div class="modify-info__input">
+                        <input class="body4" type="text" name="customer[verifycode]" placeholder="{{t "customer.general.verification_code"}}">
+                        <button class="button button--link modify-info__send-code">
+                          {{t "customer.general.send"}}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="modify-info__action-buttons">
+                      <div class="button button--secondary modify-info_cancel-button js-modify-info__close_modal">{{t "customer.general.cancel_common"}}</div>
+                      <button type="submit" class="button modify-info_confirm-button">
+                        <span>{{t "customer.account.confirm_btn"}}</span> 
+                        {{snippet "loading-overlay-spinner"}}
+                      </button>
+                    </div>
+                  </div>                  
+                {{else}}
+                  <div class="modify-info__content">
+                    <div class="modify-info__input">
+                      <input class="body4" type="tel" name="customer[phone]" placeholder="{{t "customer.general.new_phone"}}">
+                      <div class="modify-code-select__container">
+                        <div class="modify-code-select__wrapper">
+                          <span class="modify-code-select__value"></span>
+                          {{ snippet 'icon-arrow'}}
+                        </div>
+                        <select name="customer[code]" autocomplete="off">
+                          {{#for all_country_dialing_code as |country_dialing_code|}}
+                            {{#if localization.country.iso_code == country_dialing_code.iso_code}}
+                              <option value="{{country_dialing_code.dialing_code}}" data-iso-code="{{country_dialing_code.iso_code}}" selected="selected">{{country_dialing_code.name}}</option>
+                            {{else}}
+                              <option value="{{country_dialing_code.dialing_code}}" data-iso-code="{{country_dialing_code.iso_code}}">{{country_dialing_code.name}}</option>
+                            {{/if}}
+                          {{/for}}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modify-info__action-buttons">
+                    <div class="button button--secondary modify-info_cancel-button js-modify-info__close_modal">{{t "customer.general.cancel_common"}}</div>
+                    <button type="submit" class="button modify-info_confirm-button">
+                      <span>{{t "customer.account.confirm_btn"}}</span> 
+                      {{snippet "loading-overlay-spinner"}}
+                    </button>
+                  </div>
+                {{/if}}
+              {{/form}}
+            </modify-customer-modal>
+          </details>
+        </details-modal>
+      </template>
+
+      
+      <template id="modify-email__modal">
+        <details-modal>
+          <details open disabled-body-click-close>
+            <div class="modal__overlay"></div>
+            <modify-customer-modal data-type="email" class="modal__content modify-info__modal">
+              <div class="modify-info__close js-modify-info__close_modal">
+                {{snippet 'icon-close'}}
+              </div>
+              <div class="modify-info__title body3 fw-bold">{{#if customer.email}}{{t "customer.account.modify_email"}}{{else}}{{t "customer.general.bind_email"}}{{/if}}</div>
+              {{#form 'bind_customer_email' id="bind-customer-email"}}
+                {{#if form.register_config.check_tag}}
+                  <div class="modify-info__step1">
+                    <div class="modify-info__desc body4"></div>
+                    <div class="modify-info__content">
+                      <div class="modify-info__input">
+                        <input class="body4" type="text" name="customer[verifycode1]" placeholder="{{t "customer.general.verification_code"}}">
+                        <button class="button button--link modify-info__send-code">
+                          {{t "customer.general.send"}}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="modify-info__action-buttons">
+                      <div class="button button--secondary modify-info_cancel-button js-modify-info__close_modal">{{t "customer.general.cancel_common"}}</div>
+                      <div class="button modify-info_next-button">
+                        <span>{{t "customer.account.next"}}</span>
+                        {{snippet "loading-overlay-spinner"}}
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="modify-info__step2" style="display: none;">
+                    <div class="modify-info__desc body4"></div>
+                    <div class="modify-info__content">
+                      <div class="modify-info__input">
+                        <input class="body4" type="email" name="customer[email]" placeholder="{{t "customer.general.new_email"}}">
+                      </div>
+                      <div class="modify-info__input">
+                        <input class="body4" type="text" name="customer[verifycode]" placeholder="{{t "customer.general.verification_code"}}">
+                        <button class="button button--link modify-info__send-code">
+                          {{t "customer.general.send"}}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="modify-info__action-buttons">
+                      <div class="button button--secondary modify-info_cancel-button js-modify-info__close_modal">{{t "customer.general.cancel_common"}}</div>
+                      <button type="submit" class="button modify-info_confirm-button">
+                        <span>{{t "customer.account.confirm_btn"}}</span> 
+                        {{snippet "loading-overlay-spinner"}}
+                      </button>
+                    </div>
+                  </div>                  
+                {{else}}
+                  <div class="modify-info__content">
+                    <div class="modify-info__input">
+                      <input class="body4" type="email" name="customer[email]" placeholder="{{t "customer.general.new_email"}}">
+                    </div>
+                  </div>
+                  <div class="modify-info__action-buttons">
+                    <div class="button button--secondary modify-info_cancel-button js-modify-info__close_modal">{{t "customer.general.cancel_common"}}</div>
+                    <button type="submit" class="button modify-info_confirm-button">
+                      <span>{{t "customer.account.confirm_btn"}}</span> 
+                      {{snippet "loading-overlay-spinner"}}
+                    </button>
+                  </div>
+                {{/if}}
+              {{/form}}
+            </modify-customer-modal>
+          </details>
+        </details-modal>
+      </template>
+    {{#if customer.login_sources}}
+      <div class="info-item third">
+        <div class="body4 info-label">{{t 'customer.account.account_binding'}}</div>
+        <div class="body4 info-value">
+          {{#for customer.login_sources as |item|}}
+            <div class="bind-info">
+              {{#if item.login_source == 'facebook'}}
+                {{ snippet 'icon-account-facebook' }}
+              {{else if item.login_source == 'line'}}
+                {{ snippet 'icon-account-line' }}
+              {{else if item.login_source == 'google'}}
+                {{ snippet 'icon-account-google' }}
+              {{else if item.login_source == 'tiktok'}}
+                {{ snippet 'icon-account-tiktok' }}
+              {{else if item.login_source == 'apple'}}
+                {{ snippet 'icon-account-apple' }}
+              {{/if}}
+              <span>{{ ternary item.nickname item.nickname customer.name }}</span>
+            </div>
+          {{/for}}
+        </div>
+      </div>
+    {{/if}}
+
+
+      {{#if shop.allow_cancel_account and (if customer.email or customer.phone)}}
+        <div class="info-item">
+          <div class="body4 info-value">
+            {{#if customer.cancelling_account}}
+              <span class="customer__delete-account">
+                {{t "customer.account.delete_deadline_tip" time=(date customer.cancelling_time "%Y-%m-%d")}}
+              </span>
+            {{else}}
+              <details-modal class="customer__delete-container">
+                <details>
+                  <summary class="modal__toggle">
+                    <button class="customer__delete-account">
+                      {{snippet "icon-delete"}}
+                      <span>{{t "customer.account.delete_account"}}</span>
+                    </button>
+                  </summary>
+                  <div class="modal__overlay"></div>
+                  <div class="modal__content customer__delete-modal">
+                    <button name="close" class="customer__delete-close">
+                      {{snippet "icon-close"}}
+                    </button>
+                    <h5>{{t "customer.account.delete_account"}}</h5>
+                    <p>
+                      {{#if customer.email}}
+                        {{t "customer.account.verify_email_message" email=customer.email}}
+                      {{else}}
+                        {{t "customer.account.verify_phone_message" phone=customer.phone}}
+                      {{/if}}
+                    </p>
+                    <p>{{t "customer.account.delete_account_notify"}}</p>
+                    <ul>
+                      <li>{{t "customer.account.name"}}</li>
+                      <li>{{t "general.address.address"}}</li>
+                      <li>{{t "customer.account.delete_account_email"}}</li>
+                      <li>{{t "customer.account.ip_address"}}</li>
+                      <li>{{t "customer.account.credit_card_number"}}</li>
+                    </ul>
+                    <p>{{t "customer.account.deadline"}}</p>
+                    {{#form "delete_customer" id="delete-customer-form"}}
+                      <div class="field">
+                        <div class="field__container">
+                          <input
+                            type="text"
+                            class="field__input"
+                            name="customer[verifycode]"
+                            required
+                            placeholder="{{t 'customer.general.verification_code'}}"
+                          />
+                          <label class="field__label body3">
+                            {{t "customer.general.verification_code"}}
+                          </label>
+                        </div>
+                        <div class="field__suffix">
+                          <button class="button button--link verifycode-button">
+                            {{t "customer.general.send"}}
+                          </button>
+                        </div>
+                      </div>
+                      <p class="field__info field__info--error display-none">
+                        {{snippet "icon-error"}}
+                        <span class="text"></span>
+                      </p>
+                      <button type="submit" class="button button--full-width">
+                        {{t "customer.account.delete_account"}}
+                      </button>
+                    {{/form}}
+                  </div>
+                </details>
+              </details-modal>
+            {{/if}}
+          </div>
+        </div>
+      {{/if}}
+
+      <div class="edit__action-buttons">
+        <div class="button button--secondary cancel-edit">{{t "customer.general.cancel_common"}}</div>
+        <button type="submit" form="update_username_customer" class="button confirm-edit">{{t "customer.account.confirm_btn"}}</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+{{#comment}}
+    Renders a product photo swipe data source
+
+    Accepts:
+    - section: {Object} section object
+    - product: {Object} Product Handlebars object
+{{/comment}}
+
+{{assign "quality" (default quality 80)}}
+{{assign "loop" (default loop false)}}
+{{assign "video_autoplay" (default video_autoplay false)}}
+{{assign 'video_mute' (ternary video_autoplay 1 0)}}
+{{assign "youtube_control" (default youtube_control 1)}}
+{{assign "youtube_show_playlist" (default youtube_show_playlist 1)}}
+
+<product-photo-swipe id="ProductPhotoSwipe-{{section.id}}" data-video-autoplay="{{video_autoplay}}">
+  {{#if product.selected_or_first_available_variant.featured_media}}
+    {{assign "media" product.selected_or_first_available_variant.featured_media}}
+    {{snippet
+      "product-photo-swipe-source-media"
+      media=media
+      quality=quality
+      youtube_control=youtube_control
+      youtube_show_playlist=youtube_show_playlist
+      loop=loop
+      video_mute=video_mute
+    }}
+  {{/if}}
+  {{#for product.media as |media|}}
+    {{#unless media.id == product.selected_or_first_available_variant.featured_media.id}}
+      {{snippet
+        "product-photo-swipe-source-media"
+        media=media
+        quality=quality
+        youtube_control=youtube_control
+        youtube_show_playlist=youtube_show_playlist
+        loop=loop
+        video_mute=video_mute
+      }}
+    {{/unless}}
+  {{/for}}
+</product-photo-swipe>

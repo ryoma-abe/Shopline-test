@@ -1,0 +1,68 @@
+dropdown-menu[open] .dropdown-menu__button svg {
+  transform: rotate(-180deg);
+}
+
+.dropdown-menu {
+  position: relative;
+}
+
+.dropdown-menu__button {
+  gap: 8px;
+}
+
+.dropdown-menu__button:active::before {
+  animation: none;
+}
+
+.dropdown-menu__button svg {
+  transition: transform 0.2s linear;
+}
+
+.dropdown-menu__list-wrapper {
+  position: absolute;
+  background-color: rgb(var(--color-page-background));
+  overflow: hidden;
+  z-index: 10;
+  padding: 10px 0;
+}
+
+.dropdown-menu__list-wrapper.top {
+  bottom: 100%;
+  top: unset;
+}
+
+.dropdown-menu__list-wrapper.bottom {
+  top: 100%;
+}
+
+.dropdown-menu__list-wrapper.align--right {
+  right: 0px;
+}
+
+.dropdown-menu__list {
+  position: relative;
+  max-height: 60vh;
+  overflow-y: auto;
+  width: max-content;
+}
+
+@media screen and (max-width: 959px) {
+  .dropdown-menu__list {
+    max-width: 50vw;
+    min-width: 100%;
+  }
+}
+
+.dropdown-menu__list a {
+  display: block;
+  padding: 4px 15px;
+  cursor: pointer;
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

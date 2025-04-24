@@ -1,0 +1,141 @@
+{{#comment}}
+ * Renders share content.
+ * @param {string} share_url - Share the url of the page.
+ * @param {string} share_title - Share the title of the page.
+ * @param {string} share_image - Share photos of the url.
+ * @param {string} name - The name of the Shared platform.
+ * @param {boolean} show_official_share_icon - Whether to display the official platform icon.
+ * @param {boolean} show_social_name - Whether to display the platform name.
+ * @Usage:
+    {{snippet
+      "share-card-content"
+      share_url=share_url
+      share_title=share_title
+      share_image=share_image
+      name=name
+      show_official_share_icon=settings.show_official_share_icon
+      show_social_name=settings.show_social_name
+    }}
+ {{/comment}}
+{{#if name == "Facebook"}}
+  <a
+    target="_blank"
+    class="third-party-item"
+    data-platform="{{name}}"
+    href="https://www.facebook.com/sharer.php?u={{encodeURI share_url}}"
+    rel="noreferrer"
+  >
+    <div class="third-party-icon">
+      {{#if show_official_share_icon}}
+        {{snippet "icon-official-fb"}}
+      {{else}}
+        {{snippet "icon-social-fb"}}
+      {{/if}}
+    </div>
+    {{#if show_social_name}}
+      <span class="third-party-name body6">{{name}}</span>
+    {{/if}}
+  </a>
+{{/if}}
+{{#if name == "Twitter"}}
+  <a
+    target="_blank"
+    class="third-party-item"
+    data-platform="{{name}}"
+    href="https://twitter.com/share?text={{encodeURI share_title}}&url={{encodeURI share_url}}"
+    rel="noreferrer"
+  >
+    <div class="third-party-icon">
+      {{#if show_official_share_icon}}
+        {{snippet "icon-official-twitter"}}
+      {{else}}
+        {{snippet "icon-social-twitter"}}
+      {{/if}}
+    </div>
+    {{#if show_social_name}}
+      <span class="third-party-name body6">{{name}}</span>
+    {{/if}}
+  </a>
+{{/if}}
+{{#if name == "Pin"}}
+  <a
+    target="_blank"
+    class="third-party-item"
+    data-platform="{{name}}"
+    href="https://pinterest.com/pin/create/button/?url={{encodeURI
+      share_url
+    }}&media={{share_image}}&description={{encodeURI share_title}}"
+    rel="noreferrer"
+  >
+    <div class="third-party-icon">
+      {{#if show_official_share_icon}}
+        {{snippet "icon-official-pin"}}
+      {{else}}
+        {{snippet "icon-social-pin"}}
+      {{/if}}
+    </div>
+    {{#if show_social_name}}
+      <span class="third-party-name body6">{{name}}</span>
+    {{/if}}
+  </a>
+{{/if}}
+{{#if name == "Line"}}
+  <a
+    target="_blank"
+    class="third-party-item"
+    data-platform="{{name}}"
+    href="https://social-plugins.line.me/lineit/share?url={{encodeURI share_url}}"
+    rel="noreferrer"
+  >
+    <div class="third-party-icon">
+      {{#if show_official_share_icon}}
+        {{snippet "icon-official-line"}}
+      {{else}}
+        {{snippet "icon-social-line"}}
+      {{/if}}
+    </div>
+    {{#if show_social_name}}
+      <span class="third-party-name body6">{{name}}</span>
+    {{/if}}
+  </a>
+{{/if}}
+{{#if name == "Whatsapp"}}
+  <a
+    target="_blank"
+    class="third-party-item"
+    data-platform="{{name}}"
+    href="https://api.whatsapp.com/send/?text={{encodeURI share_url}}"
+    rel="noreferrer"
+  >
+    <div class="third-party-icon">
+      {{#if show_official_share_icon}}
+        {{snippet "icon-official-whatsapp"}}
+      {{else}}
+        {{snippet "icon-social-whatsapp"}}
+      {{/if}}
+    </div>
+    {{#if show_social_name}}
+      <span class="third-party-name body6">{{name}}</span>
+    {{/if}}
+  </a>
+{{/if}}
+{{#if name == "Tumblr"}}
+  <a
+    target="_blank"
+    class="third-party-item"
+    data-platform="{{name}}"
+    href="https://www.tumblr.com/widgets/share/tool?posttype=link&canonicalUrl={{encodeURI share_url}}"
+    rel="noreferrer"
+  >
+    <div class="third-party-icon">
+      {{#if show_official_share_icon}}
+        {{snippet "icon-official-tumblr"}}
+      {{else}}
+        {{snippet "icon-social-tumblr"}}
+      {{/if}}
+    </div>
+    {{#if show_social_name}}
+      <span class="third-party-name body6">{{name}}</span>
+    {{/if}}
+  </a>
+{{/if}}

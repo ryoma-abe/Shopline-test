@@ -1,0 +1,465 @@
+{{assign "block_length" (length section.blocks)}}
+
+{{snippet "stylesheet" href=(asset_url "section-count-down.css")}}
+<script src="{{asset_url 'component-count-down.js'}}" defer></script>
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+<div class="section-padding {{#unless section.settings.full_display}}page-width{{/unless}}">
+  <div
+    class="count-down-container {{section.settings.image_position}} mobile--{{section.settings.mobile_image_position}}"
+  >
+    <div
+      class="count-down__image-box
+        {{#if section.settings.mobile_image_position == 'none'}}display-none-tablet{{/if}}"
+      style="width: {{section.settings.image_width}};"
+    >
+      <div class="count-down__image-box-wrapper global-card-border-shadow">
+        {{assign "pc_image" (ternary section.settings.pc_image section.settings.pc_image null)}}
+        {{assign "mobile_image" (ternary section.settings.mobile_image section.settings.mobile_image null)}}
+        {{#if pc_image or mobile_image}}
+          <style>
+          #shopline-section-{{section.id}} {
+            {{#if pc_image}}
+              --pc-image-ratio: {{multiply (divide 1 pc_image.aspect_ratio) 100}}%;
+            {{/if}}
+            {{#if mobile_image}}
+              --mobile-image-ratio: {{multiply (divide 1 mobile_image.aspect_ratio) 100}}%;
+            {{/if}}
+          }
+          </style>
+          <picture>
+            {{#if pc_image and mobile_image}}
+              {{source_tag (image_url mobile_image) media="(max-width: 959px)"}}
+            {{/if}}
+            {{#capture "pc_size"}}{{#if section.settings.image_width == "33%"}}1/3{{else}}1/2{{/if}}{{/capture}}
+            {{snippet
+              "image"
+              class="image-with-text__image"
+              data=(default pc_image mobile_image)
+              pc_size=pc_size
+              mobile_size="100vw"
+            }}
+          </picture>
+        {{else}}
+          {{placeholder_svg_tag "image"}}
+        {{/if}}
+      </div>
+    </div>
+    {{#if block_length > 0}}
+      <div
+        class="count-down__info-reference global-card-border-shadow
+          text-{{section.settings.pc_content_align}}
+          mobile-text-{{section.settings.mobile_content_align}}
+          vertical-{{section.settings.pc_content_position}}"
+      >
+        {{#for section.blocks as |block|}}
+          {{#if block.type == "title"}}
+            <h2
+              {{{block.shopline_attributes}}}
+              class="title1 count-down__title"
+              style="--title-font-size: {{block.settings.title_font_size}}px;"
+            >
+              {{block.settings.title}}
+            </h2>
+          {{/if}}
+          {{#if block.type == "desc"}}
+            <div {{{block.shopline_attributes}}} class="body1 rte count-down__desc">{{{block.settings.desc}}}</div>
+          {{/if}}
+          {{#if block.type == "count_down" and block.settings.deadline}}
+            <div
+              class="count-down__timer-container {{#if section.settings.show_divider}}divider{{/if}}"
+              style="--count-down-color: {{section.settings.count_down_color.red}}, {{section.settings.count_down_color.green}}, {{section.settings.count_down_color.blue}};"
+              {{{block.shopline_attributes}}}
+            >
+              <count-down
+                data-deadline="{{block.settings.deadline}}"
+                class="loading title1"
+                style="--deadline-font-size:{{block.settings.deadline_font_size}}px"
+              >
+                {{snippet "loading-overlay-spinner"}}
+              </count-down>
+              <div
+                class="count-down__result title3 rte"
+                style="font-size:{{block.settings.result_font_size}}px"
+              >{{{block.settings.result}}}</div>
+            </div>
+          {{/if}}
+          {{#if block.type == "button"}}
+            {{#if (trim block.settings.button_text)}}
+              <a
+                {{{block.shopline_attributes}}}
+                href="{{default block.settings.link 'javascript:;'}}"
+                class="button button--secondary count-down__btn"
+              >
+                {{block.settings.button_text}}
+              </a>
+            {{/if}}
+          {{/if}}
+        {{/for}}
+      </div>
+    {{/if}}
+  </div>
+</div>
+{{#schema}}
+{
+  "name": "t:sections.count-down.name",
+  "blocks": [
+    {
+      "limit": 1,
+      "name": "t:sections.count-down.blocks.title.name",
+      "type": "title",
+      "settings": [
+        {
+          "default": "Countdown timer",
+          "id": "title",
+          "label": "t:sections.count-down.blocks.title.settings.title.label",
+          "type": "text"
+        },
+        {
+          "type": "select",
+          "id": "title_font_size",
+          "label": "t:sections.count-down.blocks.title.settings.title_font_size.label",
+          "options": [
+            {
+              "label": "t:sections.count-down.blocks.title.settings.title_font_size.options__0.label",
+              "value": 70
+            },
+            {
+              "label": "t:sections.count-down.blocks.title.settings.title_font_size.options__1.label",
+              "value": 50
+            },
+            {
+              "label": "t:sections.count-down.blocks.title.settings.title_font_size.options__2.label",
+              "value": 36
+            }
+          ],
+          "default": 50
+        }
+      ]
+    },
+    {
+      "limit": 1,
+      "name": "t:sections.count-down.blocks.desc.name",
+      "type": "desc",
+      "settings": [
+        {
+          "default": "The most wanted styles is waiting for you. Find the best styles of modern outfits for you.",
+          "id": "desc",
+          "label": "t:sections.count-down.blocks.desc.settings.desc.label",
+          "type": "richtext"
+        }
+      ]
+    },
+    {
+      "limit": 1,
+      "type": "count_down",
+      "name": "t:sections.count-down.blocks.count_down.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "deadline",
+          "info": "t:sections.count-down.blocks.count_down.settings.deadline.info",
+          "label": "t:sections.count-down.blocks.count_down.settings.deadline.label"
+        },
+        {
+          "type": "select",
+          "default": 70,
+          "id": "deadline_font_size",
+          "label": "t:sections.count-down.blocks.count_down.settings.deadline_font_size.label",
+          "options": [
+            {
+              "label": "t:sections.count-down.blocks.count_down.settings.deadline_font_size.options__0.label",
+              "value": 70
+            },
+            {
+              "label": "t:sections.count-down.blocks.count_down.settings.deadline_font_size.options__1.label",
+              "value": 50
+            },
+            {
+              "label": "t:sections.count-down.blocks.count_down.settings.deadline_font_size.options__2.label",
+              "value": 36
+            }
+          ]
+        },
+        {
+          "id": "result",
+          "info": "t:sections.count-down.blocks.count_down.settings.result.info",
+          "label": "t:sections.count-down.blocks.count_down.settings.result.label",
+          "type": "richtext"
+        },
+        {
+          "type": "select",
+          "id": "result_font_size",
+          "label": "t:sections.count-down.blocks.count_down.settings.result_font_size.label",
+          "options": [
+            {
+              "label": "t:sections.count-down.blocks.count_down.settings.result_font_size.options__0.label",
+              "value": 22
+            },
+            {
+              "label": "t:sections.count-down.blocks.count_down.settings.result_font_size.options__1.label",
+              "value": 18
+            },
+            {
+              "label": "t:sections.count-down.blocks.count_down.settings.result_font_size.options__2.label",
+              "value": 16
+            }
+          ],
+          "default": 22
+        }
+      ]
+    },
+    {
+      "limit": 1,
+      "type": "button",
+      "name": "t:sections.count-down.blocks.button.name",
+      "settings": [
+        {
+          "type": "text",
+          "default": "Button",
+          "id": "button_text",
+          "label": "t:sections.count-down.blocks.button.settings.button_text.label"
+        },
+        {
+          "id": "link",
+          "label": "t:sections.count-down.blocks.button.settings.link.label",
+          "type": "url"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "settings": [
+    {
+      "default": "#FF3597",
+      "id": "count_down_color",
+      "label": "t:sections.count-down.settings.count_down_color.label",
+      "type": "color"
+    },
+    {
+      "default": false,
+      "id": "full_display",
+      "label": "t:sections.count-down.settings.full_display.label",
+      "type": "switch"
+    },
+    {
+      "default": true,
+      "id": "show_divider",
+      "info": "",
+      "label": "t:sections.count-down.settings.show_divider.label",
+      "type": "switch"
+    },
+    {
+      "id": "pc_image",
+      "info": "t:sections.count-down.settings.pc_image.info",
+      "label": "t:sections.count-down.settings.pc_image.label",
+      "type": "image_picker"
+    },
+    {
+      "id": "image_width",
+      "label": "t:sections.count-down.settings.image_width.label",
+      "type": "select",
+      "default": "33%",
+      "options": [
+        {
+          "value": "33%",
+          "label": "t:sections.count-down.settings.image_width.options__0.label"
+        },
+        {
+          "value": "50%",
+          "label": "t:sections.count-down.settings.image_width.options__1.label"
+        }
+      ]
+    },
+    {
+      "id": "image_position",
+      "label": "t:sections.count-down.settings.image_position.label",
+      "type": "select",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.count-down.settings.image_position.options__0.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.count-down.settings.image_position.options__1.label"
+        }
+      ]
+    },
+    {
+      "id": "pc_content_position",
+      "label": "t:sections.count-down.settings.pc_content_position.label",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.count-down.settings.pc_content_position.options__0.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.count-down.settings.pc_content_position.options__1.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.count-down.settings.pc_content_position.options__2.label"
+        }
+      ]
+    },
+    {
+      "id": "pc_content_align",
+      "label": "t:sections.count-down.settings.pc_content_align.label",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.count-down.settings.pc_content_align.options__0.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.count-down.settings.pc_content_align.options__1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.count-down.settings.pc_content_align.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.count-down.settings.group_header__0.label"
+    },
+    {
+      "id": "mobile_image",
+      "info": "t:sections.count-down.settings.mobile_image.info",
+      "label": "t:sections.count-down.settings.mobile_image.label",
+      "type": "image_picker"
+    },
+    {
+      "id": "mobile_image_position",
+      "label": "t:sections.count-down.settings.mobile_image_position.label",
+      "type": "select",
+      "default": "left",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.count-down.settings.mobile_image_position.options__0.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.count-down.settings.mobile_image_position.options__1.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.count-down.settings.mobile_image_position.options__2.label"
+        }
+      ]
+    },
+    {
+      "id": "mobile_content_align",
+      "label": "t:sections.count-down.settings.mobile_content_align.label",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.count-down.settings.mobile_content_align.options__0.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.count-down.settings.mobile_content_align.options__1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.count-down.settings.mobile_content_align.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.count-down.settings.group_header__1.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.count-down.settings.padding_top.label",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.count-down.settings.padding_bottom.label",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 3,
+      "category": "t:sections.count-down.presets.presets__0.category",
+      "name": "t:sections.count-down.presets.presets__0.name",
+      "settings": {
+        "count_down_color": "#FF3597",
+        "show_divider": true,
+        "full_display": false,
+        "pc_image": "",
+        "image_width": "33%",
+        "image_position": "left",
+        "pc_content_position": "center",
+        "pc_content_align": "left",
+        "mobile_image": "",
+        "mobile_image_position": "top",
+        "mobile_content_align": "left",
+        "padding_top": 60,
+        "padding_bottom": 60
+      },
+      "blocks": [
+        {
+          "type": "title",
+          "settings": {
+            "title": "Countdown timer",
+            "title_font_size": 50
+          }
+        },
+        {
+          "type": "desc",
+          "settings": {
+            "desc": "The most wanted styles is waiting for you. Find the best styles of modern outfits for you."
+          }
+        },
+        {
+          "type": "count_down",
+          "settings": {
+            "deadline": "",
+            "deadline_font_size": 70,
+            "result": "",
+            "result_font_size": 22
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "button_text": "Button",
+            "url": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

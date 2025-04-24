@@ -1,0 +1,115 @@
+{{#comment}}
+  Renders a list of product's price (regular, sale)
+
+  Accepts:
+  - block: {Object} Block object
+  - product: {Object} Product Item object (optional)
+  - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing (optional)
+  - price_class: {String} Adds a price class to the price element (optional)
+  - show_save: {Boolean} Whether to render discount tags
+  - save_style: {'text_style'|'button_style'} save tag style. Default: text_style
+  - save_radius {Number} save tag border radius
+  - discount_style {'number'|'ratio'} discount tag style. Default: number
+  - show_from: {Boolean} Whether to render from text. (optional)
+  - show_range: {Boolean} Whether to render price range. (optional)
+  - show_origin: {Boolean} Whether to render origin price. Default: true (optional)
+
+  Usage:
+  {{ snippet 'price' product=product }}
+{{/comment}}
+{{#if use_variant}}
+  {{assign "target" (default product.selected_or_first_available_variant (first product.variants))}}
+{{else}}
+  {{assign "target" product}}
+{{/if}}
+
+
+{{#capture 'sale_font_bold'}}
+  {{#if block.settings.sale_font_bold == false}}{{else}}fw-bold{{/if}}
+{{/capture}}
+
+{{assign "compare_at_price" target.compare_at_price}}
+{{assign "price" (default target.price 1999)}}
+{{assign "money_price" (money_with_currency price)}}
+{{assign "save_style" (default save_style "text")}}
+{{assign "save_radius" (default save_radius 4)}}
+{{assign "discount_style" (default discount_style "number")}}
+
+{{assign "show_origin" (default show_origin true)}}
+{{assign "show_from" (if show_from and target.price_max != target.price_min)}}
+{{assign "show_range" (if show_range and (not show_from) and (not use_variant) and target.price_max > target.price_min)}}
+
+{{#if show_range}}
+  {{assign "money_price_max" (money_with_currency target.price_max)}}
+  {{assign "money_price_min" (money_with_currency target.price_min)}}
+{{/if}}
+
+<div class="price {{price_class}} ">
+  <div class="price__container">
+    {{#if product.quantity_price_breaks_configured}}
+      <div class="price__regular body2">
+        <span class="fw-bold price-item price-item--regular {{#unless block.settings.font_size_flexible}}{{block.settings.sale_font_size}}{{/unless}}">{{ money_with_currency product.price_min }} - {{ money_with_currency product.price_max }}</span>
+      </div>
+    {{else}}
+      {{#if compare_at_price > price}}
+        <div class="price__sale {{block.settings.show_order}}">
+          <span class="body2 price-position-sale">
+            <span class="{{sale_font_bold}} price-item price-item--sale {{#unless block.settings.font_size_flexible}}{{block.settings.sale_font_size}}{{/unless}}">
+              {{#if show_from}}
+                {{{t "products.product_list.from_price_html" price=money_price}}}
+              {{else}}
+                {{#if show_range}}
+                  {{money_price_min}}
+                  -
+                  {{money_price_max}}
+                {{else}}
+                  {{money_price}}
+                {{/if}}
+              {{/if}}
+            </span>
+          </span>
+          {{#if show_origin}}
+            <span class="body5 price-position-origin">
+              <span class="fw-bold price-item--regular {{#unless block.settings.font_size_flexible}}{{block.settings.regular_font_size}}{{/unless}}">{{money_with_currency compare_at_price}}</span>
+            </span>
+          {{/if}}
+          {{#if show_save}}
+            {{assign "save_price" (minus compare_at_price price)}}
+            {{assign
+              "save_ratio"
+              (round (divide (divided_by (times save_price 10000) compare_at_price) 100))
+            }}
+            <span class="body5 price-position-save">
+              <span
+                style="{{#if discount_style == "ratio" and save_ratio <= 0}}display:none;{{/if}}"
+                style="--save-button-radius: {{save_radius}}px" class="price-item--save price-item--save-{{save_style}} {{#unless block.settings.font_size_flexible}}{{block.settings.save_font_size}}{{/unless}}"
+              >
+                {{#if discount_style == "number"}}
+                {{{t "products.product_list.save_byjs" priceDom=(money_with_currency save_price) }}}
+                {{else}}
+                {{save_ratio}}%OFF
+                {{/if}}
+              </span>
+            </span>
+          {{/if}}
+        </div>
+      {{else}}
+        <div class="price__regular body2">
+          <span class="{{sale_font_bold}} price-item price-item--regular {{#unless block.settings.font_size_flexible}}{{block.settings.sale_font_size}}{{/unless}}">
+            {{#if show_from}}
+              {{{t "products.product_list.from_price_html" price=money_price}}}
+            {{else}}
+              {{#if show_range}}
+                {{money_price_min}}
+                -
+                {{money_price_max}}
+              {{else}}
+                {{money_price}}
+              {{/if}}
+            {{/if}}
+          </span>
+        </div>
+      {{/if}}
+    {{/if}}
+  </div>
+</div>

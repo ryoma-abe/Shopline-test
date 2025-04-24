@@ -1,0 +1,47 @@
+{{assign "title" data.settings.subscribe_letter_title}}
+{{assign "placeholder" (default data.settings.subscribe_letter_placeholder "Enter your email")}}
+{{assign "title_size" "body5"}}
+
+{{#if data.settings.letter_show_size == "small"}}
+  {{assign "title_size" "body3"}}
+{{/if}}
+{{#if data.settings.letter_show_size == "middle"}}
+  {{assign "title_size" "body2"}}
+{{/if}}
+{{#if data.settings.letter_show_size == "large"}}
+  {{assign "title_size" "body1"}}
+{{/if}}
+<div class="footer-block--subscribe letter-size--{{default section.settings.letter_show_size 'full'}}">
+  {{#if title}}
+    <div class="footer-block__heading {{title_size}} rte">{{{title}}}</div>
+  {{/if}}
+  {{#form "customer" class="footer-letter-form"}}
+    <div class="field">
+      <div class="field__container">
+        {{assign input_id (append "NewsletterForm_" data.id)}}
+        {{snippet
+          "input-email"
+          input_class="field__input"
+          input_id=input_id
+          input_required=true
+          input_name="contact[email]"
+          input_placeholder=placeholder
+        }}
+        <label for="{{input_id}}" class="field__label body3">
+          {{placeholder}}
+        </label>
+      </div>
+      <div class="field__suffix">
+        <button type="submit" class="button button--link">
+          {{snippet "icon-mail"}}
+        </button>
+      </div>
+    </div>
+    {{#if form.posted_successfully}}
+      {{snippet "tips-card" type="success" text=(t "general.footer.subscribe_success")}}
+    {{/if}}
+    {{#if form.errors.messages}}
+      {{snippet "tips-card" type="error" text=form.errors.messages}}
+    {{/if}}
+  {{/form}}
+</div>

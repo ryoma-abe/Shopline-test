@@ -1,0 +1,88 @@
+{{#comment}}
+  Renders a form field
+
+  Accepts:
+  - type: {String} Form field type. e.g "text"
+  - id: {String} Form field id.
+  - name: {String} Form field name.
+  - required: {Boolean} Form field required.
+  - placeholder: {String} Form field placeholder.
+  - autocomplete: {String} Form field autocomplete.
+  - maxlength: {Number} Form field maxlength.
+  - classes: {String} Form field classes.
+  - showArrow: {Boolean} Show arrow icon.
+  - wrapId: {String} Form field wrapper id.
+  - hidden: {Boolean} Hidden form field.
+  - pattern: {String} Form field pattern.
+  - checked: {Boolean} Form of checkbox field checked.
+
+  Usage:
+  {{snippet
+    "form-field"
+    type="text"
+    id="CompanyEmail"
+    name="customer[email]"
+    required="true"
+    placeholder="{{t 'customer.company.email.placeholder'}}"
+    autocomplete="company_email"
+    maxlength="100"
+  }}
+{{/comment}}
+
+{{assign "type" (default type "text")}}
+{{assign "maxlength" (default maxlength "100")}}
+
+{{#case type}}
+  {{#when "text" "email" "tel"}}
+    <div class="field {{classes}}" {{#if wrapId}}id="{{wrapId}}"{{/if}} {{#if hidden == 'true'}}style="display: none;"{{/if}}>
+      <input
+        type="{{type}}"
+        id="{{id}}"
+        name="{{name}}"
+        {{#if required == "true"}}required{{/if}}
+        placeholder="{{placeholder}}"
+        autocomplete="{{autocomplete}}"
+        class="field__input"
+        maxlength="{{maxlength}}"
+        {{#if pattern}}pattern="{{pattern}}"{{/if}}
+      />
+      <label for="{{id}}" class="field__label body3">{{placeholder}}</label>
+    </div>
+  {{/when}}
+  {{#when "select"}}
+    <div class="field {{classes}}" {{#if wrapId}}id="{{wrapId}}"{{/if}} {{#if hidden}}style="display: none;"{{/if}}>
+      <select
+        id="{{id}}"
+        name="{{name}}"
+        {{#if required == "true"}}required{{/if}}
+        class="field__input"
+        autocomplete="{{autocomplete}}"
+      >
+        {{#for options as |option|}}
+          <option value="{{option.value}}">{{option.label}}</option>
+        {{/for}}
+      </select>
+      <label for="{{id}}" class="field__label body3">{{placeholder}}</label>
+      {{#if showArrow == 'true'}}
+        {{snippet "icon-arrow"}}
+      {{/if}}
+    </div>
+  {{/when}}
+  {{#when "checkbox"}}
+    <div class="{{classes}}" {{#if wrapId}}id="{{wrapId}}"{{/if}} {{#if hidden == 'true'}}style="display: none;"{{/if}}>
+      <label>
+        <span class="field-checkbox">
+          <input
+            type="checkbox"
+            name="{{name}}"
+            id="{{id}}"
+            value="true"
+            {{#if checked == "true"}}checked{{/if}}
+          />
+          <span class="checkbox"></span>
+        </span>
+        <span class="body4">{{placeholder}}</span>
+      </label>
+    </div>
+  {{/when}}
+{{/case}}

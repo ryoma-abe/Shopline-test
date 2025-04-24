@@ -1,0 +1,43 @@
+.user-center-message {
+  display: flex;
+  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 10px;
+  border: 1px solid rgba(248, 97, 64, 0.2);
+  background: #ffebe7;
+  color: #000000;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+@media screen and (max-width: 959px) {
+  .user-center-message {
+    padding: 12px;
+    margin-bottom: 20px;
+    flex-direction: column;
+  }
+  .user-center-message form {
+    margin-right: auto;
+  }
+}
+.user-center-message__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  word-wrap: break-word;
+}
+.user-center-message__button {
+  white-space: nowrap;
+  --color-button-background: 236, 25, 42;
+  --color-button-text: 255, 255, 255;
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

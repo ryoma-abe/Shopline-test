@@ -1,0 +1,182 @@
+{{#comment}}
+  Renders a blog card
+
+  Accepts:
+  - info: {Object} Blogs Item object.
+  - show_author: {Boolean} Show article authors.
+  - show_date: {Boolean} Show article date.
+  - show_cover: {Boolean} Show cover image.
+  - cover_ratio: {String} Article cover image height.
+  - show_desc: {Boolean} Show article summary.
+  - placeholder: {Boolean} For placeholder
+
+  Usage:
+  {{snippet
+    "blog-card"
+    info=Object
+    show_author=true
+    show_date=true
+    show_cover=true
+    cover_ratio="medium"
+    show_desc=true
+    placeholder=false
+  }}
+{{/comment}}
+
+
+{{assign "theme_settings" settings}}
+{{assign "card_style" theme_settings.blog_card_style}}
+{{assign "card_image_padding" theme_settings.blog_card_image_padding}}
+{{assign "card_content_align" theme_settings.blog_card_content_align}}
+{{assign "color_card_background" theme_settings.color_card_background}}
+{{assign "color_card_text" theme_settings.color_card_text}}
+{{#capture "card_background_color"}}
+  {{~#if color_card_background~}}
+    {{ theme_settings.color_card_background.red }}, {{ theme_settings.color_card_background.green }}, {{theme_settings.color_card_background.blue }}
+  {{~else~}}
+    {{ theme_settings.color_image_background.red }}, {{ theme_settings.color_image_background.green }}, {{theme_settings.color_image_background.blue }}
+  {{~/if~}}
+{{/capture}}
+{{#capture "card_text_color"}}
+  {{~#if color_card_text~}}
+    {{ theme_settings.color_card_text.red }}, {{ theme_settings.color_card_text.green }}, {{theme_settings.color_card_text.blue }}
+  {{~else~}}
+    {{ theme_settings.color_text.red }}, {{ theme_settings.color_text.green }}, {{theme_settings.color_text.blue }}
+  {{~/if~}}
+{{/capture}}
+
+{{assign "show_desc" (default show_desc true)}}
+{{assign "cover_ratio" (default cover_ratio "medium")}}
+
+{{assign "link_url" ""}}
+{{assign "link_ele" "span"}}
+{{#if (isTruthy info.id)}}
+  {{assign "link_url" info.url}}
+  {{assign "link_ele" "a"}}
+{{/if}}
+
+{{#if placeholder}}
+  <div {{{info.shopline_attributes}}} 
+    class="simple-blog blog-card-style-{{card_style}} {{#if card_style == 'card'}}global-blog-card-border-shadow{{/if}}"
+    style="--card-image-padding: {{card_image_padding}}px; 
+    --color-card-background: {{card_background_color}};
+    --color-card-text: {{card_text_color}};"
+  >
+    {{#if show_cover}}
+      <{{link_ele}} class="simple-blog__image-wrapper {{#if card_style != 'card'}}global-blog-card-border-shadow{{/if}}" {{#if link_url}}href="{{link_url}}"{{/if}}>
+        <div
+          class="simple-blog__image-box
+            {{#if cover_ratio == 'auto'}}simple-blog__image-auto {{#if (isFalsey info.image.src)}}simple-blog__noimage-auto{{/if}}{{else}}simple-blog__image-{{cover_ratio}}{{/if}}"
+          style="{{image_wrapper_style}}"
+        >
+          <div class="simple-blog__empty-img">
+            {{placeholder_svg_tag "image"}}
+          </div>
+        </div>
+      </{{link_ele}}>
+    {{/if}}
+    <div class="simple-blog__main {{#if card_content_align == 'center'}}simple-blog__main--center{{/if}}">
+      <div class="simple-blog__info">
+        <{{link_ele}} class="simple-blog__title-wrap" {{#if link_url}}href="{{link_url}}"{{/if}}>
+          <h4 class="simple-blog__title">
+            <span>Blog post</span>
+          </h4>
+        </{{link_ele}}>
+        {{#if show_date or show_author}}
+          <p class="simple-blog__extra-info body4">
+            {{assign "show_date" show_date}}
+            {{assign "show_author" show_author}}
+            {{#if show_date}}
+              <span class="text">
+                <{{link_ele}} {{#if link_url}}href="{{link_url}}"{{/if}}>
+                  {{date "1685624554752" "abbreviated_date"}}
+                </{{link_ele}}>
+              </span>
+            {{/if}}
+            {{#if show_date and show_author}}
+              <span class="separator">·</span>
+            {{/if}}
+            {{#if show_author}}
+              <span class="text">
+                <{{link_ele}} {{#if link_url}}href="{{link_url}}"{{/if}}>
+                  author
+                </{{link_ele}}>
+              </span>
+            {{/if}}
+          </p>
+        {{/if}}
+      </div>
+      {{#if show_desc}}
+        <{{link_ele}} {{#if link_url}}href="{{link_url}}"{{/if}}>
+          <p class="simple-blog__description body3">
+            Give your customers a summary of your blog post
+          </p>
+        </{{link_ele}}>
+      {{/if}}
+    </div>
+  </div>
+{{else}}
+  <div {{{info.shopline_attributes}}} 
+    class="simple-blog blog-card-style-{{card_style}} {{#if card_style == 'card'}}global-blog-card-border-shadow{{/if}}"
+    style="--card-image-padding: {{card_image_padding}}px; 
+    --color-card-background: {{card_background_color}};
+    --color-card-text: {{card_text_color}};"
+  >
+    {{#if show_cover}}
+      <{{link_ele}} class="simple-blog__image-wrapper {{#if card_style != 'card'}}global-blog-card-border-shadow{{/if}}" {{#if link_url}}href="{{link_url}}"{{/if}} title="{{info.title}}">
+        <div
+          class="simple-blog__image-box
+            {{#if cover_ratio == 'auto'}}simple-blog__image-auto {{#if (isFalsey info.image.src)}}simple-blog__noimage-auto{{/if}}{{else}}simple-blog__image-{{cover_ratio}}{{/if}}"
+            style="{{image_wrapper_style}}"
+        >
+          {{#if info.image.src}}
+            {{snippet "image" class="simple-blog__image" data=info.image}}
+          {{else}}
+            <div class="simple-blog__empty-img">
+              {{placeholder_svg_tag "image"}}
+            </div>
+          {{/if}}
+        </div>
+      </{{link_ele}}>
+    {{/if}}
+    <div class="simple-blog__main {{#if card_content_align == 'center'}}simple-blog__main--center{{/if}}">
+      <div class="simple-blog__info">
+        <{{link_ele}} class="simple-blog__title-wrap" {{#if link_url}}href="{{link_url}}"{{/if}} title="{{info.title}}">
+          <h4 class="simple-blog__title">
+            <span>{{info.title}}</span>
+          </h4>
+        </{{link_ele}}>
+        {{#if (if info.published_at or info.author) and (if show_date or show_author)}}
+          <p class="simple-blog__extra-info body4">
+            {{assign "show_date" (if info.published_at and show_date)}}
+            {{assign "show_author" (if info.author and show_author)}}
+            {{#if show_date}}
+              <span class="text">
+                <{{link_ele}} {{#if link_url}}href="{{link_url}}"{{/if}} title="{{info.title}}">
+                  {{date info.published_at "abbreviated_date"}}
+                </{{link_ele}}>
+              </span>
+            {{/if}}
+            {{#if show_date and show_author}}
+              <span class="separator">·</span>
+            {{/if}}
+            {{#if show_author}}
+              <span class="text">
+                <{{link_ele}} {{#if link_url}}href="{{link_url}}"{{/if}} title="{{title}}">
+                  {{info.author}}
+                </{{link_ele}}>
+              </span>
+            {{/if}}
+          </p>
+        {{/if}}
+      </div>
+      {{#if show_desc and info.excerpt}}
+        <{{link_ele}} {{#if link_url}}href="{{link_url}}"{{/if}} title="{{info.title}}">
+          <p class="simple-blog__description body3">
+            {{info.excerpt}}
+          </p>
+        </{{link_ele}}>
+      {{/if}}
+    </div>
+  </div>
+{{/if}}

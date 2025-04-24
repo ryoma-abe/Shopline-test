@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{request.locale.iso_code}}">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="canonical" href="{{canonical_url}}" />
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+
+    {{#if settings.favicon_image}}
+      <link rel="icon" type="image/png" href="{{settings.favicon_image}}" />
+    {{/if}}
+
+    <title>{{t "products.giftcard.seoTitle" value=(money_with_currency gift_card.balance) shop=shop.name}}</title>
+
+
+    <meta name="description" content="{{t 'products.giftcard.title'}}" />
+
+    {{content_for_header}}
+  </head>
+
+  <body data-button-hover-animation="{{settings.btn_hover_animation}}">
+    {{content_for_layout}}
+
+    {{content_for_footer}}
+  </body>
+</html>

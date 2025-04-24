@@ -1,0 +1,67 @@
+
+
+
+{{assign "default_selected_variant" (default section.settings.default_selected_variant true)}}
+{{assign "is_selected_variant" product.selected_variant}}
+
+{{assign "featured_media" ""}}
+{{#if default_selected_variant or is_selected_variant}}
+  {{assign "featured_media" product.selected_or_first_available_variant.featured_media}}
+{{/if}}
+
+{{assign "video_mute" 0}}
+{{#if section.settings.video_autoplay}}
+  {{assign "video_mute" 1}}
+{{/if}}
+
+<product-modal
+  data-video-autoplay="{{ section.settings.video_autoplay }}"
+  id="ProductModal-{{section.id}}"
+  class="product-media-modal media-modal {{#if (isFalsey featured_media)}}js-init-not-selected-variant{{/if}}"
+>
+  <div class="product-media-modal__dialog" tabindex="-1">
+    <button id="ModalClose-{{section.id}}" type="button" class="product-media-modal__toggle">
+      {{snippet "icon-close"}}
+    </button>
+
+    <div class="product-media-modal__content" role="document" tabindex="0">
+      {{#if featured_media}}
+        {{assign "media" featured_media}}
+        {{snippet
+          "product-media"
+          section=section
+          media=media
+          loop=section.settings.video_loop
+          variant_image=section.settings.hide_variants
+          image_quality=image_quality
+        }}
+      {{/if}}
+
+      {{#for product.media as |media|}}
+        {{assign "variant_image" false}}
+
+        {{#if section.settings.hide_variants}}
+          {{#if variant_images contains media.src}}
+            {{assign "variant_image" true}}
+          {{/if}}
+
+          {{#if variant_images contains media.id}}
+            {{assign "variant_image" true}}
+          {{/if}}
+        {{/if}}
+
+        {{#if media.id != featured_media.id}}
+          {{snippet
+            "product-media"
+            section=section
+            media=media
+            loop=section.settings.video_loop
+            variant_image=variant_image
+            video_mute=video_mute
+            image_quality=image_quality
+          }}
+        {{/if}}
+      {{/for}}
+    </div>
+  </div>
+</product-modal>

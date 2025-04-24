@@ -1,0 +1,57 @@
+{{#if (isFalsey cart.empty)}}
+  {{#for cart.items as |item|}}
+    <div id="cart-notification-product-{{item.key}}" class="cart-item">
+      <div class="cart-notification-product__image {{#if item.image}}global-media-border-shadow{{/if}}">
+        {{#if item.image.src}}
+          <img
+            src="{{image_url item.image width=200}}"
+            alt="{{item.image.alt}}"
+            width="100"
+            height="{{ceil (divide 100 item.image.aspect_ratio)}}"
+            loading="lazy"
+          />
+        {{else}}
+          {{placeholder_svg_tag "image" "placeholder"}}
+        {{/if}}
+      </div>
+      <div class="cart-notification-product__details">
+        <div class="cart-notification-product__name body2">{{item.product.title}}</div>
+        {{#unless item.product.has_only_default_variant}}
+          {{#for item.options_with_values as |option|}}
+            <div class="product-option">
+              <span>{{option.name}}:</span>
+              <span>{{option.value}}</span>
+            </div>
+          {{/for}}
+        {{/unless}}
+
+        {{#if item.properties.length > 0}}
+          {{#for item.properties as |property|}}
+            <div class="product-property body4">
+              <span class="product-property__name">{{property.name}}:&nbsp;</span>
+              {{#if property.type == "text"}}
+                <span>{{property.value}}</span>
+              {{else if property.type == "link"}}
+                <a class="button button--link" href="{{property.urls.[0]}}" target="_blank">
+                  {{#if property.value}}
+                    {{property.value}}
+                  {{else}}
+                    {{t 'cart.item.click_to_view'}}
+                  {{/if}}
+                </a>
+              {{else if property.type == "picture"}}
+                <div class="product-property__value">
+                  {{#for property.urls as |url|}}
+                    <a class="product-property__link" href="{{url}}" target="_blank">
+                      {{snippet "image" class="product-property__image" data=url lazy=true}}
+                    </a>
+                  {{/for}}
+                </div>
+              {{/if}}
+            </div>
+          {{/for}}
+        {{/if}}
+      </div>
+    </div>
+  {{/for}}
+{{/if}}

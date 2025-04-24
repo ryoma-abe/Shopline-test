@@ -1,0 +1,58 @@
+slide-pagination {
+  display: flex;
+  line-height: 0;
+  width: 480px;
+  height: 6px;
+}
+@media (max-width: 959px) {
+  slide-pagination {
+    width: 240px;
+  }
+}
+
+slide-pagination.click {
+  cursor: pointer;
+}
+
+slide-pagination.click .slide-pagination-bullet {
+  background-color: rgba(var(--color-text), 0.1);
+  width: 100%;
+  flex-shrink: 1;
+  height: 100%;
+  display: inline-block;
+  overflow: hidden;
+}
+
+slide-pagination.click .slide-pagination-bullet::before {
+  content: "";
+  width: 100%;
+  background-color: rgb(var(--color-text));
+  display: block;
+  height: 100%;
+  transform: translateX(-101%);
+}
+
+slide-pagination.click .slide-pagination-bullet.is-active::before {
+  transform: translateX(0);
+}
+
+slide-pagination:not(.click) {
+  background-color: rgba(var(--color-text), 0.1);
+}
+
+slide-pagination:not(.click)::before {
+  content: "";
+  width: var(--progress);
+  background-color: rgb(var(--color-text));
+  display: block;
+  height: 100%;
+  transition: width 0.2s linear;
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

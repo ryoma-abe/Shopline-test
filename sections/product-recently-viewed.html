@@ -1,0 +1,287 @@
+<script src="{{asset_url 'section-product-recently-viewed.js'}}" defer></script>
+<script src="{{asset_url 'component-slider.js'}}" defer></script>
+{{snippet "stylesheet" href=(asset_url "component-price.css")}}
+{{snippet "stylesheet" href=(asset_url "component-card.css")}}
+
+{{snippet "stylesheet" href=(asset_url "section-product-recently-viewed.css")}}
+
+{{#if settings.enabled_color_swatch}}
+  {{snippet "stylesheet" href=(asset_url "component-color-swatches.css")}}
+  <script src="{{asset_url 'component-color-swatch.js'}}" defer="defer"></script>
+  <script src="{{asset_url 'component-color-swatch-radios.js'}}" defer="defer"></script>
+  <script src="{{asset_url 'component-product-form.js'}}" defer="defer"></script>
+{{/if}}
+{{#if settings.enable_quick_view}}
+  {{snippet "stylesheet" href=(asset_url "component-quick-add.css") lazy=true}}
+  <script src="{{asset_url 'component-quick-add.js'}}" defer="defer"></script>
+{{/if}}
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+{{assign "title" section.settings.title}}
+{{assign "mobile_cols" section.settings.mobile_cols}}
+{{assign "pc_cols" section.settings.pc_cols}}
+{{assign "color_scheme" section.settings.color_scheme}}
+{{assign "enable_horizontal_slider" section.settings.enable_horizontal_slider}}
+
+{{#capture "section_template"}}{{ternary template.directory (append template.directory "/") ""}}{{template.name}}{{ternary template.suffix (append "." template.suffix) ""}}{{/capture}}
+<product-recently-viewed
+  class="page-width section-padding {{#if color_scheme}}color-scheme-{{color_scheme}}{{/if}}"
+  data-section-template="{{section_template}}"
+  data-section-id="{{section.id}}"
+  data-product-id="{{product.id}}"
+>
+
+  {{assign "pc_enable_horizontal_slider" false}}
+  {{assign "mobile_enable_horizontal_slider" false}}
+
+  {{#if enable_horizontal_slider and search.results_count > pc_cols}}
+    {{assign "pc_enable_horizontal_slider" true}}
+  {{/if}}
+  {{#if enable_horizontal_slider and search.results_count > mobile_cols}}
+    {{assign "mobile_enable_horizontal_slider" true}}
+  {{/if}}
+
+  {{#if search.results_count > 0}}
+    <h2 class="title-wrapper text-center product-recently-viewed-title {{section.settings.title_size}}">
+      {{title}}
+    </h2>
+
+    <slider-component
+      class="slider-product-recently-viewed
+        {{~#unless pc_enable_horizontal_slider}} no-slider-pc{{/unless~}}
+        {{~#unless mobile_enable_horizontal_slider}} no-slider-mobile{{/unless~}}
+        "
+    >
+      <ul
+        id="Slider-{{section.id}}"
+        class="grid
+          grid-cols-{{pc_cols}}-desktop
+          grid-cols-{{mobile_cols}}
+          slider
+          {{#if mobile_enable_horizontal_slider}}slider--mobile{{/if}}
+          "
+        style="--mobile-cols: {{mobile_cols}};"
+      >
+
+        {{#for search.results as |product|}}
+          {{#case product.object_type}}
+            {{#when "product"}}
+              {{#if forloop.index0 < section.settings.show_product_number}}
+                <li id="Slide-{{product.id}}" class="slider__slide">
+                  {{snippet
+                    "product-card"
+                    product_data=product
+                    show_secondary_image=section.settings.show_secondary_image
+                    image_ratio=section.settings.product_image_ratio
+                    section_id=section.id
+                    desktop_grid_cols=section.settings.pc_cols
+                    mobile_grid_cols=section.settings.mobile_cols
+                    image_fill_type=section.settings.product_fill_type
+                    theme_settings=settings
+                  }}
+                </li>
+              {{/if}}
+            {{/when}}
+          {{/case}}
+        {{/for}}
+      </ul>
+
+      <button name="previous" class="slider-product-recently-viewed__button previous display-none-tablet">
+        {{snippet "icon-arrow"}}
+      </button>
+      <button name="next" class="slider-product-recently-viewed__button next display-none-tablet">
+        {{snippet "icon-arrow"}}
+      </button>
+    </slider-component>
+  {{/if}}
+</product-recently-viewed>
+
+{{#schema}}
+{
+  "name": "t:sections.product-recently-viewed.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.product-recently-viewed.settings.title.label",
+      "default": "Recently viewed"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "options": [
+        {
+          "value": "title5",
+          "label": "t:sections.product-recently-viewed.settings.title_size.options__0.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.product-recently-viewed.settings.title_size.options__1.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.product-recently-viewed.settings.title_size.options__2.label"
+        }
+      ],
+      "default": "title3",
+      "label": "t:sections.product-recently-viewed.settings.title_size.label"
+    },
+    {
+      "type": "range",
+      "id": "show_product_number",
+      "label": "t:sections.product-recently-viewed.settings.show_product_number.label",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "id": "pc_cols",
+      "type": "range",
+      "label": "t:sections.product-recently-viewed.settings.pc_cols.label",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "id": "mobile_cols",
+      "type": "select",
+      "label": "t:sections.product-recently-viewed.settings.mobile_cols.label",
+      "options": [
+        {
+          "value": 1,
+          "label": "t:sections.product-recently-viewed.settings.mobile_cols.options__0.label"
+        },
+        {
+          "value": 2,
+          "label": "t:sections.product-recently-viewed.settings.mobile_cols.options__1.label"
+        }
+      ],
+      "default": 2
+    },
+    {
+      "type": "switch",
+      "id": "enable_horizontal_slider",
+      "label": "t:sections.product-recently-viewed.settings.enable_horizontal_slider.label",
+      "info": "t:sections.product-recently-viewed.settings.enable_horizontal_slider.info",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.product-recently-viewed.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.product-recently-viewed.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.product-recently-viewed.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.product-recently-viewed.settings.color_scheme.options__3.label"
+        }
+      ],
+      "default": "none",
+      "label": "t:sections.product-recently-viewed.settings.color_scheme.label"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.product-recently-viewed.settings.group_header__0.label"
+    },
+    {
+      "id": "product_image_ratio",
+      "type": "select",
+      "label": "t:sections.product-recently-viewed.settings.product_image_ratio.label",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.product-recently-viewed.settings.product_image_ratio.options__0.label"
+        },
+        {
+          "value": "100",
+          "label": "t:sections.product-recently-viewed.settings.product_image_ratio.options__1.label"
+        },
+        {
+          "value": "133.33",
+          "label": "3:4"
+        },
+        {
+          "value": "75",
+          "label": "t:sections.product-recently-viewed.settings.product_image_ratio.options__3.label"
+        },
+        {
+          "value": "150",
+          "label": "t:sections.product-recently-viewed.settings.product_image_ratio.options__4.label"
+        }
+      ],
+      "default": "150"
+    },
+    {
+      "id": "product_fill_type",
+      "type": "select",
+      "label": "t:sections.product-recently-viewed.settings.product_fill_type.label",
+      "options": [
+        {
+          "value": "contain",
+          "label": "t:sections.product-recently-viewed.settings.product_fill_type.options__0.label"
+        },
+        {
+          "value": "cover",
+          "label": "t:sections.product-recently-viewed.settings.product_fill_type.options__1.label"
+        }
+      ],
+      "default": "contain"
+    },
+    {
+      "id": "show_secondary_image",
+      "type": "switch",
+      "label": "t:sections.product-recently-viewed.settings.show_secondary_image.label",
+      "default": false
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.product-recently-viewed.settings.group_header__1.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.product-recently-viewed.settings.padding_top.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.product-recently-viewed.settings.padding_bottom.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product-recently-viewed.presets.presets__0.name",
+      "category": "t:sections.product-recently-viewed.presets.presets__0.category",
+      "category_index": 2
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,109 @@
+{{#comment}}
+  Renders a product media gallery. Should be used with 'media-gallery/index.js'
+  Also see 'product-media-modal'
+
+  Accepts:
+  - section: {Object}
+  - product_list: {Array}
+  - limit: {Number}
+  - id {String}
+  - class {String}
+  - show_mobile_slider {Boolean}
+  - show_mobile_slider_view_all {Boolean}
+  - show_desktop_slider {Boolean}
+  - more_in_collection {Boolean}
+  - full_in_mobile {Boolean}
+  - url {string}
+  - settings {Object}
+  - image_shape{'square'|'round'}
+  Usage:
+  {{snippet 'featured-collection-slider' id=section.id section=section product_list=list}}
+{{/comment}}
+<slider-component
+  class="slider-mobile-gutter page-width {{class}}
+    {{#if section.settings.full_in_mobile}} slider-mobile--full{{/if}}
+    {{#if show_desktop_slider}} slider-component-desktop{{/if}}"
+  controller-previous="#previous-{{id}}"
+  controller-next="#next-{{id}}"
+  {{{shopline_attributes}}}
+>
+  <ul
+    id="Slider-{{id}}"
+    class="grid product-grid contains-product-card-slider
+      {{#if product_list.length == 0}} grid-cols-2
+      {{else}} grid-cols-{{section.settings.columns_mobile}}{{/if}}
+      grid-cols-{{section.settings.columns_desktop}}-desktop
+      {{#if section.settings.full_in_mobile}} slider-full-screen slider--full{{/if}}
+      {{#if show_mobile_slider or show_desktop_slider}} slider slider-full-screen
+        {{#if show_desktop_slider}} slider--desktop{{/if}}
+        {{#if show_mobile_slider}} slider--mobile grid--peek{{/if}}
+      {{/if}}"
+    style="--mobile-cols:{{section.settings.columns_mobile}};"
+  >
+    {{#if product_list.length > 0}}
+      {{#for product_list limit=limit as |product|}}
+        <li
+          id="Slide-{{section.id}}-featured-collection"
+          class="animation-delay-show-container grid__item{{#if show_mobile_slider or show_desktop_slider}} slider__slide{{/if}} come-into-view"
+        >
+          {{snippet
+            "product-card"
+            product_data=product
+            image_ratio=section.settings.product_image_ratio
+            show_secondary_image=section.settings.show_secondary_image
+            section_id=id
+            desktop_grid_cols=section.settings.columns_desktop
+            mobile_grid_cols=section.settings.columns_mobile
+            image_fill_type=section.settings.image_fill_type
+            theme_settings=settings
+            image_shape=image_shape
+          }}
+        </li>
+      {{/for}}
+      {{#if show_mobile_slider and show_mobile_slider_view_all and section.settings.button_text and more_in_collection}}
+        <li id="Slide-view-all-featured-collection" class="slider__slide display-none-desktop grid__item animation-delay-show-container come-into-view">
+          <a
+            {{#if url}}href="{{url}}"{{/if}}
+            class="featured-collection__mb-view-all">
+            <span class="mb-view-all__icon">
+              {{snippet "icon-arrow"}}
+            </span>
+            <span class="mb-view-all__text body3 fw-bold">
+              {{section.settings.button_text}}
+            </span>
+          </a>
+        </li>
+      {{/if}}
+    {{else}}
+      <li class="grid__item animation-delay-show-container">
+        {{snippet "product-card" theme_settings=settings}}
+      </li>
+      <li class="grid__item animation-delay-show-container">
+        {{snippet "product-card" theme_settings=settings}}
+      </li>
+      <li class="grid__item animation-delay-show-container">
+        {{snippet "product-card" theme_settings=settings}}
+      </li>
+      <li class="grid__item animation-delay-show-container">
+        {{snippet "product-card" theme_settings=settings}}
+      </li>
+    {{/if}}
+  </ul>
+    {{#if show_desktop_slider}}
+    <div class="slider-buttons display-none-tablet slider-block--{{id}}">
+      <button type="button" class="slider-button slider-button--prev" name="previous" id="previous-{{id}}">
+        {{snippet "icon-arrow"}}
+      </button>
+      <button type="button" class="slider-button slider-button--next" name="next" id="next-{{id}}">
+        {{snippet "icon-arrow"}}
+      </button>
+    </div>
+  {{/if}}
+  {{#if section.settings.button_text and more_in_collection}}
+    <div class="collection__view-all text-center {{#if show_mobile_slider_view_all}}display-none display-block-desktop{{/if}}">
+      <a {{#if url}}href="{{url}}"{{/if}} class="button">
+        {{section.settings.button_text}}
+      </a>
+    </div>
+  {{/if}}
+</slider-component>

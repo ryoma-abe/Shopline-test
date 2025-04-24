@@ -1,0 +1,18 @@
+{{#if selector}}
+  {{assign 'selector' (append '#shopline-section-' section_id ' ' selector)}}
+{{else}}
+
+  {{assign 'selector' (append '#shopline-section-' section_id '.section-padding, #shopline-section-' section_id ' .section-padding')}}
+{{/if}}
+<style>
+{{selector}} {
+  padding-top: {{padding_top}}px;
+  padding-bottom: {{padding_bottom}}px;
+}
+@media only screen and (max-width: 959px) {
+  {{selector}} {
+    padding-top: {{multiply padding_top 0.5}}px;
+    padding-bottom: {{multiply padding_bottom 0.5}}px;
+  }
+}
+</style>

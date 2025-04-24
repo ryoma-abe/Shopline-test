@@ -1,0 +1,18 @@
+{{#comment}}
+  Renders a link element
+
+  Accepts:
+  - classes: {String} Class string.
+  - href: {String} Url string.
+  - text: {String} Link text.
+
+  Usage:
+  {{snippet
+    "link"
+    classes="header-inline-menus__link"
+    href=menu_block.settings.image_1_link
+    text=menu_block.settings.image_1_link_text
+  }}
+{{/comment}}
+
+<a class="{{classes}}" href="{{#if href}}{{href}}{{else}}javascript:;{{/if}}">{{text}}</a>

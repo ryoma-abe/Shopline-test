@@ -1,0 +1,83 @@
+.cart__empty-product-recommend {
+  padding: 60px 0;
+}
+.cart__empty-product-recommend .cart__empty-product-recommend-title {
+  margin-bottom: 40px;
+}
+
+.cart-drawer {
+  --cart-drawer-padding: 20px;
+  --cart-drawer-width: 440px;
+}
+
+.cart-drawer .cart__empty-product-recommend {
+  padding: 30px 0;
+  position: relative;
+}
+
+.cart-drawer
+  .cart__empty-product-recommend
+  .cart__empty-product-recommend-title {
+  margin-bottom: 20px;
+}
+
+.cart-drawer .cart__empty-product-recommend::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(0px - var(--cart-drawer-padding));
+  width: var(--cart-drawer-width);
+  height: 1px;
+  background-color: rgba(var(--color-entry-line));
+}
+
+.cart-drawer .cart__empty-product-recommend .slider {
+  flex-wrap: nowrap;
+  margin-bottom: 0;
+  scroll-padding-left: var(--cart-drawer-padding);
+  scroll-padding-right: var(--cart-drawer-padding);
+}
+
+.cart-drawer .cart__empty-product-recommend .slider.slider-full-screen {
+  padding-left: calc(
+    var(--cart-drawer-padding) - (var(--grid-horizontal-space) * 0.5)
+  ) !important;
+  padding-right: calc(
+    var(--cart-drawer-padding) - (var(--grid-horizontal-space) * 0.5)
+  ) !important;
+  margin-left: calc(0px - var(--cart-drawer-padding)) !important;
+  margin-right: calc(0px - var(--cart-drawer-padding)) !important;
+}
+
+.cart-drawer .cart__empty-product-recommend .slider .slider__slide {
+  width: calc(30% + var(--cart-drawer-padding) * 2);
+}
+
+@media (min-width: 960px) {
+  .cart__empty-product-recommend .slider {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 959px) {
+  .cart__empty-product-recommend {
+    padding: 30px 0;
+  }
+  .cart__empty-product-recommend .cart__empty-product-recommend-title {
+    margin-bottom: 20px;
+  }
+  .cart__empty-product-recommend .slider {
+    margin-bottom: 0;
+  }
+  .cart__empty-product-recommend .slider .slider__slide {
+    width: calc(30% + var(--page-padding) * 2);
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

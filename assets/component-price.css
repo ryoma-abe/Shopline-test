@@ -1,0 +1,159 @@
+.price {
+  display: inline-block;
+  color: rgb(var(--color-sale));
+}
+
+.price .price__sale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.price .price__sale .price-item--regular {
+  text-decoration: line-through;
+  color: rgb(var(--color-light-text));
+  /* when has sale style use regular price font size */
+  font-size: var(--regular-price-font-size, inherit);
+}
+
+.price .price__sale .price-item--save {
+  color: rgb(var(--color-discount));
+}
+
+.price .price__sale .price-item--save.price-item--save-button {
+  background: rgb(var(--color-discount-tag-background));
+  color: rgb(var(--color-discount-tag-text));
+  border-radius: var(--save-button-radius, 4px);
+  padding: 4px 12px;
+}
+
+.price .price__sale .price-item--sale {
+  color: rgb(var(--color-sale));
+}
+
+.price .price__sale.origin_sale .price-position-sale {
+  order: 2;
+}
+
+.price .price__sale.origin_sale .price-position-origin {
+  order: 1;
+}
+
+.price .price__sale.origin_sale .price-position-save {
+  display: none;
+}
+
+.price .price__sale.sale_origin .price-position-sale {
+  order: 1;
+}
+
+.price .price__sale.sale_origin .price-position-origin {
+  order: 2;
+}
+
+.price .price__sale.sale_origin .price-position-save {
+  display: none;
+}
+
+.price .price__sale.save_sale_origin .price-position-sale {
+  order: 2;
+}
+
+.price .price__sale.save_sale_origin .price-position-origin {
+  order: 3;
+}
+
+.price .price__sale.save_sale_origin .price-position-save {
+  order: 1;
+}
+
+.price .price__sale.sale_origin_save .price-position-sale {
+  order: 1;
+}
+
+.price .price__sale.sale_origin_save .price-position-origin {
+  order: 2;
+}
+
+.price .price__sale.sale_origin_save .price-position-save {
+  order: 3;
+}
+
+.price .price__sale.sale_save .price-position-sale {
+  order: 1;
+}
+
+.price .price__sale.sale_save .price-position-origin {
+  display: none;
+}
+
+.price .price__sale.sale_save .price-position-save {
+  order: 2;
+}
+
+.price .price__sale.save_sale .price-position-sale {
+  order: 2;
+}
+
+.price .price__sale.save_sale .price-position-origin {
+  display: none;
+}
+
+.price .price__sale.save_sale .price-position-save {
+  order: 1;
+}
+
+.price .price__regular .price-item--regular {
+  color: rgb(var(--color-sale));
+}
+
+.price .price-item--regular {
+  /* use sale price font size default */
+  font-size: var(--sale-price-font-size, inherit);
+}
+
+.price .price-item--save {
+  font-size: var(--save-price-font-size, inherit);
+}
+
+.price .price-item--sale {
+  font-size: var(--sale-price-font-size, inherit);
+}
+
+.price .price-item--save,
+.price .price-item--sale,
+.price .price-item--regular {
+  margin-right: 6px;
+}
+
+.price .price-item--save.font_size_small,
+.price .price-item--sale.font_size_small,
+.price .price-item--regular.font_size_small {
+  font-size: 1em;
+}
+
+.price .price-item--save.font_size_medium,
+.price .price-item--sale.font_size_medium,
+.price .price-item--regular.font_size_medium {
+  font-size: 1.3em;
+}
+
+.price .price-item--save.font_size_big,
+.price .price-item--sale.font_size_big,
+.price .price-item--regular.font_size_big {
+  font-size: 1.5em;
+}
+
+.price .price-item--save.font_size_huge,
+.price .price-item--sale.font_size_huge,
+.price .price-item--regular.font_size_huge {
+  font-size: 2em;
+}
+.price > * {
+  display: inline-block;
+  vertical-align: top;
+}
+/* The ipad end responds to the mobile end in vertical screen */
+/* @custom-media --tablet (max-width: 959px); */
+/* @custom-media --gt-mobile (min-width: 751px); */
+/* detectingScreen need to consider the configuration of the tablet */

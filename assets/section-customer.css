@@ -1,0 +1,282 @@
+.customer {
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.customer h1 {
+  text-transform: uppercase;
+}
+
+.customer .submit {
+  width: 100%;
+  text-transform: capitalize;
+}
+
+.customer .verifycode-button {
+  text-decoration: none;
+}
+
+.customer-form-title {
+  margin-bottom: 40px;
+}
+
+@media (max-width: 959px) {
+  .customer-form-title {
+    margin-bottom: 30px;
+  }
+}
+
+.customer-form-hint {
+  margin-bottom: 40px;
+}
+
+@media (max-width: 959px) {
+  .customer-form-hint {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 959px) {
+  .customer {
+    padding: 40px 20px;
+    width: 100%;
+  }
+}
+
+.customer .tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+  gap: 40px;
+}
+
+.customer .tab a {
+  width: 50%;
+  color: rgb(var(--color-light-text));
+}
+
+.customer .tab a:first-child {
+  position: relative;
+  text-align: right;
+}
+
+.customer .tab a:first-child::after {
+  content: " ";
+  height: 10px;
+  width: 1px;
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgb(var(--color-entry-line));
+}
+
+.customer .tab > a {
+  cursor: pointer;
+}
+
+.customer .tab .active {
+  color: rgb(var(--color-text));
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.customer #customer-error-message {
+  color: #f04949;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 140%;
+}
+
+.customer #customer-error-message:not(:empty) {
+  margin-bottom: 20px;
+}
+
+.customer .actions {
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.customer .actions a,
+.customer .actions .body4 {
+  padding: 0;
+  color: rgba(var(--color-text));
+  cursor: pointer;
+}
+
+.customer .actions a {
+  text-underline-offset: 0;
+  text-decoration: underline;
+}
+
+.customer .actions a:hover {
+  text-decoration: none;
+}
+
+.customer .backToSignIn {
+  text-align: center;
+  padding-top: 40px;
+}
+
+.customer .sign-up__company-register {
+  text-align: center;
+  padding-top: 48px;
+}
+
+.customer .field[data-type="mobile"] .field__suffix {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.customer .country-select {
+  padding: 0;
+}
+
+.customer .country-select-wrapper {
+  display: flex;
+  padding-left: 8px;
+  position: relative;
+}
+
+.customer .country-select-wrapper .country-select {
+  appearance: none;
+  border: none;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.customer .country-select-wrapper .country-select-trigger {
+  padding-left: 16px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.customer .country-select-wrapper .country-select-trigger span {
+  color: rgb(var(--color-text));
+  padding-right: 4px;
+}
+
+.customer .country-select-wrapper .country-select-trigger::before {
+  border-left: 1px solid rgb(var(--color-entry-line));
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+}
+
+.customer.forgot .customer-form-title {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 959px) {
+  .customer.forgot .customer-form-title {
+    margin-bottom: 8px;
+  }
+}
+
+.customer.forgot .description {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 959px) {
+  .customer.forgot .description {
+    margin-bottom: 30px;
+  }
+}
+
+.customer.forgot .description {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 959px) {
+  .customer.forgot .description {
+    margin-bottom: 30px;
+  }
+}
+
+.customer.forgot .backToSignIn {
+  padding-top: 20px;
+}
+
+@media (max-width: 959px) {
+  .customer.forgot .backToSignIn {
+    padding-top: 16px;
+  }
+}
+
+.customer-third-login {
+  margin-top: 28px;
+}
+
+.customer-third-login .customer-third-login__desc {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.customer-third-login .customer-third-login__desc::before {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  display: block;
+  content: "";
+  border-top: 1px solid rgb(var(--color-entry-line));
+}
+
+.customer-third-login .customer-third-login__desc span {
+  display: inline-block;
+  padding: 0 20px;
+  position: relative;
+  background-color: rgb(var(--color-page-background));
+}
+
+.customer-third-login .customer-third-login__btns {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.customer-third-login .customer-third-login__btns #third-login-container a {
+  display: inline-block;
+  margin: 0 12px;
+}
+
+.customer tool-tip[tip-position="bottom"] {
+  inset-block-start: calc(100% + var(--tt-p-block));
+}
+
+.customer tool-tip[tip-position="bottom"]:after {
+  left: calc(50% - 10px);
+}
+
+@media (max-width: 959px) {
+  .customer tool-tip[tip-position="bottom"] {
+    --tt-x: 0;
+    left: -10px !important;
+  }
+  .customer tool-tip[tip-position="bottom"]:after {
+    left: 10px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

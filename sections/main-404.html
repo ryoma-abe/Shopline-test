@@ -1,0 +1,39 @@
+<style type="text/css">
+.template-404{
+    padding:120px 0;
+    text-align: center;
+}
+.template-404 .title4{
+    font-weight: 600;
+}
+.template-404 .desc {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+@media screen and (min-width: 960px) {
+    .template-404 {
+        padding:160px 0;
+    }
+
+    .template-404 .desc{
+        margin-bottom: 40px;
+    }
+}
+</style>
+<div class="template-404 page-width center">
+  <h1 class="title4">
+    {{t "general.404.title"}}
+   </h1>
+  <p class="desc body3">
+    {{t "general.404.subtext"}}
+  </p>
+  <a href="{{ routes.all_products_collection_url }}" class="button">
+     {{t "transaction.payment.continue_shopping"}}
+  </a>
+</div>
+{{#schema}}
+{
+  "name": "t:sections.main-404.name"
+}
+{{/schema}}

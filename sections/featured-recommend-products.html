@@ -1,0 +1,338 @@
+{{snippet "stylesheet" href=(asset_url "section-featured-recommend-products.css")}}
+{{snippet "stylesheet" href=(asset_url "component-price.css")}}
+{{snippet "stylesheet" href=(asset_url "component-card.css")}}
+<script src="{{asset_url 'component-slider.js'}}" defer></script>
+<script src="{{asset_url 'section-featured-recommend-products.js'}}" defer></script>
+{{#if settings.enabled_color_swatch}}
+  {{snippet "stylesheet" href=(asset_url "component-color-swatches.css")}}
+  <script src="{{asset_url 'component-color-swatch.js'}}" defer="defer"></script>
+  <script src="{{asset_url 'component-color-swatch-radios.js'}}" defer="defer"></script>
+  <script src="{{asset_url 'component-product-form.js'}}" defer="defer"></script>
+{{/if}}
+{{#if settings.enable_quick_view}}
+  {{snippet "stylesheet" href=(asset_url "component-quick-add.css") lazy=true}}
+  <script src="{{asset_url 'component-quick-add.js'}}" defer="defer"></script>
+{{/if}}
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+{{assign "product_list" section.settings.category.products}}
+{{#if section.settings.image}}
+{{assign 'cate_image' section.settings.image}}
+{{else}}
+{{assign 'cate_image' section.settings.category.image}}
+{{/if}}
+<div
+  class="featured-recommend-products section-padding color-scheme-{{ section.settings.color_scheme}}"
+  style="
+  --featured-recommend-products-product-image-ratio:{{section.settings.product_image_ratio}};
+  --featured-recommend-products-product-image-style:{{section.settings.product_image_style}};
+  --m-cols:{{section.settings.m_cols}};
+  "
+>
+  <div class="featured-recommend-products__body page-width">
+    <div class="featured-recommend-products__image display-none display-flex-desktop">
+      <div class="main global-product-card-border-shadow">
+        {{#if cate_image.src}}
+          {{snippet
+            "image"
+            data=cate_image
+            pc_size="2/3"
+            class="fd-image"
+          }}
+        {{else}}
+          {{placeholder_svg_tag "lifestyle-1" "default-image"}}
+        {{/if}}
+        {{#if section.settings.show_line}}
+          <div class="line"></div>
+        {{/if}}
+      </div>
+    </div>
+    <div class="featured-recommend-products__products-list">
+      <div class="main">
+        <div class="fd-content">
+          <h1 class="fd-title {{section.settings.title_font_size}}">{{section.settings.title}}</h1>
+          <p class="desc body3">{{section.settings.desc}}</p>
+          <a href="{{default section.settings.link 'javascript:;'}}" class="button button--link">
+            {{section.settings.button_text}}
+          </a>
+        </div>
+        <div class="featured-recommend-products__mobile--image display-none-desktop global-product-card-border-shadow">
+          {{#if cate_image.src}}
+            {{snippet
+              "image"
+              data=cate_image
+              class="fd-image"
+            }}
+          {{else}}
+            {{placeholder_svg_tag "lifestyle-1" "default-image"}}
+          {{/if}}
+          {{#if section.settings.show_line}}
+            <div class="line"></div>
+          {{/if}}
+        </div>
+        <featured-recommend-products-slider class="featured-recommend-products-slider" data-m-slice="{{section.settings.slice_in_mobile}}" data-m-cols="{{section.settings.m_cols}}">
+          <div id="Slider-{{section.id}}" class="slider contains-product-card-slider fd-slider">
+            {{#if (length product_list)}}
+              {{#for product_list limit=section.settings.product_number as |product|}}
+                <div id="Slide-{{product.id}}" class="slider__slide featured-recommend-products-slider-slide">
+                  {{snippet
+                    "product-card"
+                    product_data=product
+                    show_secondary_image=section.settings.show_next_image
+                    section_id=section.id
+                    image_ratio=section.settings.product_image_ratio
+                    image_fill_type=section.settings.product_image_style
+                    desktop_grid_cols=3
+                    mobile_grid_cols=3
+                    theme_settings=settings
+                  }}
+                </div>
+              {{/for}}
+            {{else}}
+                <div id="Slide-1" class="slider__slide featured-recommend-products-slider-slide">
+                {{snippet "product-card" theme_settings=settings}}
+              </div>
+                <div id="Slide-2" class="slider__slide featured-recommend-products-slider-slide">
+                {{snippet "product-card" theme_settings=settings}}
+              </div>
+                <div id="Slide-3" class="slider__slide featured-recommend-products-slider-slide">
+                {{snippet "product-card" theme_settings=settings}}
+              </div>
+            {{/if}}
+
+          </div>
+          {{#if (length product_list) > 2 or (isFalsey (length product_list))}}
+            <button class="featured-recommend-products__control" name="previous">
+              {{snippet "icon-arrow-slider"}}
+            </button>
+            <button class="featured-recommend-products__control" name="next">
+              {{snippet "icon-arrow-slider"}}
+            </button>
+          {{/if}}
+        </featured-recommend-products-slider>
+      </div>
+    </div>
+  </div>
+</div>
+{{#schema}}
+{
+  "name": "t:sections.featured-recommend-products.name",
+  "class": "section index-section--hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.featured-recommend-products.settings.image.label",
+      "info": "t:sections.featured-recommend-products.settings.image.info"
+    },
+    {
+      "type": "switch",
+      "id": "show_line",
+      "label": "t:sections.featured-recommend-products.settings.show_line.label",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "t:sections.featured-recommend-products.settings.title.label",
+      "default": "Two Line\nTitle Slide",
+      "limit": 500
+    },
+    {
+      "type": "select",
+      "id": "title_font_size",
+      "label": "t:sections.featured-recommend-products.settings.title_font_size.label",
+      "default": "title3",
+      "options": [
+        {
+          "value": "title2",
+          "label": "t:sections.featured-recommend-products.settings.title_font_size.options__0.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.featured-recommend-products.settings.title_font_size.options__1.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.featured-recommend-products.settings.title_font_size.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "desc",
+      "label": "t:sections.featured-recommend-products.settings.desc.label",
+      "default": "Pair large text with a full-width video to showcase your brand’s lifestyle video or to describe and showcase an important detail of your products."
+    },
+    {
+      "type": "collection_picker",
+      "id": "category",
+      "label": "t:sections.featured-recommend-products.settings.category.label"
+    },
+    {
+      "type": "range",
+      "id": "product_number",
+      "label": "t:sections.featured-recommend-products.settings.product_number.label",
+      "default": 6,
+      "min": 4,
+      "max": 12,
+      "step": 1
+    },
+    {
+      "id": "m_cols",
+      "type": "select",
+      "label": "t:sections.featured-recommend-products.settings.m_cols.label",
+      "default": 1,
+      "options": [
+        {
+          "value": 1,
+          "label": "t:sections.featured-recommend-products.settings.m_cols.options__0.label"
+        },
+        {
+          "value": 2,
+          "label": "t:sections.featured-recommend-products.settings.m_cols.options__1.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "slice_in_mobile",
+      "label": "t:sections.featured-recommend-products.settings.slice_in_mobile.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.featured-recommend-products.settings.color_scheme.label",
+      "default": "2",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.featured-recommend-products.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.featured-recommend-products.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.featured-recommend-products.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.featured-recommend-products.settings.color_scheme.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "t:sections.featured-recommend-products.settings.button_text.label",
+      "default": "Shop this"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.featured-recommend-products.settings.link.label"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.featured-recommend-products.settings.group_header__0.label"
+    },
+    {
+      "id": "product_image_ratio",
+      "type": "select",
+      "label": "t:sections.featured-recommend-products.settings.product_image_ratio.label",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.featured-recommend-products.settings.product_image_ratio.options__0.label"
+        },
+        {
+          "value": "100",
+          "label": "t:sections.featured-recommend-products.settings.product_image_ratio.options__1.label"
+        },
+        {
+          "value": "133.33",
+          "label": "3:4"
+        },
+        {
+          "value": "75",
+          "label": "t:sections.featured-recommend-products.settings.product_image_ratio.options__3.label"
+        },
+        {
+          "value": "150",
+          "label": "t:sections.featured-recommend-products.settings.product_image_ratio.options__4.label"
+        }
+      ],
+      "default": "150"
+    },
+    {
+      "type": "select",
+      "id": "product_image_style",
+      "label": "t:sections.featured-recommend-products.settings.product_image_style.label",
+      "default": "cover",
+      "options": [
+        {
+          "value": "contain",
+          "label": "t:sections.featured-recommend-products.settings.product_image_style.options__0.label"
+        },
+        {
+          "value": "cover",
+          "label": "t:sections.featured-recommend-products.settings.product_image_style.options__1.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "show_next_image",
+      "label": "t:sections.featured-recommend-products.settings.show_next_image.label",
+      "default": true
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.featured-recommend-products.settings.group_header__1.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.featured-recommend-products.settings.padding_top.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.featured-recommend-products.settings.padding_bottom.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "category_index": 2,
+      "category": "t:sections.featured-recommend-products.presets.presets__0.category",
+      "name": "t:sections.featured-recommend-products.presets.presets__0.name",
+      "settings": {
+        "image_height": "100",
+        "product_image_style": "cover",
+        "show_line": true,
+        "m_cols": 1,
+        "slice_in_mobile": true
+      }
+    }
+  ]
+}
+{{/schema}}

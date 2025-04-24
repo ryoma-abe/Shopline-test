@@ -1,0 +1,30 @@
+<cart-coupon class="cart__coupon-wrapper">
+  <div class="display-flex">
+    <div class="field coupon__input">
+      <div class="field__container">
+        <input class="field__input" placeholder="{{t 'transaction.discount.coupon_code'}}" />
+        <label for="coupon" class="field__label body3">
+          {{t "transaction.discount.coupon_code"}}
+        </label>
+      </div>
+    </div>
+    <button class="button coupon__button" type="submit">
+      {{t "sales.general.apply_common"}}
+      {{snippet "loading-overlay-spinner"}}
+    </button>
+  </div>
+
+  <p class="coupon-error-message field__info field__info--error"></p>
+
+  <ul class="cart__coupon-list">
+    {{#for cart.discount_applications as |discount_application|}}
+      {{#if discount_application.code}}
+        <li class="coupon__list-item" data-code="{{discount_application.code}}">
+          {{snippet "icon-discount-tag"}}
+          <span class="body4 fw-bold coupon__code">{{discount_application.code}}</span>
+          <div class="coupon__close">{{snippet "icon-close"}}</div>
+        </li>
+      {{/if}}
+    {{/for}}
+  </ul>
+</cart-coupon>

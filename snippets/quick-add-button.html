@@ -1,0 +1,37 @@
+
+
+{{assign "button_style" (default button_style "icon")}}
+
+{{#if button_style == "button"}}
+  <div class="quick-add quick-add-button {{classes}} {{button_classes}}">
+    <modal-opener data-modal="#QuickAdd-{{product_data.id}}">
+      <button
+        id="{{id}}"
+        type="submit"
+        name="add"
+        class="quick-add-button__opener button button--full-width"
+        data-product-url="{{product_data.url}}"
+        {{#if disabled}}disabled{{/if}}
+      >
+        <span>{{t "products.product_list.add_to_cart"}}</span>
+        {{snippet "loading-overlay-spinner"}}
+      </button>
+    </modal-opener>
+  </div>
+{{else}}
+  <div class="quick-add {{classes}} {{button_classes}}">
+    <modal-opener data-modal="#QuickAdd-{{product_data.id}}">
+      <button
+        id="{{id}}"
+        type="submit"
+        name="add"
+        class="quick-add-icon__opener"
+        data-product-url="{{product_data.url}}"
+        {{#if disabled}}disabled{{/if}}
+      >
+        <i class="loading-hidden">{{snippet "icon-quick-add"}}</i>
+        {{snippet "loading-overlay-spinner"}}
+      </button>
+    </modal-opener>
+  </div>
+{{/if}}

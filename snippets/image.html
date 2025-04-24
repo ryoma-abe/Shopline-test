@@ -1,0 +1,59 @@
+{{#comment}}
+  Render img tag
+
+  Accepts:
+  - data: {Object} Select image data.
+  - class: {String} Tag class attr.
+  - style: {String} Tag style attr.
+  - sizes: {String} Customize img tag size attr.
+  - pc_size: {String} Customize the specifications used on the pc side，like "20px" "100vw" "100%" "2/3"
+  - mobile_size: {String} Customize the specifications used on the mobile side，like "20px" "100vw" "100%" "2/3"
+  - lazy: {Boolean} Set whether to use lazy loading.
+
+  Usage:
+  {{ snippet 'image' data=selectedImage pc_size="1/3" mobile_size="200px" lazy=true }}
+{{/comment}}
+
+{{#with section}}
+  {{assign "image_index" (plus (default image_index 0) 1)}}
+{{/with}}
+
+{{assign "is_first_screen" (ternary section.index (if section.index < 3 and section.image_index < 3) false)}}
+{{assign "is_first_section" (ternary is_first_screen (if section.index == 1) false)}}
+
+{{#if pc_size or mobile_size}}
+  {{assign "pc_size_breakpoint" "100vw"}}
+  {{assign "mobile_size_breakpoint" "100vw"}}
+
+  {{#if pc_size}}
+    {{#if (has pc_size "px") or (has pc_size "vw") or (has pc_size "%")}}
+      {{assign "pc_size_breakpoint" pc_size}}
+    {{else}}
+      {{assign "pc_size_breakpoint" (append "calc(100vw * " pc_size ")")}}
+    {{/if}}
+  {{/if}}
+
+  {{#if mobile_size}}
+    {{#if (has mobile_size "px") or (has mobile_size "vw") or (has mobile_size "%")}}
+      {{assign "mobile_size_breakpoint" mobile_size}}
+    {{else}}
+      {{assign "mobile_size_breakpoint" (append "calc(100vw * " mobile_size ")")}}
+    {{/if}}
+  {{/if}}
+
+  {{assign "sizes" (append "(max-width: 959px) " mobile_size_breakpoint ",(min-width: 960px) " pc_size_breakpoint)}}
+{{/if}}
+
+{{image_tag
+  (image_url data quality=quality)
+  class=(default class "")
+  style=(default style "")
+  widths=(default breakpoints "375, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2160, 2660, 2960, 3260, 3860")
+  loading=(ternary (default lazy (not is_first_screen)) "lazy" "eager")
+  sizes=sizes
+  data-scale="hover-scale"
+  alt=(default data.alt "")
+  decoding="async"
+  fetchpriority=(default fetchpriority (ternary is_first_section "high" "auto"))
+  quality=quality
+}}

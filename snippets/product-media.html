@@ -1,0 +1,67 @@
+{{#if media.media_type 'image'}}
+  {{assign 'preview_image' null}}
+
+  {{#if (hasOwn media.preview_image 'src') and (isTruthy media.preview_image.src)}}
+    {{assign 'preview_image' media.preview_image}}
+  {{else if (hasOwn media 'src') and (isTruthy media.src)}}
+    {{assign 'preview_image' media}}
+  {{/if}}
+  
+  <img
+    class="global-media-settings global-media-settings--no-shadow{{#if variant_image }} product__media-item--variant{{/if}}"
+    data-section-id="{{ section.id }}"
+    srcset="{{#if (if preview_image.width >= 550) }}{{ image_url preview_image quality=image_quality width=550 }} 550w,{{/if}}
+            {{#if (if preview_image.width >= 1100) }}{{ image_url preview_image quality=image_quality width=1100 }} 1100w,{{/if}}
+            {{#if (if preview_image.width >= 1445) }}{{ image_url preview_image quality=image_quality width=1445 }} 1445w,{{/if}}
+            {{#if (if preview_image.width >= 1680) }}{{ image_url preview_image quality=image_quality width=1680 }} 1680w,{{/if}}
+            {{#if (if preview_image.width >= 2048) }}{{ image_url preview_image quality=image_quality width=2048 }} 2048w,{{/if}}
+            {{#if (if preview_image.width >= 2200) }}{{ image_url preview_image quality=image_quality width=2200 }} 2200w,{{/if}}
+            {{#if (if preview_image.width >= 2890) }}{{ image_url preview_image quality=image_quality width=2890 }} 2890w,{{/if}}
+            {{#if (if preview_image.width >= 4096) }}{{ image_url preview_image quality=image_quality width=4096 }} 4096w,{{/if}}
+            {{ image_url preview_image quality=image_quality }} {{ preview_image.width }}w"
+    sizes="(min-width: 750px) calc(100vw - 220px), 1100px"
+    src="{{ image_url preview_image width=1445 quality=image_quality }}"
+    alt="{{ media.alt }}"
+    loading="lazy"
+    width="1100"
+    height="{{ ceil (divide 1100 preview_image.aspect_ratio) }}"
+    data-media-id="{{ media.id }}"
+  >
+{{else}}
+  <deferred-media class="deferred-media media global-media-settings global-media-settings--no-shadow" style="padding-top: min(calc(100vh - 120px), {{ times (divide 1 media.aspect_ratio) 100 }}%)" data-media-id="{{ media.id }}">
+    <button id="Deferred-Poster-Modal-{{ media.id }}" class="deferred-media__poster" type="button">
+      <span class="deferred-media__poster-button auto-width motion-reduce">
+        {{snippet 'icon-play'}}
+      </span>
+      <img
+        srcset="{{#if (if media.preview_image.width >= 288) }}{{ image_url media.preview_image quality=image_quality width=288 }} 288w,{{/if}}
+                {{#if (if media.preview_image.width >= 576) }}{{ image_url media.preview_image quality=image_quality width=576 }} 576w,{{/if}}
+                {{#if (if media.preview_image.width >= 550) }}{{ image_url media.preview_image quality=image_quality width=550 }} 550w,{{/if}}
+                {{#if (if media.preview_image.width >= 1100) }}{{ image_url media.preview_image quality=image_quality width=1100 }} 1100w,{{/if}}
+                {{ image_url media.preview_image quality=image_quality }} {{ media.preview_image.width }}w"
+        src="{{ image_url media.preview_image width=550 height=550 }}"
+        sizes="(min-width: 1200px) calc((1200px - 100px) / 2), (min-width: 750px) calc((100vw - 115px) / 2), calc(100vw - 40px)"
+        loading="lazy"
+        width="576"
+        height="{{ ceil (divide 576 media.preview_image.aspect_ratio) }}"
+        alt="{{ media.preview_image.alt }}"
+      >
+    </button>
+    <template>
+      {{assign 'video_mute' (default video_mute 0)}}
+      {{#case media.media_type}}
+        {{#when 'external_video'}}
+          {{assign 'video_class' (append 'js-' media.host)}}
+          {{#if media.host 'youtube'}}
+            {{ external_video_tag (external_video_url media autoplay=1 loop=loop playlist=media.external_id mute=video_mute) class=video_class loading="lazy" frameborder="0" }}
+          {{else}}
+            {{ external_video_tag (external_video_url media autoplay=1 loop=loop mute=video_mute) class=video_class loading="lazy" frameborder="0" }}
+          {{/if}}
+        {{/when}}
+        {{#when 'video'}}
+          {{ video_tag media autoplay=true loop=loop controls=true preload="none" muted=(ternary (if video_mute == 1) true false) onloadeddata="this.play();" }}
+        {{/when}}
+      {{/case}}
+    </template>
+  </deferred-media>
+{{/if}}

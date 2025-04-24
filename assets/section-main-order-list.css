@@ -1,0 +1,261 @@
+@media screen and (max-width: 959px) {
+  .customer-order-list-wrap {
+    margin-top: -20px;
+  }
+}
+@media (min-width: 960px) {
+  .customer-order-list-wrap .pagination-wrapper {
+    margin-top: 80px;
+  }
+}
+
+.customer-order-list {
+  display: grid;
+  gap: 20px;
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-list {
+    gap: 12px;
+    background-color: rgba(var(--color-entry-line), 0.5);
+    margin: 0 -20px;
+    padding-bottom: 12px;
+  }
+}
+
+.customer-order-item {
+  --gap: 20px;
+
+  display: grid;
+  grid-template:
+    "head head" auto
+    "body foot" auto
+    / 3fr 1fr;
+  gap: var(--gap);
+  align-items: center;
+  background-color: rgba(var(--color-page-background));
+  transition: background 0.3s;
+  border-bottom: 1px solid rgba(var(--color-entry-line), 0.5);
+  position: relative;
+}
+
+.customer-order-item:hover {
+  background-color: rgba(var(--color-text), 0.03);
+}
+
+@media screen and (min-width: 960px) {
+  .customer-order-item {
+    padding-bottom: var(--gap);
+  }
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-item {
+    --gap: 12px;
+
+    grid-template:
+      "head" auto
+      "body" auto
+      "foot" auto;
+    padding: 20px;
+  }
+}
+
+.customer-order-item__link {
+  display: block !important;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.customer-order-item__head {
+  grid-area: head;
+  display: grid;
+  grid-template: "seq time status" / auto 1fr auto;
+  gap: 12px;
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-item__head {
+    grid-template:
+      "seq status" auto
+      "time time" auto
+      / 1fr auto;
+  }
+}
+
+.customer-order-item__body {
+  grid-area: body;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  gap: var(--gap);
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-item__body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.customer-order-item__foot {
+  grid-area: foot;
+  padding-top: calc(20px - var(--gap));
+  text-align: right;
+}
+
+.customer-order-item__seq {
+  grid-area: seq;
+}
+
+.customer-order-item__create-time {
+  grid-area: time;
+  opacity: 0.6;
+  margin: 0;
+}
+
+.customer-order-item__status {
+  grid-area: status;
+  opacity: 0.4;
+}
+
+.customer-order-item__info {
+  display: flex;
+  align-items: center;
+}
+
+.customer-order-item__cover {
+  --cover-image-size: 88px;
+
+  width: var(--cover-image-size);
+  height: var(--cover-image-size);
+}
+
+.customer-order-item__cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.customer-order-item__cover .image-fallback {
+  background-color: rgb(var(--color-image-background));
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-item__cover {
+    --cover-image-size: 60px;
+  }
+}
+
+.customer-order-item__pay-status {
+  flex: 1 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-item__pay-status {
+    grid-template-columns: repeat(3, auto);
+    font-weight: 700;
+  }
+}
+
+.customer-order-item__pay-status .status-divider {
+  display: block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.customer-order-item__pay-status .status-box {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+
+.customer-order-item__pay-status .status-info {
+  text-transform: capitalize;
+}
+
+.customer-order-item__pay-status .icon {
+  margin-right: 6px;
+  opacity: 0.4;
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-item__pay-status .icon {
+    display: none;
+  }
+}
+
+.customer-order-item__total-content {
+  margin-left: 24px;
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-item__total-content {
+    margin-left: 12px;
+  }
+}
+
+.customer-order-item__total-content > p {
+  margin: 0;
+}
+
+.customer-order-item__price-total {
+  text-align: right;
+  margin-top: 8px;
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-item__price-total {
+    text-align: left;
+  }
+}
+
+.customer-order-list__empty {
+  --padding: 130px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: var(--padding);
+  padding-top: calc(var(--padding) - 40px);
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-list__empty {
+    --padding: 100px;
+  }
+}
+
+.customer-order-list__empty .empty-title {
+  margin-top: 0;
+  margin-bottom: 32px;
+}
+
+.customer-order-item__rebuy {
+  z-index: 1;
+}
+
+@media screen and (max-width: 959px) {
+  .customer-order-item__rebuy {
+    width: 100%;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

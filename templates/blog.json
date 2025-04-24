@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main-blog-list": {
+      "type": "main-blog-list",
+      "disabled": false,
+      "settings": {
+        "layout": "grid",
+        "is_show_author": true,
+        "is_show_date": true,
+        "is_show_cover": true,
+        "cover_img_ratio": "medium"
+      }
+    }
+  },
+
+  "order": ["main-blog-list"]
+}

@@ -1,0 +1,28 @@
+{{assign "scene" "cart-notification"}}
+
+<cart-notification>
+  <div class="cart-notification-wrapper page-width">
+    <div id="cart-notification" class="cart-notification {{#if color_scheme }} color-scheme-{{ color_scheme }}{{/if}}">
+      <div class="cart-notification__header">
+        <h2 class="cart-notification__heading title6 text-uppercase">
+          {{ snippet 'icon-check' }} 
+          <span>{{t 'cart.cart.added_to_cart'}}:</span>
+        </h2>
+        <div class="cart-notification__close modal__close-button">
+          {{snippet "icon-close"}}
+        </div>
+      </div>
+      <div id="cart-notification-product" class="cart-notification-product"></div>
+      <div id="cart-notification-subtotal"></div>
+      <div class="cart-notification__links">
+        <div class="cart-notification-view">
+          <a href="{{ routes.cart_url }}" id="cart-notification-button" class="button button--secondary"></a>
+        </div>
+        {{assign "form_id" (append 'cart-form--' scene)}}
+        {{#form 'cart' id=form_id}}
+          <button class="button" type="submit" name="checkout">{{ t 'cart.checkout_proceeding.checkout' }}</button>
+        {{/form}}
+      </div>
+    </div>
+  </div>
+</cart-notification>

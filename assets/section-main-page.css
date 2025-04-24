@@ -1,0 +1,34 @@
+.custom-page .page-title,
+.main-page .page-title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+@media screen and (min-width: 960px) {
+  .custom-page .page-title,
+  .main-page .page-title {
+    margin-bottom: 30px;
+  }
+}
+
+.custom-page .placeholder {
+  display: inline-block;
+  height: 335px;
+  width: 100%;
+  background-color: rgba(var(--color-text), 0.05);
+}
+
+@media screen and (min-width: 960px) {
+  .custom-page .placeholder {
+    width: 100%;
+    height: 525px;
+  }
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

@@ -1,0 +1,12 @@
+
+{{#if customer.cancelling_account}}
+  <div class="user-center-message">
+    <div class="user-center-message__content">
+      <div class="body3 fw-bold">{{t 'customer.account.unregister'}}</div>
+      <div class="body4">{{t 'customer.account.revoke_message' time=(date customer.cancelling_time "%Y-%m-%d") }}</div>
+    </div>
+    {{#form "cancel_delete_customer"}}
+      <button type="submit" class="button user-center-message__button">{{t 'customer.account.revoke_btn' }}</button>
+    {{/form}}
+  </div>
+{{/if}}

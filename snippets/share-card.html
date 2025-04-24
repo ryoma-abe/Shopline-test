@@ -1,0 +1,75 @@
+{{#comment}}
+ * Renders share component.
+ * @param {Object} theme - Global configuration object.
+ * @param {("product_detail"|"article_detail")} share_type - Share type, only values of "product_detail" or "article_detail" are allowed.
+ * @param {Object} share_data - Share data object.
+ * @param {string=} domain - Share the current domain name of the page.
+ * @param {id=} id - section.id.
+ * @Usage:{{snippet 'share-card' theme_settings=global.settings share_type="article_detail" share_data=global.article domain=global.request.origin}}
+ {{/comment}}
+{{snippet "stylesheet" href=(asset_url "snippet-share-card.css")}}
+<script src="{{asset_url 'share-card.js'}}" defer></script>
+
+{{assign "share_list_data" (arrayify "")}}
+{{#if theme_settings.share_to_facebook}}
+  {{assign "share_list_data" (concat share_list_data (arrayify "Facebook"))}}
+{{/if}}
+{{#if theme_settings.share_to_twitter}}
+  {{assign "share_list_data" (concat share_list_data (arrayify "Twitter"))}}
+{{/if}}
+{{#if theme_settings.share_to_pinterest}}
+  {{assign "share_list_data" (concat share_list_data (arrayify "Pin"))}}
+{{/if}}
+{{#if theme_settings.share_to_line}}
+  {{assign "share_list_data" (concat share_list_data (arrayify "Line"))}}
+{{/if}}
+{{#if theme_settings.share_to_whatsapp}}
+  {{assign "share_list_data" (concat share_list_data (arrayify "Whatsapp"))}}
+{{/if}}
+{{#if theme_settings.share_to_tumblr}}
+  {{assign "share_list_data" (concat share_list_data (arrayify "Tumblr"))}}
+{{/if}}
+{{assign "leng" (length share_list_data)}}
+{{#capture "share_url"}}https://{{domain}}{{share_data.url}}{{/capture}}
+{{#if share_type == "product_detail"}}
+  {{assign "share_title" share_data.title}}
+  {{assign "share_image" share_data.images.[0].src}}
+{{/if}}
+{{#if share_type == "article_detail"}}
+  {{assign "share_title" share_data.title}}
+  {{assign "share_image" share_data.image.src}}
+{{/if}}
+<share-card data-id="{{id}}" class="third-party-share notranslate">
+  {{#for share_list_data limit=3 as |name|}}
+    {{snippet
+      "share-card-content"
+      share_url=share_url
+      share_title=share_title
+      share_image=share_image
+      name=name
+      show_official_share_icon=theme_settings.show_official_share_icon
+      show_social_name=theme_settings.show_social_name
+    }}
+  {{/for}}
+  {{#if leng > 3}}
+    {{assign "share_more_data" (after share_list_data 3)}}
+    <div class="third-party-more" id="share_card_{{id}}">
+      <div class="third-party-arrow third-party-arrow-small">
+        {{snippet "icon-arrow"}}
+      </div>
+      <div class="third-party-more-list">
+        {{#for share_more_data as |name|}}
+          {{snippet
+            "share-card-content"
+            share_url=share_url
+            share_title=share_title
+            share_image=share_image
+            name=name
+            show_official_share_icon=theme_settings.show_official_share_icon
+            show_social_name=theme_settings.show_social_name
+          }}
+        {{/for}}
+      </div>
+    </div>
+  {{/if}}
+</share-card>

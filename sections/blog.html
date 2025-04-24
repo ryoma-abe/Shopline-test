@@ -1,0 +1,321 @@
+{{snippet "stylesheet" href=(asset_url "component-blog.css")}}
+{{snippet "stylesheet" href=(asset_url "section-blog.css")}}
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+{{assign "blog_collection" section.settings.blog_collection}}
+{{assign "show_mobile_slider" (if section.settings.enable_mobile_slide and blog_collection.articles.length > 1)}}
+{{assign "mobile_pagination_style" section.settings.mobile_pagination_style}}
+{{#if show_mobile_slider}}
+<script src="{{asset_url 'component-slider.js'}}" defer></script>
+{{/if}}
+
+{{assign "blog_control_limit" section.settings.limit}}
+{{#if section.settings.mobile_cols == '2' and show_mobile_slider}}
+  {{assign "blog_control_limit" (minus section.settings.limit 1)}}
+{{/if}}
+
+<div class="section section-padding color-scheme-{{section.settings.color_scheme}}">
+  <div class="blogs__main">
+    <div class="page-width blogs__head {{#unless section.settings.title}}blogs__head--no-title{{/unless}}">
+      {{#if section.settings.title}}
+        <h2 class="blogs__title word-break title3 title__align-{{section.settings.title_align}}">
+          {{section.settings.title}}
+        </h2>
+      {{/if}}
+    </div>
+    <slider-component class="blogs__list-wrapper page-width blogs__list-{{mobile_pagination_style}}">
+      <ul 
+        id="Slider-{{section.id}}"
+        class="grid grid-cols-{{default section.settings.pc_cols '3'}}-desktop grid-cols-{{section.settings.mobile_cols}}-tablet {{#if show_mobile_slider}}slider contains-blog-card-slider slider-full-screen slider--mobile{{/if}} blogs__list"
+        style="--mobile-cols: {{section.settings.mobile_cols}}">
+        {{#if blog_collection.articles.length}}
+          {{#for blog_collection.articles limit=section.settings.limit as |article|}}
+            {{#capture "image_item_wrapper_style"}}
+              {{#if section.settings.image_cover_ratio == "auto"}}
+                padding-bottom: {{divide 100 article.image.aspect_ratio}}%;
+              {{else}}
+                padding-bottom: {{times 100 section.settings.image_cover_ratio}}%;
+              {{/if}}
+            {{/capture}}
+
+            <li id="Slide-{{article.id}}" class="slider__slide blogs__item hover-image-scale" {{{article.shopline_attributes}}}>
+              {{snippet
+                "blog-card"
+                placeholder=false
+                info=article
+                show_author=section.settings.is_show_author
+                show_date=section.settings.is_show_date
+                show_cover=section.settings.is_show_cover
+                cover_ratio="large"
+                show_desc=section.settings.is_show_desc
+                image_wrapper_style=(trim image_item_wrapper_style)
+              }}
+            </li>
+          {{/for}}
+        {{else}}
+          <li class="blogs__item hover-image-scale" {{{shopline_attributes}}}>
+            {{snippet
+              "blog-card"
+              placeholder=true
+              info=this
+              show_author=section.settings.is_show_author
+              show_date=section.settings.is_show_date
+              show_cover=section.settings.is_show_cover
+              cover_ratio="large"
+              show_desc=section.settings.is_show_desc
+            }}
+          </li>
+        {{/if}}
+      </ul>
+      {{#if show_mobile_slider}}
+        {{#if mobile_pagination_style == "bars"}}
+          <div class="blog__control--bars slider-buttons display-none-desktop">
+            {{#for blog_collection.articles limit=blog_control_limit}}
+              <button name="pager" class="blog__control--bar" data-index="{{forloop.index0}}"></button>
+            {{/for}}
+          </div>
+        {{/if}}
+        {{#if mobile_pagination_style == "dots"}}
+          <div class="blog__control--dots slider-buttons display-none-desktop">
+            {{#for blog_collection.articles limit=blog_control_limit}}
+              <button class="blog__control--dot" name="pager" data-index="{{forloop.index0}}"></button>
+            {{/for}}
+          </div>
+        {{/if}}
+      {{/if}}
+    </slider-component>
+  </div>
+  {{#if (isTruthy section.settings.btn_text)}}
+    <div class="stage-blogs-btn">
+      {{assign "ele" (ternary (if blog_collection.url) "a" "span")}}
+      <{{ele}} class="button" {{#if blog_collection.url}}href="{{blog_collection.url}}"{{/if}}>
+        {{section.settings.btn_text}}
+      </{{ele}}>
+    </div>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.blog.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.blog.settings.title.label",
+      "default": "Blog"
+    },
+    {
+      "id": "title_align",
+      "type": "text_align",
+      "label": "t:sections.blog.settings.title_align.label",
+      "default": "center"
+    },
+    {
+      "type": "blog",
+      "id": "blog_collection",
+      "label": "t:sections.blog.settings.blog_collection.label"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.blog.settings.limit.label",
+      "default": 4,
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "unit": "t:sections.blog.settings.limit.unit"
+    },
+    {
+      "id": "pc_cols",
+      "type": "range",
+      "label": "t:sections.blog.settings.pc_cols.label",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "id": "mobile_cols",
+      "type": "select",
+      "label": "t:sections.blog.settings.mobile_cols.label",
+      "options": [
+        {
+          "value": 1,
+          "label": "t:sections.blog.settings.mobile_cols.options__0.label"
+        },
+        {
+          "value": 2,
+          "label": "t:sections.blog.settings.mobile_cols.options__1.label"
+        }
+      ],
+      "default": 1
+    },
+    {
+      "type": "switch",
+      "id": "enable_mobile_slide",
+      "default": false,
+      "label": "t:sections.blog.settings.enable_mobile_slide.label"
+    },
+    {
+      "type": "select",
+      "id": "mobile_pagination_style",
+      "label": "t:sections.blog.settings.mobile_pagination_style.label",
+      "default": "simple",
+      "options": [
+        {
+          "value": "bars",
+          "label": "t:sections.blog.settings.mobile_pagination_style.options__0.label"
+        },
+        {
+          "value": "dots",
+          "label": "t:sections.blog.settings.mobile_pagination_style.options__1.label"
+        },
+        {
+          "value": "simple",
+          "label": "t:sections.blog.settings.mobile_pagination_style.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "is_show_date",
+      "default": true,
+      "label": "t:sections.blog.settings.is_show_date.label"
+    },
+    {
+      "type": "switch",
+      "id": "is_show_author",
+      "default": true,
+      "label": "t:sections.blog.settings.is_show_author.label"
+    },
+    {
+      "type": "switch",
+      "id": "is_show_cover",
+      "default": true,
+      "label": "t:sections.blog.settings.is_show_cover.label"
+    },
+    {
+      "id": "image_cover_ratio",
+      "type": "select",
+      "label": "t:sections.blog.settings.image_cover_ratio.label",
+      "options": [
+        {
+          "value": "auto",
+          "label": "t:sections.blog.settings.image_cover_ratio.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.blog.settings.image_cover_ratio.options__1.label"
+        },
+        {
+          "value": "0.75",
+          "label": "t:sections.blog.settings.image_cover_ratio.options__2.label"
+        },
+        {
+          "value": "0.6666",
+          "label": "t:sections.blog.settings.image_cover_ratio.options__3.label"
+        },
+        {
+          "value": "0.5625",
+          "label": "t:sections.blog.settings.image_cover_ratio.options__4.label"
+        }
+      ],
+      "default": "0.75"
+    },
+    {
+      "type": "switch",
+      "id": "is_show_desc",
+      "default": true,
+      "label": "t:sections.blog.settings.is_show_desc.label"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "default": "View all",
+      "label": "t:sections.blog.settings.btn_text.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.blog.settings.color_scheme.label",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.blog.settings.color_scheme.options__0.label"
+        },
+        {
+          "value": "1",
+          "label": "t:sections.blog.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.blog.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.blog.settings.color_scheme.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.blog.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.blog.settings.padding_top.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.blog.settings.padding_bottom.label",
+      "default": 80,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 5,
+      "category": "t:sections.blog.presets.presets__0.category",
+      "name": "t:sections.blog.presets.presets__0.name",
+      "settings": {
+        "title": "Blogs",
+        "title_align": "center",
+        "blog_collection": "",
+        "limit": 4,
+        "pc_cols": 4,
+        "mobile_cols": 1,
+        "enabled_mobile_slide": false,
+        "mobile_pagination_style": "simple",
+        "is_show_date": true,
+        "is_show_author": true,
+        "is_show_cover": true,
+        "is_show_desc": true,
+        "image_cover_ratio": "0.75",
+        "btn_text": "View all",
+        "color_scheme": "none",
+        "cover_img_ratio": "0.75",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  ]
+}
+{{/schema}}

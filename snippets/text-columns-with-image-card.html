@@ -1,0 +1,101 @@
+{{#comment}}
+  Renders a text-columns-with-image-card
+
+  Accepts:
+  - image_style: {String} If the image scale is circular the value is 'circle' otherwise the value is 'square'.
+  - image_width: {String} Image width, values are only allowed to be '100%' | '50%' | '33.33%'.
+  - image_ratio: {String} Image scale, values only allowed are 'auto' | '100%' | '133.33%' | 'circle'.
+  - no_spacing: {String} Internal spacing status of the list card, the only values allowed are the strings 'true' or 'false'
+  - show_mask: {Boolean} Whether to show the card background.
+  - color_scheme: {String} Card colour scheme, values are only allowed to be 'none' | '1' | '2' | '3'.
+  - text_align: {String} Card content alignment, values are only allowed to be 'left' or 'center'.
+  - pc_cols: {Number} Number of columns on the computer side.
+  - jump_link: {String} Url of the card link.
+  - shopline_attributes: {object} Shopline_attributes object
+  - block: {object} The block object
+
+
+  Usage:
+  {{snippet
+    "text-columns-with-image-card"
+    image_style="square"
+    image_width="100%"
+    image_ratio="100%"
+    no_spacing="false"
+    show_mask=true
+    color_scheme="none"
+    text_align="left"
+    pc_cols=3
+    jump_link="https.shopline.com"
+    shopline_attributes=this.shopline_attributes
+  }}
+{{/comment}}
+{{#if color_scheme == "none"}}
+  {{assign "theme_bg" theme_settings.color_page_background}}
+{{else}}
+  {{assign "theme_bg" (get (append "color_scheme_" color_scheme "_bg") theme_settings)}}
+{{/if}}
+
+{{assign "computed_image_ratio" (default image_ratio "100%")}}
+{{#if image_ratio == "auto"}}
+  {{assign "computed_image_ratio" (append (default (divide 100 block.settings.image.aspect_ratio) 100) "%")}}
+{{/if}}
+<div class="text-columns-with-images-item text-columns-with-images-item--{{text_align}}" {{{ block.shopline_attributes }}}>
+  <div class="text-columns-with-images-item__wrapper global-content-border-shadow {{#if theme_settings.content_border_thickness == 0}}no-border{{/if}}
+    {{#if no_spacing == 'true'}}no-spacing{{/if}}" style="background: {{theme_bg}}">
+    {{#if (isTruthy show_mask)}}
+      {{#style}}
+        .text-columns-with-images-item__extract-mask {
+          {{#if theme_bg.lightness >= 40 }}
+            background-color: rgba(0, 0, 0, 0.05);
+          {{else}}
+            background-color: rgba(255, 255, 255, 0.1);
+          {{/if}}
+        }
+      {{/style}}
+      <div class="text-columns-with-images-item__extract-mask"></div>
+    {{/if}}
+    <div class="text-columns-with-images-item__main hover-image-scale">
+      {{#if block.settings.image}}
+        <div
+          class="text-columns-with-images-item__image text-columns-with-images-item__image--{{image_style}}"
+          style="width: {{image_width}}"
+        >
+          <a
+            href="{{#if block.settings.jump_link}}{{block.settings.jump_link}}{{else}}javascript:;{{/if}}"
+            class="text-columns-with-images-item__link"
+            style="padding-bottom: {{computed_image_ratio}}"
+          >
+            {{snippet "image" pc_size=(append "1/" pc_cols) mobile_size="100%" data=block.settings.image}}
+          </a>
+        </div>
+      {{/if}}
+      {{#if block.settings.title or block.settings.description or block.settings.button_text}}
+        <div class="text-columns-with-images-item__content">
+          {{#if block.settings.title}}
+            <div class="text-columns-with-images-item__title title5">
+              {{block.settings.title}}
+            </div>
+          {{/if}}
+          {{#if block.settings.description}}
+            <div class="text-columns-with-images-item__text body3 rte">{{{block.settings.description}}}</div>
+          {{/if}}
+          {{#if block.settings.button_text}}
+            <a
+              href="{{#if block.settings.jump_link}}{{block.settings.jump_link}}{{else}}javascript:;{{/if}}"
+              class="text-columns-with-images-item__button text-columns-with-images-item__button--{{text_align}}
+                body4 d-flex"
+            >
+              <span class="button-text">
+                {{block.settings.button_text}}
+              </span>
+              <span class="button-arrow">
+                {{snippet "icon-arrow"}}
+              </span>
+            </a>
+          {{/if}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>

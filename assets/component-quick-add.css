@@ -1,0 +1,93 @@
+quick-add-modal {
+  --modal-animation-name: quick-add-fade-in;
+}
+.quick-add-modal__content {
+  top: 60px;
+  left: 60px;
+  right: 60px;
+  bottom: 60px;
+  margin: auto;
+  background-color: rgb(var(--color-page-background));
+  overflow: hidden;
+  max-width: var(--page-width);
+  padding: 40px;
+  padding-right: 5px;
+  cursor: auto;
+}
+.quick-add-modal__content
+  .product__info-item:not(.quick-add-hidden)
+  .third-party-more-list {
+  top: unset;
+  bottom: 100%;
+}
+.quick-add-modal__toggle {
+  background-color: rgb(var(--color-page-background));
+  border: 1px solid rgba(var(--color-text), 0.05);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 13px;
+  z-index: 5;
+  position: absolute;
+  top: 21px;
+  right: 21px;
+  /* fix safari z-index not working */
+  -webkit-transform: translate3d(0, 0, 0);
+  color: inherit;
+}
+.quick-add-modal__content-info {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+@media (max-width: 959px) {
+  .quick-add-modal__content {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 80%;
+    margin-bottom: 0;
+    --start-transform: translateY(100%);
+    padding: 0;
+  }
+  .quick-add-modal__content .product__info-wrapper,
+  .quick-add-modal__content .thumbnail-slider {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .quick-add-modal__toggle {
+    top: 14px;
+    right: 12px;
+  }
+}
+@keyframes quick-add-fade-in {
+  0% {
+    transform: var(--start-transform, translateY(30px));
+  }
+
+  100% {
+    transform: var(--end-transform, translateY(0));
+  }
+}
+quick-add-modal .quick-add-hidden {
+  display: none !important;
+}
+quick-add-modal .quick-add-show {
+  display: block !important;
+}
+quick-add-modal .product__modal-opener:not(.product__modal-opener--image) {
+  display: none !important;
+}
+quick-add-modal .product__media-list .deferred-media {
+  display: block;
+  width: 100%;
+}
+/* The ipad end responds to the mobile end in vertical screen */
+/* @custom-media --tablet (max-width: 959px); */
+/* @custom-media --gt-mobile (min-width: 751px); */
+/* detectingScreen need to consider the configuration of the tablet */

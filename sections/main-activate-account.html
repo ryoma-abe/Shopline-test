@@ -1,0 +1,129 @@
+{{snippet "stylesheet" href=(asset_url "component-tool-tip.css")}}
+{{snippet "stylesheet" href=(asset_url "section-customer.css")}}
+<script src="{{asset_url 'section-customer-lib-jquery.js'}}" defer></script>
+<script src="{{asset_url 'component-tool-tip.js'}}" defer></script>
+<script src="{{asset_url 'section-main-activate-account.js'}}" defer></script>
+
+{{assign "privacy_policy_url" shop.privacy_policy.url}}
+{{assign "terms_of_service_url" shop.terms_of_service.url}}
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+<div class="customer activate page-width section-padding">
+  <h1 class="title5 text-center customer-form-title">{{t "customer.activate.normal_title"}}</h1>
+
+  {{#form "activate_customer_password" id="activate-account-form"}}
+    <div class="field">
+      <div class="field__container">
+        <input
+          type="password"
+          class="field__input"
+          id="Password"
+          name="customer[password]"
+          required
+          placeholder="{{t 'customer.general.password'}}"
+        />
+        <label for="Password" class="field__label body3">
+          {{t "customer.general.password"}}
+        </label>
+      </div>
+      <div class="field__suffix">
+        <button type="button" class="button button--link" id="toggle-password">
+          {{snippet "icon-eye-invisible" id="pwd--show"}}
+          {{snippet "icon-eye" class="display-none" id="pwd--hiden"}}
+        </button>
+      </div>
+    </div>
+
+    <p id="customer-error-message" class="body6"></p>
+
+    <button class="button submit" type="submit">
+      {{t "customer.activate.button"}}
+      {{snippet "loading-overlay-spinner"}}
+    </button>
+
+    {{#if privacy_policy_url or terms_of_service_url}}
+      <div class="actions">
+        <label>
+          <span class="field-checkbox">
+            <input type="checkbox" name="agree" required />
+            <span class="checkbox"></span>
+            <tool-tip tip-position="bottom" controlled>
+              {{t 'customer.general.user_agreement_tip'}}
+            </tool-tip>
+          </span>
+          <span class="body4">
+            {{t "customer.register.tips_agree_with_the_shop"}}
+            {{#if privacy_policy_url}}
+              <a target="_blank" href="{{privacy_policy_url}}">{{t "customer.register.privacy_policy"}}</a>
+            {{/if}}
+            {{#if privacy_policy_url and terms_of_service_url}}
+              <span>{{t "customer.general.and_button"}}</span>
+            {{/if}}
+            {{#if terms_of_service_url}}
+              <a target="_blank" href="{{terms_of_service_url}}">{{t "customer.register.terms_of_service"}}</a>
+            {{/if}}
+          </span>
+        </label>
+      </div>
+    {{/if}}
+
+    <div class="actions" data-type="email-marketing">
+      <label>
+        <span class="field-checkbox">
+          <input type="checkbox" name="customer[accepts_marketing]" checked value="true" />
+          <span class="checkbox"></span>
+        </span>
+        <span class="body4">
+          {{t "unvisiable.customer.error_message_1"}}
+        </span>
+      </label>
+    </div>
+  {{/form}}
+
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main-activate-account.name",
+  "max_blocks": 16,
+  "class": "section",
+  "settings": [
+    {
+      "type": "group_header",
+      "label": "t:sections.main-activate-account.settings.group_header__0.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.main-activate-account.settings.padding_top.label",
+      "default": 36,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.main-activate-account.settings.padding_bottom.label",
+      "default": 36,
+      "max": 100,
+      "min": 0,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "default": {
+    "settings": {
+      "padding_top": 36,
+      "padding_bottom": 36
+    }
+  }
+}
+{{/schema}}

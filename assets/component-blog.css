@@ -1,0 +1,182 @@
+.simple-blog {
+  align-items: flex-start;
+}
+[data-type_title_text_align="left"] .simple-blog {
+  text-align: left;
+}
+[data-type_title_text_align="center"] .simple-blog {
+  text-align: center;
+}
+[data-type_title_text_align="right"] .simple-blog {
+  text-align: right;
+}
+.simple-blog__title-wrap {
+  display: inline-block;
+}
+.simple-blog__title {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  overflow: hidden;
+}
+.simple-blog__extra-info {
+  align-items: center;
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+.simple-blog__extra-info .text {
+  max-width: calc(50% - 25px);
+  opacity: 0.6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.simple-blog__extra-info .separator {
+  color: rgba(var(--color-text));
+  margin-left: 15px;
+  margin-right: 15px;
+  font-size: 25px;
+  line-height: 20px;
+  overflow: hidden;
+}
+.simple-blog__extra-info :first-child {
+  text-align: right;
+}
+.simple-blog__extra-info :last-child {
+  text-align: inherit;
+}
+.simple-blog__extra-info .separator + span {
+  text-align: left;
+}
+.simple-blog__image-wrapper {
+  display: block;
+  margin-bottom: 20px;
+  overflow: hidden;
+  width: 100%;
+  background-color: rgba(var(--color-image-background));
+  padding: var(--card-image-padding, 0px);
+}
+.simple-blog__image-box {
+  width: 100%;
+  position: relative;
+  border-radius: calc(
+    var(--blog-card-border-radius) - var(--blog-card-border-thickness)
+  );
+  overflow: hidden;
+}
+.blog-card-style-card {
+  height: 100%;
+  background-color: rgba(var(--color-card-background));
+}
+.blog-card-style-card .simple-blog__image-wrapper {
+  background-color: transparent;
+}
+.blog-card-style-card .simple-blog__image-box {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.blog-card-style-card .simple-blog__main {
+  padding: 0 8px 8px 8px;
+  color: rgba(var(--color-card-text));
+}
+.blog-card-style-card .simple-blog__main a {
+  color: rgba(var(--color-card-text));
+}
+.simple-blog__main.simple-blog__main--center {
+  text-align: center;
+}
+.simple-blog__main.simple-blog__main--center .simple-blog__extra-info {
+  justify-content: center;
+}
+.simple-blog__image-box .simple-blog__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--media-border-radius-outset);
+}
+.simple-blog__empty-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  background-color: rgb(var(--color-image-background));
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+.simple-blog__empty-img svg {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(var(--color-image-background));
+}
+.simple-blog__image {
+  position: relative;
+}
+@media (max-width: 959px) {
+  .simple-blog__main {
+    padding: 0 10px;
+  }
+}
+.simple-blog__info {
+  flex: 1 0 0;
+}
+.simple-blog__description {
+  cursor: pointer;
+  margin: 0;
+  margin-top: 10px;
+  word-break: break-word;
+}
+@media (min-width: 960px) {
+  .simple-blog__description {
+    margin: 0;
+    margin-top: 12px;
+  }
+
+  .simple-blog__title {
+    font-size: calc(var(--title-font-size) * 1.2 * 0.6);
+  }
+}
+.simple-blog__tags {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  margin-top: 10px;
+  overflow: hidden;
+  word-break: break-all;
+}
+.simple-blog__image-large {
+  padding-bottom: 86%;
+}
+.simple-blog__image-medium,
+.simple-blog__noimage-auto {
+  padding-bottom: 56%;
+}
+.simple-blog__image-small {
+  padding-bottom: 26%;
+}
+.simple-blog__image-auto .simple-blog__image {
+  position: relative;
+}
+@media (max-width: 959px) {
+  .simple-blog__image-wrapper {
+    margin-bottom: 12px;
+  }
+
+  .simple-blog__extra-info {
+    margin-bottom: 0;
+  }
+
+  .simple-blog__title {
+    text-decoration: underline;
+    font-size: calc(var(--title-font-size) * 0.733333 * 0.6);
+  }
+}
+/* The ipad end responds to the mobile end in vertical screen */
+/* @custom-media --tablet (max-width: 959px); */
+/* @custom-media --gt-mobile (min-width: 751px); */
+/* detectingScreen need to consider the configuration of the tablet */

@@ -1,0 +1,1372 @@
+{{assign "main_menu" section.settings.main_menu_link_list}}
+{{assign "mobile_main_menu" section.settings.mobile_main_menu_link_list}}
+{{assign "mobile_top_menu" section.settings.mobile_top_menu}}
+
+{{snippet "stylesheet" href=(asset_url "section-header.css")}}
+
+<script src="{{asset_url 'component-predictive-search.js'}}" defer></script>
+<script src="{{asset_url 'section-header-modal.js'}}" defer></script>
+
+<script src="{{asset_url 'section-header-header-layout.js'}}" defer></script>
+
+{{snippet "stylesheet" href=(asset_url "component-cart-coupon.css")}}
+<script src="{{asset_url 'component-cart-coupon.js'}}" defer></script>
+
+{{#if settings.cart_type == "drawer"}}
+  {{snippet "stylesheet" href=(asset_url "section-cart-drawer.css")}}
+  {{snippet "stylesheet" href=(asset_url "snippet-cart-fixed-checkout.css")}}
+  {{snippet "stylesheet" href=(asset_url "snippet-cart-item.css")}}
+  {{snippet "stylesheet" href=(asset_url "component-cart.css")}}
+  <script src="{{asset_url 'component-quantity-input.js'}}" defer="defer"></script>
+  <script src="{{asset_url 'component-cart.js'}}" defer="defer"></script>
+  <script src="{{asset_url 'section-cart-drawer.js'}}" defer="defer"></script>
+{{/if}}
+
+{{#if settings.cart_type == "notification"}}
+  {{snippet "stylesheet" href=(asset_url "component-cart-notification.css")}}
+  <script src="{{asset_url 'component-cart-notification.js'}}" defer="defer"></script>
+{{/if}}
+
+
+{{assign "menu_img_obj" (JSONparse "{}")}}
+{{#for section.blocks as |block|}}
+  {{assign "menu_title" (get "settings.menu_title" block)}}
+  
+  {{#if menu_title}}
+    {{assign "upper_case_title" (uppercase menu_title)}}
+    {{#if (isFalsey (get upper_case_title menu_img_obj))}}
+      {{#with menu_img_obj}}
+        {{assign ../upper_case_title block}}
+      {{/with}}
+    {{/if}}
+  {{/if}}
+{{/for}}
+
+{{#if section.settings.sticky_header_type != "none"}}
+  {{assign "is_sticky" true}}
+{{/if}}
+
+{{#if template.name == "index"}}
+  {{assign "is_home" true}}
+{{/if}}
+{{assign "is_show_top_menu" true}}
+{{#if section.settings.mobile_top_menu_show_home and (isFalsey is_home)}}
+  {{assign "is_show_top_menu" false}}
+{{/if}}
+{{#if (isFalsey mobile_top_menu)}}
+  {{assign "is_show_top_menu" false}}
+{{/if}}
+{{#if is_show_top_menu}}
+  <script src="{{asset_url 'component-slider.js'}}" defer></script>
+{{/if}}
+
+{{assign 'highlight_menus_list' (split '' ',') }}
+{{#if section.settings.enable_highlight}}
+  {{assign 'highlight_menus_list' (split section.settings.highlight_menus ',') }}
+{{/if}}
+
+<header-layout data-sticky-type="{{section.settings.sticky_header_type}}">
+  <style>
+    .header {
+      --header-highlight-background: {{section.settings.highlight_bg_color}};
+      --header-highlight-text-color: {{section.settings.highlight_text_color}};
+    }
+  {{#if section.settings.transparent_header and section.settings.transparent_title_color}}
+      .header.is-transparent:not(.is-transparent--active){
+       --transparent-color-text:{{ section.settings.transparent_title_color.red }}, {{ section.settings.transparent_title_color.green }}, {{section.settings.transparent_title_color.blue }};
+      }
+  {{/if}}
+  </style>
+  {{assign "transparent_header" false}}
+  {{#if section.settings.transparent_header and is_home}}
+    {{assign "transparent_header" true}}
+  {{/if}}
+  <header
+    class="header section--padding
+      {{ternary transparent_header 'is-transparent' ''}}
+      {{ternary is_sticky 'is-sticky' ''}}
+      "
+    style="
+      --section-padding-top: {{section.settings.padding_top}}px;
+      --section-padding-bottom: {{section.settings.padding_bottom}}px;
+      {{#if section.settings.header_division_bottom}}border-bottom: 1px solid rgb(var(--color-entry-line));{{/if}}
+    "
+  >
+    <div
+      class="page-width header__container
+        header__container--{{section.settings.navigation_layout}}
+        header__nav-style--{{section.settings.main_menu_style}}
+        {{ternary section.settings.full_width 'header__full_width' ''}}
+        {{#if section.settings.enabled_tile_search and section.settings.show_search_entry}}tile-search{{/if}}
+        "
+    >
+      
+      <div class="header__tools display-none-desktop">
+        
+        {{assign "menu" (default mobile_main_menu main_menu)}}
+        {{snippet "header-menu-drawer" section=section menu=menu class="display-none-desktop" highlight_menus_list=highlight_menus_list}}
+
+        
+        {{#if section.settings.show_search_entry}}
+          <header-modal class="header__search">
+            <details>
+              <summary class="modal__toggle">
+                <button class="icon-button header__icon-button">
+                  {{snippet "icon-search"}}
+                </button>
+              </summary>
+              <div class="modal__content global-modal-border-shadow">
+                <div class="modal__overlay"></div>
+                <predictive-search class="search-modal__content page-width" data-show-suggested-menu="{{ternary settings.search_menu true false}}">
+                  <form action="{{routes.search_url}}" method="get" class="search-modal__form search">
+                    <div class="search-modal__field field">
+                      <input
+                        id="Search-In-Modal-1"
+                        class="search-modal__input field__input body3"
+                        type="search"
+                        name="keyword"
+                        value=""
+                        placeholder="{{t 'general.search.search'}}"
+                        maxlength="255"
+                        autocorrect="off"
+                        autocomplete="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                      />
+                      <label class="search-modal__field-label field__label body3" for="Search-In-Modal-1">{{t
+                          "general.search.search"
+                        }}</label>
+                      <button class="search-modal__close-button icon-button header__icon-button" name="close">
+                        {{snippet "icon-close"}}
+                      </button>
+                    </div>
+                    <div class="predictive-search global-modal-border-shadow" tabindex="-1">
+                      {{snippet 'suggested-menu'}}
+                      <div class="predictive-search__results" data-predictive-search></div>
+                      <div class="predictive-search__loading-state">
+                        <span class="predictive-search__spinner">
+                          {{snippet "icon-loading"}}
+                        </span>
+                      </div>
+                    </div>
+                  </form>
+                </predictive-search>
+              </div>
+            </details>
+          </header-modal>
+        {{/if}}
+      </div>
+
+      
+      <div class="header__buttons display-none-desktop">
+        {{#if section.settings.show_user_entry}}
+          <a
+            class="icon-button header__icon-button
+              {{#if section.settings.user_mobile_layout == 'menu'}}display-none-tablet{{/if}}"
+            href="{{#if customer}}{{routes.account_url}}{{else}}{{routes.account_login_url}}{{/if}}"
+          >
+            {{snippet "icon-user"}}
+          </a>
+        {{/if}}
+        <a
+          id="cart-icon-bubble-mobile"
+          class="icon-button header__icon-button display-none-desktop
+            {{#if (isFalsey section.settings.show_cart_entry)}}visibility-hidden{{/if}}"
+          href="{{routes.cart_url}}"
+        >
+          {{snippet "cart-icon-bubble-mobile"}}
+        </a>
+      </div>
+
+      
+      {{assign "page_type" template.name}}
+      {{assign "pc_logo_width" settings.desktop_logo_width}}
+      {{assign "mobile_logo_width" settings.mobile_logo_width}}
+
+      <{{#if page_type == "index"}}h1{{else}}div{{/if}} class="header__heading">
+        <a
+          class="header__heading-link"
+          style="--header-logo-pc-width: {{pc_logo_width}}px; --header-logo-mobile-width: {{mobile_logo_width}}px;"
+          href="{{routes.root_url}}"
+        >
+          {{#if transparent_header and section.settings.transparent_image}}
+            {{snippet
+              "image"
+              class="header__heading-logo header__heading-logo--transparent"
+              data=section.settings.transparent_image
+              pc_size=(append pc_logo_width "px")
+              mobile_size=(append mobile_logo_width "px")
+              alt=(default settings.logo.alt shop.name)
+            }}
+          {{/if}}
+          {{#if settings.logo}}
+            {{snippet
+              "image"
+              class="header__heading-logo header__heading-logo--nomal"
+              data=settings.logo
+              pc_size=(append pc_logo_width "px")
+              mobile_size=(append mobile_logo_width "px")
+              alt=(default settings.logo.alt shop.name)
+            }}
+          {{else}}
+            <span>{{shop.name}}</span>
+          {{/if}}
+        </a>
+      </{{#if page_type == "index"}}h1{{else}}div{{/if}}>
+
+      {{#if section.settings.navigation_layout == "middle-left" or section.settings.navigation_layout == "middle-line"}}
+        <div class="header__buttons display-none-tablet">
+      {{/if}}
+
+      {{#if section.settings.show_search_entry}}
+        <div class="header__tools display-none-tablet">
+          {{#unless section.settings.enabled_tile_search}}
+            <header-modal class="header__search">
+              <details>
+                <summary class="modal__toggle">
+                  <button class="icon-button header__icon-button">
+                    {{snippet "icon-search"}}
+                  </button>
+                </summary>
+                <div class="modal__content global-modal-border-shadow">
+                  <div class="modal__overlay"></div>
+                  <predictive-search class="search-modal__content page-width" data-show-suggested-menu="{{ternary settings.search_menu true false}}">
+                    <form action="{{routes.search_url}}" method="get" class="search-modal__form search">
+                      <div class="search-modal__field field">
+                        <input
+                          id="Search-In-Modal-1"
+                          class="search-modal__input field__input body3"
+                          type="search"
+                          name="keyword"
+                          value=""
+                          placeholder="{{t 'general.search.search'}}"
+                          maxlength="255"
+                          autocorrect="off"
+                          autocomplete="off"
+                          autocapitalize="off"
+                          spellcheck="false"
+                          autofocus
+                        />
+                        <label class="search-modal__field-label field__label body3" for="Search-In-Modal-1">{{t
+                            "general.search.search"
+                          }}</label>
+                        <button class="search-modal__close-button icon-button header__icon-button" name="close">
+                          {{snippet "icon-close"}}
+                        </button>
+                      </div>
+                      <div class="predictive-search global-modal-border-shadow" tabindex="-1">
+                       {{snippet 'suggested-menu'}}
+                        <div class="predictive-search__results" data-predictive-search></div>
+                        <div class="predictive-search__loading-state">
+                          <span class="predictive-search__spinner">
+                            {{snippet "icon-loading"}}
+                          </span>
+                        </div>
+                      </div>
+                    </form>
+                  </predictive-search>
+                </div>
+              </details>
+            </header-modal>
+          {{else}}
+            {{#if
+              section.settings.navigation_layout
+              !=
+              "middle-line"
+              or
+              (if section.settings.navigation_layout == "middle-line" and section.settings.main_menu_style == "drawer")
+            }}
+              {{snippet "header-tile-search"}}
+            {{/if}}
+          {{/unless}}
+        </div>
+      {{/if}}
+
+      {{assign
+        "show_locale_selector"
+        (if section.settings.show_locale_selector and (gt (length localization.available_languages) 1))
+      }}
+      {{assign
+        "show_country_selector"
+        (if section.settings.show_country_selector and (gt (length localization.available_countries) 1))
+      }}
+      <div class="header__icons display-none-tablet">
+        {{#if show_locale_selector or show_country_selector}}
+          <div class="header__localization display-none-tablet">
+            <localization-form>
+              {{#form "localization" id="localization-form" enctype="multipart/form-data" accept-charset="UTF-8"}}
+                {{#if show_locale_selector}}
+                  <dropdown-menu>
+                    <div class="dropdown-menu">
+                      <input type="hidden" name="locale_code" value="{{localization.language.iso_code}}" />
+                      <button class="dropdown-menu__button body5" type="button">
+                        <span data-label>{{localization.language.endonym_name}}</span>
+                        {{snippet "icon-arrow"}}
+                      </button>
+                      <div class="dropdown-menu__list-wrapper bottom body4" hidden>
+                        <ul class="dropdown-menu__list list-unstyled">
+                          {{#for localization.available_languages as |language|}}
+                            <li>
+                              <a href="javascript:;" data-value="{{language.iso_code}}">{{language.endonym_name}}</a>
+                            </li>
+                          {{/for}}
+                        </ul>
+                      </div>
+                    </div>
+                  </dropdown-menu>
+                {{/if}}
+                {{#if show_country_selector}}
+                  <dropdown-menu>
+                    <div class="dropdown-menu">
+                      <input type="hidden" name="country_code" value="{{localization.country.iso_code}}" />
+                      <button class="dropdown-menu__button body5" type="button">
+                        <span data-label>{{localization.country.name}}（{{localization.country.currency.iso_code}}
+                          {{localization.country.currency.symbol}}）</span>
+                        {{snippet "icon-arrow"}}
+                      </button>
+                      <div class="dropdown-menu__list-wrapper bottom align--right body4" hidden>
+                        <ul class="dropdown-menu__list list-unstyled">
+                          {{#for localization.available_countries as |country|}}
+                            <li>
+                              <a href="javascript:;" data-value="{{country.iso_code}}">
+                                {{country.name}}（{{country.currency.iso_code}}
+                                {{country.currency.symbol}}）
+                              </a>
+                            </li>
+                          {{/for}}
+                        </ul>
+                      </div>
+                    </div>
+                  </dropdown-menu>
+                {{/if}}
+              {{/form}}
+            </localization-form>
+          </div>
+        {{/if}}
+
+        {{#if section.settings.show_user_entry}}
+          <div class="user__container">
+            <a
+              class="icon-button header__icon-button"
+              href="{{#if customer}}{{routes.account_url}}{{else}}{{routes.account_login_url}}{{/if}}"
+            >
+              {{snippet "icon-user"}}
+            </a>
+            {{#if section.settings.hover_show_user_menu}}
+              {{assign "menu_text_1" section.settings.user_menu_text_1}}
+              {{assign "menu_link_1" section.settings.user_menu_link_1}}
+              {{assign "menu_text_2" section.settings.user_menu_text_2}}
+              {{assign "menu_link_2" section.settings.user_menu_link_2}}
+              {{assign "menu_text_3" section.settings.user_menu_text_3}}
+              {{assign "menu_link_3" section.settings.user_menu_link_3}}
+              <ul class="user__menu-container">
+                {{#if customer}}
+                  <li class="body4 fw-bold user__menu-title">
+                    <span>{{customer.name}}</span>
+                  </li>
+                  <div class="user__menu-title-line"></div>
+                  <li class="body4">
+                    <a href="{{routes.account_order_list_url}}">{{t "customer.general.orders"}}</a>
+                  </li>
+                  <li class="body4">
+                    <a href="{{routes.account_url}}">{{t "customer.account.personal__info"}}</a>
+                  </li>
+                {{else}}
+                  <li class="body4 fw-bold user__menu-title">
+                    <a href="{{routes.account_login_url}}" style="text-decoration:underline">{{t
+                        "general.header.login"
+                      }}</a>
+                  </li>
+                  <div class="user__menu-title-line"></div>
+                  <li class="body4">
+                    <a href="{{routes.account_login_url}}">{{t "customer.general.orders"}}</a>
+                  </li>
+                {{/if}}
+                {{#if menu_text_1}}
+                  <li class="body4">
+                    <a href="{{#if menu_link_1}}{{menu_link_1}}{{else}}javascript:;{{/if}}">{{menu_text_1}}</a>
+                  </li>
+                {{/if}}
+                {{#if menu_text_2}}
+                  <li class="body4">
+                    <a href="{{#if menu_link_2}}{{menu_link_2}}{{else}}javascript:;{{/if}}">{{menu_text_2}}</a>
+                  </li>
+                {{/if}}
+                {{#if menu_text_3}}
+                  <li class="body4">
+                    <a href="{{#if menu_link_3}}{{menu_link_3}}{{else}}javascript:;{{/if}}">{{menu_text_3}}</a>
+                  </li>
+                {{/if}}
+                {{#if customer}}
+                  <li class="body4 user__menu-sign-out">
+                    <a href="{{routes.account_logout_url}}">{{t "customer.general.sign__out"}}</a>
+                  </li>
+                {{/if}}
+              </ul>
+            {{/if}}
+          </div>
+        {{/if}}
+
+        <a
+          id="cart-icon-bubble"
+          class="icon-button header__icon-button {{#if (isFalsey section.settings.show_cart_entry)}}display-none{{/if}}"
+          href="{{routes.cart_url}}"
+        >
+          {{snippet "cart-icon-bubble"}}
+        </a>
+      </div>
+
+      {{#if section.settings.navigation_layout == "middle-left" or section.settings.navigation_layout == "middle-line"}}
+        </div>
+      {{/if}}
+
+      {{#if
+        section.settings.show_search_entry
+        and
+        section.settings.enabled_tile_search
+        and
+        section.settings.navigation_layout
+        ==
+        "middle-line"
+        and
+        section.settings.main_menu_style
+        !=
+        "drawer"
+      }}
+        <div class="header__tools right-search display-none-tablet">
+          {{snippet "header-tile-search"}}
+        </div>
+      {{/if}}
+
+      {{#if section.settings.main_menu_style == "drawer"}}
+        {{snippet "header-menu-drawer" section=section menu=main_menu class="display-none-tablet header__drawer-nav" highlight_menus_list=highlight_menus_list}}
+      {{else}}
+        
+        <nav
+          class="header__inline-nav display-none-tablet
+            {{#if section.settings.show_line_separator}}header__inline-nav--has-divider{{/if}}"
+        >
+          <ul
+            class="header__inline-menus list-unstyled
+              {{#if section.settings.menu_img_style == 'normal'}}header__inline-menus--img-normal{{/if}}"
+          >
+            {{#for main_menu.links as |link|}}
+              
+              {{assign "is_megamenu" false}}
+              {{#for link.links as |subLink|}}
+                {{#if (length subLink.links) > 0}}
+                  {{assign "is_megamenu" true}}
+                {{/if}}
+              {{/for}}
+              
+              {{assign "has_img" false}}
+              {{assign "menu_block" (get (uppercase link.title) menu_img_obj)}}
+              {{assign "show_img1" menu_block.settings.image_1}}
+              {{assign "show_img2" menu_block.settings.image_2}}
+              {{assign "show_img3" menu_block.settings.image_3}}
+              {{#if show_img1 or show_img2 or show_img3}}
+                {{assign "has_img" true}}
+              {{/if}}
+              {{#comment}} highlight {{/comment}}
+              {{assign 'is_highlight' false}}
+              {{#for highlight_menus_list as |hight_item|}} 
+                {{#if (uppercase link.title) == (uppercase hight_item)}}
+                  {{assign 'is_highlight' true}}
+                  {{break}}
+                {{/if}}
+              {{/for}}
+              <li
+                class="header-inline-menus__item
+                  header-inline-menus__item--{{#if (length link.links) > 0}}has-submenu{{/if}}
+                  {{#if menu_block.settings.menu_img_style == 'normal'}}header__inline-menus--img-normal{{/if}}
+                  {{#if is_megamenu or has_img}}is-megamenu{{/if}}"
+                {{#if (length link.links) > 0}}
+                  data-item-title="{{link.title}}"
+                {{/if}}
+              >
+                {{#if (length link.links) > 0}}
+                  
+                  <a
+                    class="header-inline-menus__link menus__link body4 {{#if is_highlight}}menu-item--highlight{{/if}}"
+                    {{#if link.url}}href="{{link.url}}"{{else}}href="javascript:;"{{/if}}
+                  >
+                    {{link.title}}
+                  </a>
+                  {{#if is_megamenu or has_img}}
+                    <div
+                      class="header__inline-submenus header-nav-list
+                        {{#if has_img}}header__inline-submenus--{{menu_block.id}}{{/if}}"
+                    >
+                      <ul class="megamenu__list">
+                        {{#for link.links as |sub_link|}}
+                          <li class="megamenu-list__item">
+                            {{#if (length sub_link.links) > 0}}
+                              
+                              <a
+                                class="megamenu-list__item-title menus__link
+                                  {{#if section.settings.body_pc_second_font_bold}}fw-bold{{/if}}
+                                  {{section.settings.body_pc_second_font_size}}"
+                                {{#if sub_link.url}}href="{{sub_link.url}}"{{else}}href="javascript:;"{{/if}}
+                              >
+                                {{sub_link.title}}
+                              </a>
+                              <ul class="megamenu-list__submenu list-unstyled">
+                                {{#for sub_link.links as |sub_sub_link|}}
+                                  
+                                  <li class="megamenu-submenu__item">
+                                    <a
+                                      class="menus__link header-inline-submenus__link--thirdly
+                                        {{section.settings.body_pc_thirdly_font_size}}"
+                                      {{#if
+                                        sub_sub_link.url
+                                      }}href="{{sub_sub_link.url}}"{{else}}href="javascript:;"{{/if}}
+                                    >{{sub_sub_link.title}}</a>
+                                  </li>
+                                {{/for}}
+                              </ul>
+                            {{else}}
+                              
+                              <a
+                                class="menus__link megamenu-list__item-title
+                                  {{#if section.settings.body_pc_second_font_bold}}fw-bold{{/if}}
+                                  {{section.settings.body_pc_second_font_size}}"
+                                {{#if sub_link.url}}href="{{sub_link.url}}"{{else}}href="javascript:;"{{/if}}
+                              >
+                                {{sub_link.title}}
+                              </a>
+                            {{/if}}
+                          </li>
+                        {{/for}}
+                      </ul>
+
+                      {{#if has_img}}
+                        <style>
+                          .header__inline-submenus--{{menu_block.id}} .header__image_title,
+                          .header__inline-submenus--{{menu_block.id}} .header__image--cover {
+                            color: {{menu_block.settings.text_color}};
+                          }
+                        </style>
+                        {{#if show_img1}}
+                          <div
+                            class="header__image"
+                            style="order:{{ternary (if menu_block.settings.image_1_position == 'left') -1 1}}"
+                          >
+                            <div
+                              class="header__image__content"
+                              style="
+                              {{#if menu_block.settings.menu_img_style == 'normal'}}
+                                padding-bottom:{{divide 100 show_img1.aspect_ratio}}%;
+                              {{/if}}
+                              "
+                            >
+                              {{snippet "image" data=show_img1}}
+                            </div>
+                            <div class="header__image--cover">
+                              <p
+                                class="header__image_title
+                                  {{#if menu_block.settings.menu_img_style == 'normal'}}body4{{else}}body3{{/if}}"
+                              >{{menu_block.settings.image_1_title}}</p>
+                              {{snippet
+                                "link"
+                                classes="header__image_button body5 button--link"
+                                href=menu_block.settings.image_1_link
+                                text=menu_block.settings.image_1_link_text
+                              }}
+                            </div>
+                          </div>
+                        {{/if}}
+                        {{#if show_img2}}
+                          <div
+                            class="header__image image2"
+                            style="order:{{ternary (if menu_block.settings.image_2_position == 'left') -1 1}}"
+                          >
+                            <div
+                              class="header__image__content"
+                              style="
+                              {{#if menu_block.settings.menu_img_style == 'normal'}}
+                                padding-bottom:{{divide 100 show_img2.aspect_ratio}}%;
+                              {{/if}}
+                              "
+                            >
+                              {{snippet "image" data=show_img2}}
+                            </div>
+
+                            <div class="header__image--cover">
+                              <p
+                                class="header__image_title
+                                  {{#if menu_block.settings.menu_img_style == 'normal'}}body4{{else}}body3{{/if}}"
+                              >{{menu_block.settings.image_2_title}}</p>
+                              {{snippet
+                                "link"
+                                classes="header__image_button body5 button--link"
+                                href=menu_block.settings.image_2_link
+                                text=menu_block.settings.image_2_link_text
+                              }}
+                            </div>
+                          </div>
+                        {{/if}}
+                        {{#if show_img3}}
+                          <div
+                            class="header__image image3"
+                            style="order:{{ternary (if menu_block.settings.image_3_position == 'left') -1 1}}"
+                          >
+                            <div
+                              class="header__image__content"
+                              style="
+                              {{#if menu_block.settings.menu_img_style == 'normal'}}
+                                padding-bottom:{{divide 100 show_img3.aspect_ratio}}%;
+                              {{/if}}"
+                            >
+                              {{snippet "image" data=show_img3}}
+                            </div>
+                            <div class="header__image--cover">
+                              <p
+                                class="header__image_title
+                                  {{#if menu_block.settings.menu_img_style == 'normal'}}body4{{else}}body3{{/if}}"
+                              >{{menu_block.settings.image_3_title}}</p>
+                              {{snippet
+                                "link"
+                                classes="header__image_button body5 button--link"
+                                href=menu_block.settings.image_3_link
+                                text=menu_block.settings.image_3_link_text
+                              }}
+                            </div>
+                          </div>
+                        {{/if}}
+                      {{/if}}
+                    </div>
+                  {{else}}
+                    
+                    <ul class="header-dropdown-menu list-unstyled">
+                      {{#for link.links as |sub_link|}}
+                        <li class="header-inline-submenus__item">
+                          <a
+                            class="header-inline-submenus__link menus__link
+                              {{#if section.settings.body_pc_second_font_bold}}fw-bold{{/if}}
+                              {{section.settings.body_pc_thirdly_font_size}}"
+                            {{#if sub_link.url}}href="{{sub_link.url}}"{{else}}href="javascript:;"{{/if}}
+                          >{{sub_link.title}}</a>
+                        </li>
+                      {{/for}}
+                    </ul>
+                  {{/if}}
+                {{else}}
+                  
+                  <a
+                    class="header-inline-menus__link menus__link body4 {{#if is_highlight}}menu-item--highlight{{/if}}"
+                    {{#if link.url}}href="{{link.url}}"{{else}}href="javascript:;"{{/if}}
+                  >
+                    {{link.title}}
+                  </a>
+                {{/if}}
+              </li>
+            {{/for}}
+            
+            {{#for section.blocks as |block|}}
+              {{#if block.type == "menuGallery"}}
+                {{snippet "header-gallery" settings=block.settings shopline_attributes=block.shopline_attributes}}
+              {{/if}}
+            {{/for}}
+            
+          </ul>
+        </nav>
+      {{/if}}
+    </div>
+    
+    {{#if is_show_top_menu}}
+      <slider-component>
+        <div class="mobile-top-nav color-scheme-{{section.settings.color_scheme}}">
+          <div class="swiper-container mobile-site-nav__swiper">
+            <ul id="Slider-{{section.id}}" class="mobile-site-nav slider">
+              {{#for mobile_top_menu.links as |link|}}
+                <li class="mobile-site-nav__item slider__slide" id="Slide-{{forloop.index0}}">
+                  <a
+                    data-node-id="{{link.id}}"
+                    class="mobile-site-nav__item__link
+                      {{#if link.current}}mobile-site-nav__item__link--active{{/if}}
+                      body3"
+                    {{#if link.url}}href="{{link.url}}"{{else}}href="javascript:;"{{/if}}
+                  >
+                    <span class="mobile-site-nav__item__link__text">{{link.title}}</span>
+                  </a>
+                </li>
+              {{/for}}
+            </ul>
+          </div>
+        </div>
+      </slider-component>
+    {{/if}}
+    
+  </header>
+</header-layout>
+
+{{#if settings.cart_type == "notification" and template.name != 'cart'}}
+  {{snippet "cart-notification"}}
+{{/if}}
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": "{{ shop.name }}",
+    {{#if settings.logo}}
+      "logo": "{{ settings.logo.src }}",
+    {{/if}}
+    "sameAs": [
+      "{{ settings.social_twitter_link }}",
+      "{{ settings.social_facebook_link }}",
+      "{{ settings.social_pinterest_link }}",
+      "{{ settings.social_instagram_link }}",
+      "{{ settings.social_tiktok_link }}",
+      "{{ settings.social_linkedin_link }}",
+      "{{ settings.social_snapchat_link }}",
+      "{{ settings.social_whatsapp_link }}",
+      "{{ settings.social_line_link }}",
+      "{{ settings.social_kakao_link }}",
+      "{{ settings.social_youtube_link }}",
+      "{{ settings.social_vimeo_link }}",
+      "{{ settings.social_tumblr_link }}"
+    ],
+    "url": "{{ request.origin }}"
+  }
+</script>
+
+{{#schema}}
+{
+  "name": "t:sections.header.name",
+  "settings": [
+    {
+      "id": "full_width",
+      "type": "switch",
+      "label": "t:sections.header.settings.full_width.label",
+      "default": false
+    },
+    {
+      "id": "header_division_bottom",
+      "type": "switch",
+      "label": "t:sections.header.settings.header_division_bottom.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "show_country_selector",
+      "label": "t:sections.header.settings.show_country_selector.label",
+      "info": "t:sections.header.settings.show_country_selector.info",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "id": "show_locale_selector",
+      "label": "t:sections.header.settings.show_locale_selector.label",
+      "info": "t:sections.header.settings.show_locale_selector.info",
+      "default": false
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.header.settings.group_header__0.label"
+    },
+    {
+      "type": "switch",
+      "id": "show_search_entry",
+      "default": true,
+      "label": "t:sections.header.settings.show_search_entry.label"
+    },
+    {
+      "type": "switch",
+      "id": "enabled_tile_search",
+      "default": true,
+      "label": "t:sections.header.settings.enabled_tile_search.label"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.header.settings.group_header__1.label"
+    },
+    {
+      "type": "switch",
+      "id": "transparent_header",
+      "label": "t:sections.header.settings.transparent_header.label",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "transparent_image",
+      "label": "t:sections.header.settings.transparent_image.label",
+      "info": "t:sections.header.settings.transparent_image.info"
+    },
+    {
+      "type": "color",
+      "id": "transparent_title_color",
+      "label": "t:sections.header.settings.transparent_title_color.label",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.header.settings.group_header__2.label"
+    },
+    {
+      "type": "menu_picker",
+      "id": "main_menu_link_list",
+      "label": "t:sections.header.settings.main_menu_link_list.label",
+      "default": "main-menu"
+    },
+    {
+      "type": "menu_picker",
+      "id": "mobile_main_menu_link_list",
+      "label": "t:sections.header.settings.mobile_main_menu_link_list.label",
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "main_menu_style",
+      "label": "t:sections.header.settings.main_menu_style.label",
+      "default": "dropdown",
+      "options": [
+        {
+          "value": "dropdown",
+          "label": "t:sections.header.settings.main_menu_style.options__0.label"
+        },
+        {
+          "value": "drawer",
+          "label": "t:sections.header.settings.main_menu_style.options__1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "navigation_layout",
+      "label": "t:sections.header.settings.navigation_layout.label",
+      "default": "middle-line",
+      "options": [
+        {
+          "value": "left-line",
+          "label": "t:sections.header.settings.navigation_layout.options__0.label"
+        },
+        {
+          "value": "left-left",
+          "label": "t:sections.header.settings.navigation_layout.options__1.label"
+        },
+        {
+          "value": "middle-left",
+          "label": "t:sections.header.settings.navigation_layout.options__2.label"
+        },
+        {
+          "value": "middle-line",
+          "label": "t:sections.header.settings.navigation_layout.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "body_pc_second_font_size",
+      "label": "t:sections.header.settings.body_pc_second_font_size.label",
+      "default": "body4",
+      "options": [
+        {
+          "value": "body2",
+          "label": "t:sections.header.settings.body_pc_second_font_size.options__0.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.header.settings.body_pc_second_font_size.options__1.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.header.settings.body_pc_second_font_size.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "body_pc_second_font_bold",
+      "label": "t:sections.header.settings.body_pc_second_font_bold.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "body_pc_thirdly_font_size",
+      "label": "t:sections.header.settings.body_pc_thirdly_font_size.label",
+      "default": "body3",
+      "options": [
+        {
+          "value": "body3",
+          "label": "t:sections.header.settings.body_pc_thirdly_font_size.options__0.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.header.settings.body_pc_thirdly_font_size.options__1.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.header.settings.body_pc_thirdly_font_size.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "menu_picker",
+      "id": "mobile_top_menu",
+      "label": "t:sections.header.settings.mobile_top_menu.label",
+      "info": "t:sections.header.settings.mobile_top_menu.info",
+      "default": ""
+    },
+    {
+      "type": "switch",
+      "id": "mobile_top_menu_show_home",
+      "label": "t:sections.header.settings.mobile_top_menu_show_home.label",
+      "info": "t:sections.header.settings.mobile_top_menu_show_home.info",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "user_mobile_layout",
+      "label": "t:sections.header.settings.user_mobile_layout.label",
+      "default": "menu",
+      "options": [
+        {
+          "value": "home",
+          "label": "t:sections.header.settings.user_mobile_layout.options__0.label"
+        },
+        {
+          "value": "menu",
+          "label": "t:sections.header.settings.user_mobile_layout.options__1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "sticky_header_type",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.header.settings.sticky_header_type.options__0.label"
+        },
+        {
+          "value": "always",
+          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
+        },
+        {
+          "value": "on-scroll-up",
+          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
+        }
+      ],
+      "default": "always",
+      "label": "t:sections.header.settings.sticky_header_type.label"
+    },
+    {
+      "type": "switch",
+      "id": "show_line_separator",
+      "default": false,
+      "label": "t:sections.header.settings.show_line_separator.label"
+    },
+    {
+      "type": "switch",
+      "id": "show_user_entry",
+      "default": true,
+      "label": "t:sections.header.settings.show_user_entry.label"
+    },
+    {
+      "type": "switch",
+      "id": "hover_show_user_menu",
+      "default": false,
+      "label": "t:sections.header.settings.hover_show_user_menu.label"
+    },
+    {
+      "type": "text",
+      "id": "user_menu_text_1",
+      "default": "",
+      "label": "t:sections.header.settings.user_menu_text_1.label"
+    },
+    {
+      "type": "url",
+      "id": "user_menu_link_1",
+      "default": "",
+      "label": "t:sections.header.settings.user_menu_link_1.label"
+    },
+    {
+      "type": "text",
+      "id": "user_menu_text_2",
+      "default": "",
+      "label": "t:sections.header.settings.user_menu_text_2.label"
+    },
+    {
+      "type": "url",
+      "id": "user_menu_link_2",
+      "default": "",
+      "label": "t:sections.header.settings.user_menu_link_2.label"
+    },
+    {
+      "type": "text",
+      "id": "user_menu_text_3",
+      "default": "",
+      "label": "t:sections.header.settings.user_menu_text_3.label"
+    },
+    {
+      "type": "url",
+      "id": "user_menu_link_3",
+      "default": "",
+      "label": "t:sections.header.settings.user_menu_link_3.label"
+    },
+    {
+      "type": "switch",
+      "id": "show_cart_entry",
+      "default": true,
+      "label": "t:sections.header.settings.show_cart_entry.label"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.header.settings.group_header__3.label",
+      "info": "t:sections.header.settings.group_header__3.info"
+    },
+    {
+      "type": "switch",
+      "id": "enable_highlight",
+      "label": "t:sections.header.settings.enable_highlight.label",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "highlight_menus",
+      "label": "t:sections.header.settings.highlight_menus.label",
+      "info": "t:sections.header.settings.highlight_menus.info",
+      "default": ""
+    },
+    {
+      "type": "color",
+      "id": "highlight_text_color",
+      "label": "t:sections.header.settings.highlight_text_color.label",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "highlight_bg_color",
+      "label": "t:sections.header.settings.highlight_bg_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.header.settings.group_header__4.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 36,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.header.settings.padding_top.label",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 36,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.header.settings.padding_bottom.label",
+      "default": 8
+    }
+  ],
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "menuImage",
+      "name": "t:sections.header.blocks.menuImage.name",
+      "icon": "image",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_title",
+          "default": "",
+          "label": "t:sections.header.blocks.menuImage.settings.menu_title.label",
+          "info": "t:sections.header.blocks.menuImage.settings.menu_title.info"
+        },
+        {
+          "type": "select",
+          "id": "menu_img_style",
+          "default": "fill",
+          "label": "t:sections.header.blocks.menuImage.settings.menu_img_style.label",
+          "options": [
+            {
+              "value": "fill",
+              "label": "t:sections.header.blocks.menuImage.settings.menu_img_style.options__0.label"
+            },
+            {
+              "value": "normal",
+              "label": "t:sections.header.blocks.menuImage.settings.menu_img_style.options__1.label"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "t:sections.header.blocks.menuImage.settings.text_color.label",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "group_header",
+          "label": "t:sections.header.blocks.menuImage.settings.group_header__0.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "t:sections.header.blocks.menuImage.settings.image_1.label"
+        },
+        {
+          "type": "text",
+          "id": "image_1_title",
+          "default": "Promotion heading",
+          "label": "t:sections.header.blocks.menuImage.settings.image_1_title.label"
+        },
+        {
+          "type": "text",
+          "id": "image_1_link_text",
+          "default": "Shop",
+          "label": "t:sections.header.blocks.menuImage.settings.image_1_link_text.label"
+        },
+        {
+          "type": "url",
+          "id": "image_1_link",
+          "label": "t:sections.header.blocks.menuImage.settings.image_1_link.label"
+        },
+        {
+          "type": "select",
+          "id": "image_1_position",
+          "label": "t:sections.header.blocks.menuImage.settings.image_1_position.label",
+          "default": "right",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.header.blocks.menuImage.settings.image_1_position.options__0.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.header.blocks.menuImage.settings.image_1_position.options__1.label"
+            }
+          ]
+        },
+        {
+          "type": "group_header",
+          "label": "t:sections.header.blocks.menuImage.settings.group_header__1.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "t:sections.header.blocks.menuImage.settings.image_2.label"
+        },
+        {
+          "type": "text",
+          "id": "image_2_title",
+          "default": "Promotion heading",
+          "label": "t:sections.header.blocks.menuImage.settings.image_2_title.label"
+        },
+        {
+          "type": "text",
+          "id": "image_2_link_text",
+          "default": "Shop",
+          "label": "t:sections.header.blocks.menuImage.settings.image_2_link_text.label"
+        },
+        {
+          "type": "url",
+          "id": "image_2_link",
+          "label": "t:sections.header.blocks.menuImage.settings.image_2_link.label"
+        },
+        {
+          "type": "select",
+          "id": "image_2_position",
+          "label": "t:sections.header.blocks.menuImage.settings.image_2_position.label",
+          "default": "right",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.header.blocks.menuImage.settings.image_2_position.options__0.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.header.blocks.menuImage.settings.image_2_position.options__1.label"
+            }
+          ]
+        },
+        {
+          "type": "group_header",
+          "label": "t:sections.header.blocks.menuImage.settings.group_header__2.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "t:sections.header.blocks.menuImage.settings.image_3.label"
+        },
+        {
+          "type": "text",
+          "id": "image_3_title",
+          "default": "Promotion heading",
+          "label": "t:sections.header.blocks.menuImage.settings.image_3_title.label"
+        },
+        {
+          "type": "text",
+          "id": "image_3_link_text",
+          "default": "Shop",
+          "label": "t:sections.header.blocks.menuImage.settings.image_3_link_text.label"
+        },
+        {
+          "type": "url",
+          "id": "image_3_link",
+          "label": "t:sections.header.blocks.menuImage.settings.image_3_link.label"
+        },
+        {
+          "type": "select",
+          "id": "image_3_position",
+          "label": "t:sections.header.blocks.menuImage.settings.image_3_position.label",
+          "default": "right",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.header.blocks.menuImage.settings.image_3_position.options__0.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.header.blocks.menuImage.settings.image_3_position.options__1.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "menuGallery",
+      "name": "t:sections.header.blocks.menuGallery.name",
+      "icon": "image",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_title",
+          "default": "",
+          "label": "t:sections.header.blocks.menuGallery.settings.menu_title.label",
+          "info": "t:sections.header.blocks.menuGallery.settings.menu_title.info"
+        },
+        {
+          "type": "url",
+          "id": "menu_url",
+          "label": "t:sections.header.blocks.menuGallery.settings.menu_url.label"
+        },
+        {
+          "type": "group_header",
+          "label": "t:sections.header.blocks.menuGallery.settings.group_header__0.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_1.label"
+        },
+        {
+          "type": "text",
+          "id": "image_1_title",
+          "default": "",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_1_title.label"
+        },
+        {
+          "type": "url",
+          "id": "image_1_link",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_1_link.label"
+        },
+        {
+          "type": "group_header",
+          "label": "t:sections.header.blocks.menuGallery.settings.group_header__1.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_2.label"
+        },
+        {
+          "type": "text",
+          "id": "image_2_title",
+          "default": "",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_2_title.label"
+        },
+        {
+          "type": "url",
+          "id": "image_2_link",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_2_link.label"
+        },
+        {
+          "type": "group_header",
+          "label": "t:sections.header.blocks.menuGallery.settings.group_header__2.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_3.label"
+        },
+        {
+          "type": "text",
+          "id": "image_3_title",
+          "default": "",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_3_title.label"
+        },
+        {
+          "type": "url",
+          "id": "image_3_link",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_3_link.label"
+        },
+        {
+          "type": "group_header",
+          "label": "t:sections.header.blocks.menuGallery.settings.group_header__3.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_4.label"
+        },
+        {
+          "type": "text",
+          "id": "image_4_title",
+          "default": "",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_4_title.label"
+        },
+        {
+          "type": "url",
+          "id": "image_4_link",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_4_link.label"
+        },
+        {
+          "type": "group_header",
+          "label": "t:sections.header.blocks.menuGallery.settings.group_header__4.label"
+        },
+        {
+          "type": "select",
+          "id": "image_size",
+          "label": "t:sections.header.blocks.menuGallery.settings.image_size.label",
+          "default": "square",
+          "options": [
+            {
+              "value": "square",
+              "label": "t:sections.header.blocks.menuGallery.settings.image_size.options__0.label"
+            },
+            {
+              "value": "adapt",
+              "label": "t:sections.header.blocks.menuGallery.settings.image_size.options__1.label"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "t:sections.header.blocks.menuGallery.settings.title_color.label",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "label": "t:sections.header.blocks.menuGallery.settings.opacity.label",
+          "default": 20,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

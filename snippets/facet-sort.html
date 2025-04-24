@@ -1,0 +1,49 @@
+{{assign "selected_sort_by" (default data.sort_by data.default_sort_by)}}
+{{assign "selected_sort" (first (where data.sort_options 'value' selected_sort_by))}}
+
+{{assign "wrapper_class" (default wrapper_class '')}}
+
+{{#if device == 'tablet'}}
+  <div class="js-mobile-sorting">
+    <details-modal class="{{#if product_count == 0}}display-none{{/if}} {{ wrapper_class }}">
+      <details class="facets__sorting-details js-disclosure-has-modal">
+        <summary class="facets__summary body3">
+          {{snippet "icon-sort"}}
+          <span>{{ t "products.facets.sort_button" }}</span>
+        </summary>
+        <div class="modal__overlay"></div>
+        <div class="modal__content">
+          <div class="facets__sorting-content">
+            <div class="facets__sorting-title body1 fw-bold">{{ t "products.facets.sort_button" }}</div>
+            <div class="facets__sorting-title-line"></div>
+            {{#for data.sort_options as |sort|}}
+              <label class="body3 sort-option">
+                <input type="radio" name="sort_by" value="{{ sort.value }}" {{#if selected_sort_by == sort.value }}checked{{/if}}>
+                {{snippet "icon-check"}}<span>{{sort.name}}</span>
+              </label>
+            {{/for}}
+          </div>
+        </div>
+      </details>
+    </details-modal>
+  </div>
+{{else}}  
+  <div class="js-sorting">
+    <details class="{{#if product_count == 0}}display-none{{/if}} facets__sorting-details disclosure-has-popup {{ wrapper_class }}" data-counts="{{ product_count }}">
+      <summary class="facets__summary body3">
+        <div>
+          <span>{{ selected_sort.name }}</span>
+          {{snippet "icon-arrow"}}
+        </div>
+      </summary>
+      <div class="facets__display facets__sorting-content global-modal-border-shadow">
+        {{#for data.sort_options as |sort|}}
+          <label class="body3 sort-option">
+            <input type="radio" name="sort_by" value="{{ sort.value }}" {{#if selected_sort_by == sort.value }}checked{{/if}}>
+            {{snippet "icon-check"}}<span>{{sort.name}}</span>
+          </label>
+        {{/for}}
+      </div>
+    </details>
+  </div>
+{{/if}}

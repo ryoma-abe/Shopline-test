@@ -1,0 +1,75 @@
+{{assign "hide_variants" (default section.settings.hide_variants false)}}
+
+{{assign "default_selected_variant" (default section.settings.default_selected_variant true)}}
+{{assign "is_selected_variant" product.selected_variant}}
+
+{{assign "featured_variant" ""}}
+{{#if default_selected_variant or is_selected_variant}}
+  {{assign "featured_variant" product.selected_or_first_available_variant}}
+{{/if}}
+
+{{assign "single_media_visible_mobile" false}}
+
+{{#comment}}
+ Hide other variant image and only display the currently selected variant image
+{{/comment}}
+{{#if hide_variants and featured_variant and (if variant_images.length == product.media.length)}}
+  {{assign "single_media_visible_mobile" true}}
+{{/if}}
+
+{{#if media_count == 0 or single_media_visible_mobile or product_mobile_thumbnail_image_hide == "show"}}
+  {{assign "hide_pagination" true}}
+{{/if}}
+
+{{assign "pagination_count" media_count}}
+{{#if product_mobile_thumbnail_image_hide == "columns"}}
+  {{assign "pagination_count" (minus media_count 1)}}
+{{/if}}
+
+{{#case product_mobile_image_switch_style}}
+  {{#when "progress"}}
+    <div
+      class="product_mobile_thumbnail_pagination
+        product-pagination__progress{{#if hide_pagination}} display-none-tablet{{/if}}"
+      style="--progress-percent: {{toFixed (times (divide 1 pagination_count) 100) 3}}%"
+    >
+      <div class="product-pagination__progress-inner">
+        <div class="product-pagination__progress-inner-bg"></div>
+      </div>
+    </div>
+  {{/when}}
+  {{#when "dot" "slider-bar"}}
+    <div
+      class="product_mobile_thumbnail_pagination product-pagination__dot-slider
+        {{#if product_mobile_image_switch_style == 'dot'}}product-pagination__dot{{else}}product-pagination__slider-bar{{/if}}{{#if hide_pagination}} display-none-tablet{{/if}}"
+    >
+      {{#for media}}
+        <a
+          href="javascript:;"
+          class="tap-area {{#if (plus forloop.index0 1) <= pagination_count}}display-block{{else}}display-none{{/if}}"
+          {{#if forloop.first}}data-current="true"{{/if}}
+        ></a>
+      {{/for}}
+    </div>
+  {{/when}}
+  {{#when "hide"}}{{/when}}
+  {{#when "number"}}
+    <div
+      class="slider-buttons product_mobile_thumbnail_pagination product-pagination__number
+        {{#if hide_pagination}} display-none-tablet{{/if}}
+        {{classes}}"
+    >
+      <button type="button" class="slider-button slider-button--prev" name="previous">
+        {{snippet "icon-arrow"}}
+      </button>
+      <div class="slider-counter caption">
+        <span class="slider-counter--current">1</span>
+        <span>/</span>
+        <span class="slider-counter--total">{{pagination_count}}</span>
+      </div>
+      <button type="button" class="slider-button slider-button--next" name="next">
+        {{snippet "icon-arrow"}}
+      </button>
+    </div>
+  {{/when}}
+{{/case}}

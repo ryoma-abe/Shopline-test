@@ -1,0 +1,55 @@
+
+
+{{assign
+  "initial_min_value"
+  (ternary (if filter.min_value.value or filter.min_value.value == 0) filter.min_value.value 0)
+}}
+{{assign
+  "initial_max_value"
+  (ternary (if filter.max_value.value or filter.max_value.value == 0) filter.max_value.value filter.range_max)
+}}
+
+<price-range
+  class="price-range-container"
+  data-currency-code="{{iso_code}}"
+  data-max-value="{{money_without_currency filter.range_max}}"
+>
+  <div class="price-range-input">
+    <div class="field">
+      <span class="field-currency body3">{{symbol}}</span>
+      <input
+        class="field__input body3"
+        name="{{filter.min_value.param_name}}"
+        id="Filter-{{filter.label}}-GTE"
+        type="number"
+        placeholder="0"
+        min="0"
+        max="{{money_without_currency filter.range_max}}"
+        data-initial-value="{{money_without_currency initial_min_value}}"
+        data-type="min"
+      />
+    </div>
+    <div class="line"></div>
+    <div class="field">
+      <span class="field-currency body3">{{symbol}}</span>
+      <input
+        class="field__input body3"
+        name="{{filter.max_value.param_name}}"
+        id="Filter-{{filter.label}}-LTE"
+        type="number"
+        min="0"
+        max="{{money_without_currency filter.range_max}}"
+        data-initial-value="{{money_without_currency initial_max_value}}"
+        data-type="max"
+      />
+    </div>
+  </div>
+
+  <div class="price-range-slider">
+    <div class="price-range-track">
+      <div class="price-range-bar"></div>
+    </div>
+    <div class="price-range-dot price-range-dot--min"></div>
+    <div class="price-range-dot price-range-dot--max"></div>
+  </div>
+</price-range>

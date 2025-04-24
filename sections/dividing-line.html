@@ -1,0 +1,133 @@
+{{snippet "stylesheet" href=(asset_url "section-dividing-line.css")}}
+
+<style>
+  {{ font_face section.settings.title_font_family }}
+  .dividing-line-container-{{section.id}}{
+    --title-font-size: {{section.settings.title_font_size}}px;
+    --title-font-family: {{section.settings.title_font_family.family}};
+    --title-font-style: {{ section.settings.title_font_family.style }};
+    --title-color: {{section.settings.title_color}};
+    --line-color: {{section.settings.line_color}};
+    --background-color: {{section.settings.background_color}};
+    --pc-padding-top: {{section.settings.pc_padding_top}}px;
+    --pc-padding-bottom: {{section.settings.pc_padding_bottom}}px;
+    --m-padding-top: {{section.settings.m_padding_top}}px;
+    --m-padding-bottom: {{section.settings.m_padding_bottom}}px;
+  }
+</style>
+
+<div data-bbb="{{ section.settings.title_font_family }}" class="dividing-line-container dividing-line-container-{{section.id}}">  
+  <div class="line"></div>
+  <div class="dividing-line-text">{{ section.settings.title }}</div>
+  <div class="line"></div>
+</div>
+
+
+
+{{#schema}}
+{
+  "name": "t:sections.dividing-line.name",
+  "class": "section",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "t:sections.dividing-line.settings.title.label",
+      "default": "Modern"
+    },
+    {
+      "id": "title_font_family",
+      "type": "font",
+      "label": "t:sections.dividing-line.settings.title_font_family.label",
+      "default": "Oregano"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 22,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.dividing-line.settings.title_font_size.label",
+      "default": 36
+    },
+    {
+      "id": "title_color",
+      "type": "color",
+      "label": "t:sections.dividing-line.settings.title_color.label",
+      "default": "#000000"
+    },
+    {
+      "id": "line_color",
+      "type": "color",
+      "label": "t:sections.dividing-line.settings.line_color.label",
+      "default": "#000000"
+    },
+    {
+      "id": "background_color",
+      "type": "color",
+      "label": "t:sections.dividing-line.settings.background_color.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "pc_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.dividing-line.settings.pc_padding_top.label",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "pc_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.dividing-line.settings.pc_padding_bottom.label",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "m_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.dividing-line.settings.m_padding_top.label",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "m_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.dividing-line.settings.m_padding_bottom.label",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 6,
+      "category": "t:sections.dividing-line.presets.presets__0.category",
+      "name": "t:sections.dividing-line.presets.presets__0.name",
+      "settings": {
+        "title": "Modern",
+        "title_font_size": 36,
+        "title_font_family": "Oregano",
+        "title_color": "#000000",
+        "line_color": "#000000",
+        "background_color": "#ffffff",
+        "pc_padding_top": 0,
+        "pc_padding_bottom": 0,
+        "m_padding_top": 0,
+        "m_padding_bottom": 0
+      }
+    }
+  ]
+}
+{{/schema}}

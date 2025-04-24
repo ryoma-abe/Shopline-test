@@ -1,0 +1,81 @@
+.product-recommendations-title.large {
+  font-size: calc(var(--title4-font-size) * 1.2);
+}
+.product-recommendations-title.small {
+  font-size: calc(var(--title4-font-size) * 0.8);
+}
+.product-recommendations-title.medium {
+  font-size: calc(var(--title4-font-size) * 1);
+}
+
+@media (min-width: 960px) {
+  .slider-product-recommendations.no-slider-pc > .slider {
+    flex-wrap: wrap;
+  }
+  .slider-product-recommendations.no-slider-pc
+    .slider-product-recommendations__button {
+    display: none;
+  }
+}
+
+.slider-product-recommendations.no-slider-mobile > .slider {
+  flex-wrap: wrap;
+}
+
+.slider-product-recommendations.no-slider-mobile
+  .slider-product-recommendations__button {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  .slider-product-recommendations > .slider.slider--mobile {
+    margin-left: calc(var(--page-padding) * -1) !important;
+    margin-right: calc(var(--page-padding) * -1) !important;
+    padding-left: var(--page-padding);
+    padding-right: var(--page-padding);
+    scroll-padding-left: var(--page-padding);
+  }
+
+  .slider-product-recommendations > .slider.slider--mobile > .slider__slide {
+    width: calc((200vw - var(--page-padding)) / (2 * var(--mobile-cols) + 1));
+  }
+}
+
+.slider-product-recommendations__button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(var(--color-page-background));
+  border: 1px solid rgba(var(--color-entry-line));
+  cursor: pointer;
+  color: rgba(var(--color-text));
+}
+
+.slider-product-recommendations__button.previous {
+  left: 0;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.slider-product-recommendations__button.next {
+  right: 0;
+  transform: translate(50%, -50%) rotate(-90deg);
+}
+
+.slider-product-recommendations__button:disabled {
+  color: rgba(var(--color-text), 0.3);
+}
+
+.slider-product-recommendations__button:hover:not(:disabled) {
+  border-color: rgba(var(--color-text));
+}
+
+/* The ipad end responds to the mobile end in vertical screen */
+
+/* @custom-media --tablet (max-width: 959px); */
+
+/* @custom-media --gt-mobile (min-width: 751px); */
+
+/* detectingScreen need to consider the configuration of the tablet */

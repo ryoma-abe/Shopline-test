@@ -1,0 +1,124 @@
+{{snippet "stylesheet" href=(asset_url "section-main-order-tracking.css")}}
+<script src="{{asset_url 'component-phone-input.js'}}" defer></script>
+<script src="{{asset_url 'section-main-order-tracking.js'}}" defer></script>
+
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+<div class="order-tracking section-padding">
+  <h1 class="title5 text-center order-tracking-form-title">
+    {{section.settings.title}}
+  </h1>
+  {{#form "order_tracking" id="order-tracking-form"}}
+    <order-tracking>
+      <div class="tab" id="order-tracking-tab">
+        <a class="body3 active" data-type="email">
+          {{t "general.order_tracking.email"}}
+        </a>
+        <a class="body3" data-type="mobile">
+          {{t "general.order_tracking.phone"}}
+        </a>
+      </div>
+      <div class="field" data-type="email">
+        {{snippet
+          "input-email"
+          input_class="field__input"
+          input_id="order_tracking[email]"
+          input_name="order_tracking[email]"
+          input_required=true
+          input_placeholder=(t "general.order_tracking.other_email")
+        }}
+        <label for="order_tracking[email]" class="field__label body3">
+          {{t "general.order_tracking.other_email"}}
+        </label>
+      </div>
+      <phone-input class="field display-none" data-type="mobile">
+        {{snippet
+          "input-phone"
+          all_country_dialing_code=../all_country_dialing_code
+          input_name="order_tracking[phone]"
+          input_id="order_tracking[phone]"
+          code_name="order_tracking[phone_area_code]"
+          input_required=true
+          input_disabled=true
+          country_iso_code=../localization.country.iso_code
+        }}
+      </phone-input>
+      <p class="body6 error-message" id="account-error-message"></p>
+      <div class="field" data-type="order_number">
+        <div class="field__container">
+          <input
+            type="text"
+            class="field__input"
+            id="order_number"
+            name="order_tracking[order_number]"
+            required
+            placeholder='{{ t "general.order_tracking.orderId"}}'
+          />
+          <label for="order_number" class="field__label body3">
+            {{ t "general.order_tracking.orderId"}}
+          </label>
+        </div>
+      </div>
+      <p class="body6 error-message" id="order-error-message"></p>
+      <div>
+        <button class="button submit" type="submit" id="find-order-btn">
+          {{ default section.settings.btn_text 'View Order' allow_empty_str=false}}
+          {{snippet "loading-overlay-spinner"}}
+        </button>
+      </div>
+    </order-tracking>
+  {{/form}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main-order-tracking.name",
+  "class": "section",
+  "default": {
+    "setting": {
+      "padding_top": 80,
+      "padding_bottom": 80
+    }
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.main-order-tracking.settings.title.label",
+      "default": "Order Tracking"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "t:sections.main-order-tracking.settings.btn_text.label",
+      "default": "View Order"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-order-tracking.settings.padding_top.label",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.main-order-tracking.settings.padding_bottom.label",
+      "default": 80
+    }
+  ]
+}
+{{/schema}}

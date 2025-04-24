@@ -1,0 +1,67 @@
+
+
+{{#if media.media_type == "image"}}
+  <img
+    class="display-none photo-swipe-image-source"
+    data-src="{{image_url media width=1800 quality=quality}}"
+    alt="{{media.alt}}"
+    width="{{default media.width media.preview_image.width}}"
+    height="{{default media.height media.preview_image.height}}"
+    data-media-id="{{media.id}}"
+    data-media-type="{{media.media_type}}"
+  />
+{{else}}
+  <div
+    class="display-none photo-swipe-image-source"
+    data-media-id="{{media.id}}"
+    data-media-type="{{media.media_type}}"
+    data-aspect-ratio="{{media.aspect_ratio}}"
+  >
+    <deferred-media class="deferred-media photo-swipe-media" data-media-id="{{media.id}}">
+      <button id="Deferred-Poster-Modal-{{section.id}}-{{media.id}}" class="deferred-media__poster" type="button">
+        <span class="deferred-media__poster-button motion-reduce">
+          {{snippet "icon-play"}}
+        </span>
+        {{snippet
+          "image"
+          class="deferred-media-image"
+          data=(default media.preview_image media)
+          lazy=true
+          breakpoints="246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946"
+          quality=quality
+        }}
+      </button>
+      <template>
+        {{#case media.media_type}}
+          {{#when 'external_video'}}
+            {{assign 'video_class' (append 'js-' media.host)}}
+            {{#if media.host "youtube"}}
+              {{#if youtube_show_playlist}}
+                {{external_video_tag
+                  (external_video_url
+                    media autoplay=1 loop=loop playlist=media.external_id mute=video_mute controls=youtube_control
+                  )
+                  class=video_class
+                  loading="lazy"
+                  frameborder="0"
+                }}
+              {{else}}
+                {{external_video_tag
+                  (external_video_url media autoplay=1 loop=loop mute=video_mute controls=youtube_control)
+                  class=video_class
+                  loading="lazy"
+                  frameborder="0"
+                }}
+              {{/if}}
+            {{else}}
+              {{ external_video_tag (external_video_url media autoplay=1 loop=loop mute=video_mute) class=video_class loading='lazy' frameborder="0" }}
+            {{/if}}
+          {{/when}}
+          {{#when 'video'}}
+            {{ video_tag media autoplay=true loop=loop controls=true preload='none' muted=(ternary (if video_mute == 1) true false) onloadeddata="this.play();" }}
+          {{/when}}
+        {{/case}}
+      </template>
+    </deferred-media>
+  </div>
+{{/if}}

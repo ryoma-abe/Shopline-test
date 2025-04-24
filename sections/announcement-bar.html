@@ -1,0 +1,284 @@
+{{assign "show_announcement" false}}
+{{assign "should_display_with_slider_ids" (JSONparse '["2", "3", "4", "6"]')}}
+{{assign "should_display_with_slider" false}}
+{{assign "cyclic_scroll" (if section.settings.display_mode == "5")}}
+
+{{#if should_display_with_slider_ids contains section.settings.display_mode}}
+  {{assign "should_display_with_slider" true}}
+{{/if}}
+
+{{#for section.blocks as |block|}}
+  {{#if (trim block.settings.notice_link_text)}}
+    {{assign "show_announcement" true}}
+  {{/if}}
+{{/for}}
+
+{{snippet "stylesheet" href=(asset_url "section-announcement-bar.css")}}
+
+{{#if show_announcement and section.settings.enable_sticky}}
+  <script src="{{asset_url 'section-announcement-bar-sticky-top.js'}}" defer></script>
+{{/if}}
+
+{{#if should_display_with_slider}}
+  {{snippet "stylesheet" href=(asset_url "lib-splide.min.css")}}
+  <script src="{{asset_url 'lib-splide.min.js'}}" defer></script>
+  <script src="{{asset_url 'section-announcement-bar-slider.js'}}" defer></script>
+{{/if}}
+
+{{#if section.settings.display_mode == "3" or section.settings.display_mode == "4" or section.settings.display_mode == "6"}}
+  {{assign "use_swiper" true}}
+{{else}}
+  {{assign "use_swiper" false}}
+{{/if}}
+
+{{assign "show_social_media" (if section.settings.show_social_media and use_swiper)}}
+
+{{#if cyclic_scroll}}
+  {{stylesheet_tag (asset_url "cyclic-scroll.css")}}
+  <script src="{{asset_url 'cyclic-scroll.js'}}" defer></script>
+{{/if}}
+
+{{#if request.design_mode}}
+  <script src="{{asset_url 'theme-editor.js'}}" defer="defer"></script>
+{{/if}}
+
+{{snippet
+  "section-padding-creator"
+  section_id=section.id
+  padding_top=section.settings.padding_top
+  padding_bottom=section.settings.padding_bottom
+}}
+
+{{#if show_announcement}}
+  {{#if cyclic_scroll}}
+    <cyclic-scroll 
+      style="
+        --scroll-speed-pc: {{section.settings.pc_scroll_interval}}s;
+        --scroll-speed-mb: {{section.settings.mb_scroll_interval}}s;
+      "
+    >
+  {{/if}}
+  {{#if should_display_with_slider}}<announcement-bar-slider
+      {{#if section.settings.display_mode != '6'}}autoplay="true"{{/if}}
+      data-display-mode="{{section.settings.display_mode}}"
+      data-speed="{{section.settings.autoplay_speed}}"
+    >{{/if}}
+  {{#if section.settings.enable_sticky}}<announcement-bar-sticky-top data-sticky-mode="{{section.settings.sticky_mode}}">{{/if}}
+  <div class="announcement-bar--container 
+    {{#if should_display_with_slider}}splide{{/if}}
+    {{#if cyclic_scroll}}cyclic-scroll__container cyclic-scroll-stop{{/if}}"
+  >
+    {{#if should_display_with_slider}}
+      <div class="splide__track">
+    {{/if}}
+    <div class="announcement-bar--list 
+      {{#if should_display_with_slider}}splide__list{{/if}} 
+      {{#if cyclic_scroll}}cyclic-scroll__inner{{/if}}"
+    >
+      {{#for section.blocks as |block|}}
+        {{~#if (isTruthy block.settings.notice_link_text)}}
+          <div
+            class="announcement-bar--item section-padding
+              {{#if cyclic_scroll}}
+                cyclic-scroll__item
+              {{else}}
+                color-scheme-{{block.settings.notice_style}}
+                {{#if block.settings.announcement_division_bottom}}division_bottom{{/if}}
+                {{#if show_social_media}}social-media--show{{/if}}
+              {{/if}}
+              {{#if should_display_with_slider}}splide__slide{{/if}}"
+            {{{block.shopline_attributes}}}
+          >
+            {{#if show_social_media}}
+              <div class="announcement-social-media display-none-tablet">
+                {{snippet "social-media" settings=settings}}
+              </div>
+            {{/if}}
+            {{#if section.settings.display_mode == '6' and section.blocks.length > 1}}
+              <div class="announcement-bar__text-wrapper splide__arrows">
+              <button class="announcement-bar__arrow" name="previous">
+                {{snippet "icon-arrow"}}
+              </button>
+            {{/if}}
+            <div class="body4 announcement--text">
+              {{#if block.settings.notice_link}}
+                <a class="announcement__link" href="{{block.settings.notice_link}}"></a>
+              {{/if}}
+              <div class="rte">
+                {{{block.settings.notice_link_text}}}
+              </div>
+            </div>
+            {{#if section.settings.display_mode == '6' and section.blocks.length > 1}}
+                <button class="announcement-bar__arrow" name="next">
+                {{snippet "icon-arrow"}}
+              </button>
+              </div>
+            {{/if}}
+            {{#if show_social_media}}
+              <div class="announcement-social-media announcement-social-media--placeholder display-none-tablet">
+                {{snippet "social-media" settings=settings}}
+              </div>
+            {{/if}}
+          </div>
+        {{~/if}}
+      {{/for}}
+    </div>
+    {{#if should_display_with_slider}}
+      </div>
+    {{/if}}
+  </div>
+  {{#if section.settings.enable_sticky}}</announcement-bar-sticky-top>{{/if}}
+  {{#if should_display_with_slider}}</announcement-bar-slider>{{/if}}
+  {{#if cyclic_scroll}}</cyclic-scroll>{{/if}}
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:sections.announcement-bar.name",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "switch",
+      "id": "enable_sticky",
+      "default": false,
+      "label": "t:sections.announcement-bar.settings.enable_sticky.label"
+    },
+    {
+      "id": "sticky_mode",
+      "type": "select",
+      "label": "t:sections.announcement-bar.settings.sticky_mode.label",
+      "default": "always",
+      "options": [
+        {
+          "value": "always",
+          "label": "t:sections.announcement-bar.settings.sticky_mode.options__0.label"
+        },
+        {
+          "value": "pc",
+          "label": "t:sections.announcement-bar.settings.sticky_mode.options__1.label"
+        },
+        {
+          "value": "mobile",
+          "label": "t:sections.announcement-bar.settings.sticky_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "id": "display_mode",
+      "type": "select",
+      "label": "t:sections.announcement-bar.settings.display_mode.label",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.announcement-bar.settings.display_mode.options__0.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.announcement-bar.settings.display_mode.options__1.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.announcement-bar.settings.display_mode.options__2.label"
+        },
+        {
+          "value": "4",
+          "label": "t:sections.announcement-bar.settings.display_mode.options__3.label"
+        },
+        {
+          "value": "5",
+          "label": "t:sections.announcement-bar.settings.display_mode.options__4.label"
+        },
+        {
+          "value": "6",
+          "label": "t:sections.announcement-bar.settings.display_mode.options__5.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "default": 5,
+      "max": 10,
+      "min": 3,
+      "step": 1,
+      "label": "t:sections.announcement-bar.settings.autoplay_speed.label",
+      "unit": "s"
+    },
+    {
+      "id": "pc_scroll_interval",
+      "type": "range",
+      "label": "t:sections.announcement-bar.settings.pc_scroll_interval.label",
+      "default": 12,
+      "unit": "s",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "info": "t:sections.announcement-bar.settings.pc_scroll_interval.info"
+    },
+    {
+      "id": "mb_scroll_interval",
+      "type": "range",
+      "label": "t:sections.announcement-bar.settings.mb_scroll_interval.label",
+      "default": 5,
+      "unit": "s",
+      "min": 3,
+      "max": 20,
+      "step": 1
+    },
+    {
+      "type": "switch",
+      "id": "show_social_media",
+      "label": "t:sections.announcement-bar.settings.show_social_media.label",
+      "default": false,
+      "info": "t:sections.announcement-bar.settings.show_social_media.info"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.announcement-bar.settings.padding_top.label",
+      "default": 10,
+      "max": 36,
+      "min": 2,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.announcement-bar.settings.padding_bottom.label",
+      "default": 10,
+      "max": 36,
+      "min": 2,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "icon": "normal",
+      "name": "t:sections.announcement-bar.blocks.item.name",
+      "settings": [
+        {
+          "id": "notice_link_text",
+          "type": "richtext",
+          "label": "t:sections.announcement-bar.blocks.item.settings.notice_link_text.label",
+          "default": "30-day postage paid returns"
+        },
+        {
+          "type": "url",
+          "id": "notice_link",
+          "label": "t:sections.announcement-bar.blocks.item.settings.notice_link.label"
+        },
+        {
+          "id": "announcement_division_bottom",
+          "type": "switch",
+          "label": "t:sections.announcement-bar.blocks.item.settings.announcement_division_bottom.label",
+          "default": false
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

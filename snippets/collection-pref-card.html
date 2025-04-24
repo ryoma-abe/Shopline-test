@@ -1,0 +1,61 @@
+{{#comment}}
+    Renders a collection card
+
+    Accepts:
+    - card_collection {Object} Collection object
+    - title: {String} collection title
+    - position: {String} determines the position of the product image card
+    - collection_title_position: {String} determines the position of the collection title
+    - mb_collection_title_position: {String} determines the position of the collection title when mobile
+    - fill_type: {String} decides how the product image card should fill the available space
+    - class: {String} container class
+    - product_image: {Boolean} product image
+    - view_button_text: {String} view more button text setting
+    - title_class: {String} collection title container class
+
+    Usage:
+    {{ snippet 'collection-pref-card' }}
+{{/comment}}
+
+<a
+  class="collection-pref-card shopline-element-collection-item {{class}}"
+  href="{{#if (isFalsey card_collection.url)}}javascript:;{{else}}{{card_collection.url}}{{/if}}"
+  {{{block.shopline_attributes}}}
+>
+  {{#if card_collection.featured_image}}
+    <div class="collection-pref-card__background">
+        {{snippet
+          "image"
+          data=card_collection.featured_image
+          pc_size=(append "1/" desktop_grid_cols)
+          mobile_size=(append "1/" mobile_grid_cols)
+          class=(append 'image-position-' position)
+        }}
+    </div>
+  {{/if}}
+  <div class="collection-pref-card__inner">
+    <div class="collection-pref-card__name text-left {{collection_title_position}} mb-{{mb_collection_title_position}} {{#if product_image}}with-image{{/if}}">
+      <p class="{{#if title_class }}{{title_class}}{{else}}title3{{/if}}">
+        {{#if title}}
+          {{title}}
+        {{else}}
+          {{default card_collection.title "Example collection"}}
+        {{/if}}
+      </p>
+      {{#if view_button_text}}
+        <span class="body2 button--link">{{view_button_text}}</span>
+      {{/if}}
+    </div>
+    {{#if product_image}}
+      <div class="collection-pref-card__product-img">
+          {{snippet
+            "image"
+            data=product_image
+            pc_size=(append "1/" desktop_grid_cols)
+            mobile_size=(append "1/" mobile_grid_cols)
+            class=""
+          }}
+      </div>
+    {{/if}}
+  </div>
+</a>

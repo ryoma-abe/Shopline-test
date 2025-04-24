@@ -1,0 +1,398 @@
+{{snippet "stylesheet" href=(asset_url "section-shoppable-image.css")}}
+{{snippet "stylesheet" href=(asset_url "component-price.css")}}
+<script src="{{asset_url 'section-shoppable-image.js'}}" defer></script>
+
+{{assign "has_img" false}}
+{{#if section.settings.image_pc or section.settings.image_mobile}}
+  {{assign "has_img" true}}
+{{/if}}
+<shoppable-image
+  class="shoppable-image page-width {{#if section.settings.image_full}}full_width{{/if}}"
+  data-section-type="shoppable-image"
+  data-section-id="{{section.id}}"
+  style="--color__hotspot: {{settings.color_page_background}};"
+>
+  <div class="shoppable-image__wrapper text-position--{{section.settings.text_position}}">
+    <div
+      class="shoppable-image__image-wrapper
+        {{ternary section.settings.image_pc '' 'shoppable-image__image-wrapper--pc_empty'}}
+        {{ternary section.settings.image_mobile '' 'shoppable-image__image-wrapper--mobile_empty'}}"
+    >
+      {{#if has_img}}
+        {{#if section.settings.image_mobile}}
+          {{assign "image_mobile" section.settings.image_mobile}}
+        {{else}}
+          {{assign "image_mobile" section.settings.image_pc}}
+        {{/if}}
+
+        {{snippet "image" class="display-none-desktop" data=image_mobile}}
+
+        {{#if section.settings.image_pc}}
+          {{snippet "image" class="display-none-tablet" data=section.settings.image_pc}}
+        {{else}}
+          {{placeholder_svg_tag "lifestyle-1" "placeholder_svg"}}
+        {{/if}}
+
+      {{else}}
+        {{placeholder_svg_tag "lifestyle-1" "placeholder_svg"}}
+      {{/if}}
+      
+      <div class="display-none-tablet">
+        {{#for section.blocks as |block|}}
+          {{snippet
+            "shoppable-image__hotspot"
+            block=block
+            horizontal_axis_position=block.settings.horizontal_axis_position_pc
+            vertical_axis_position=block.settings.vertical_axis_position_pc
+          }}
+        {{/for}}
+      </div>
+      
+      <div class="display-none-desktop">
+        {{#for section.blocks as |block|}}
+          {{snippet
+            "shoppable-image__hotspot"
+            block=block
+            horizontal_axis_position=block.settings.horizontal_axis_position_mobile
+            vertical_axis_position=block.settings.vertical_axis_position_mobile
+          }}
+        {{/for}}
+      </div>
+    </div>
+
+    <div class="shoppable-image__info is-text-{{section.settings.text_align}}">
+      {{#if section.settings.text_title}}
+        <h3 class="sub-title info__title fade-show" style="animation-delay: .6s;">
+          <span style="color:{{section.settings.text_color}}">{{section.settings.text_title}}</span>
+        </h3>
+      {{/if}}
+
+      {{#if section.settings.description}}
+        <div
+          class="body info__description fade-show body3 rte"
+          style="animation-delay: .8s;
+          --description-text-color:{{section.settings.text_color}};"
+        >
+          {{{section.settings.description}}}
+        </div>
+      {{/if}}
+
+      {{#if section.settings.button_text}}
+        <div class="fade-show" style="animation-delay: 1s;">
+          <a
+            class="button button--link info__btn body4"
+            href="{{ternary section.settings.jump_link section.settings.jump_link 'javascript:;'}}"
+            style="color:{{section.settings.button_text_color}}"
+          >
+            {{section.settings.button_text}}
+          </a>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</shoppable-image>
+
+{{#schema}}
+{
+  "name": "t:sections.shoppable-image.name",
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "type": "product",
+      "icon": "product",
+      "name": "t:sections.shoppable-image.blocks.product.name",
+      "settings": [
+        {
+          "type": "product_picker",
+          "id": "product",
+          "label": "t:sections.shoppable-image.blocks.product.settings.product.label"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_axis_position_pc",
+          "label": "t:sections.shoppable-image.blocks.product.settings.horizontal_axis_position_pc.label",
+          "default": 50,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "vertical_axis_position_pc",
+          "label": "t:sections.shoppable-image.blocks.product.settings.vertical_axis_position_pc.label",
+          "default": 50,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_axis_position_mobile",
+          "label": "t:sections.shoppable-image.blocks.product.settings.horizontal_axis_position_mobile.label",
+          "default": 50,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "vertical_axis_position_mobile",
+          "label": "t:sections.shoppable-image.blocks.product.settings.vertical_axis_position_mobile.label",
+          "default": 50,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "icon": "text",
+      "name": "t:sections.shoppable-image.blocks.text.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.shoppable-image.blocks.text.settings.title.label",
+          "default": "Feature name"
+        },
+        {
+          "type": "richtext",
+          "id": "desc",
+          "label": "t:sections.shoppable-image.blocks.text.settings.desc.label",
+          "default": "Share useful information about your product features"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "t:sections.shoppable-image.blocks.text.settings.button_text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_href",
+          "label": "t:sections.shoppable-image.blocks.text.settings.button_href.label"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_axis_position_pc",
+          "label": "t:sections.shoppable-image.blocks.text.settings.horizontal_axis_position_pc.label",
+          "default": 50,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "vertical_axis_position_pc",
+          "label": "t:sections.shoppable-image.blocks.text.settings.vertical_axis_position_pc.label",
+          "default": 50,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_axis_position_mobile",
+          "label": "t:sections.shoppable-image.blocks.text.settings.horizontal_axis_position_mobile.label",
+          "default": 50,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "vertical_axis_position_mobile",
+          "label": "t:sections.shoppable-image.blocks.text.settings.vertical_axis_position_mobile.label",
+          "default": 50,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "id": "image_pc",
+      "type": "image_picker",
+      "label": "t:sections.shoppable-image.settings.image_pc.label",
+      "info": "t:sections.shoppable-image.settings.image_pc.info"
+    },
+    {
+      "id": "image_mobile",
+      "type": "image_picker",
+      "label": "t:sections.shoppable-image.settings.image_mobile.label",
+      "info": "t:sections.shoppable-image.settings.image_mobile.info"
+    },
+    {
+      "id": "image_full",
+      "type": "switch",
+      "label": "t:sections.shoppable-image.settings.image_full.label",
+      "default": true
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.shoppable-image.settings.group_header__0.label"
+    },
+    {
+      "id": "text_title",
+      "type": "text",
+      "label": "t:sections.shoppable-image.settings.text_title.label",
+      "default": "Shop the look"
+    },
+    {
+      "id": "description",
+      "type": "richtext",
+      "label": "t:sections.shoppable-image.settings.description.label",
+      "default": "Make an image shoppable by adding hotspots that link to various products."
+    },
+    {
+      "id": "button_text",
+      "type": "text",
+      "label": "t:sections.shoppable-image.settings.button_text.label",
+      "default": "Button"
+    },
+    {
+      "id": "jump_link",
+      "type": "url",
+      "label": "t:sections.shoppable-image.settings.jump_link.label"
+    },
+    {
+      "id": "text_align",
+      "type": "select",
+      "label": "t:sections.shoppable-image.settings.text_align.label",
+      "default": "left",
+      "options": [
+        {
+          "label": "t:sections.shoppable-image.settings.text_align.options__0.label",
+          "value": "left"
+        },
+        {
+          "label": "t:sections.shoppable-image.settings.text_align.options__1.label",
+          "value": "center"
+        },
+        {
+          "label": "t:sections.shoppable-image.settings.text_align.options__2.label",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "id": "text_position",
+      "type": "select",
+      "label": "t:sections.shoppable-image.settings.text_position.label",
+      "default": "left-bottom",
+      "options": [
+        {
+          "value": "left-top",
+          "label": "t:sections.shoppable-image.settings.text_position.options__0.label"
+        },
+        {
+          "value": "top",
+          "label": "t:sections.shoppable-image.settings.text_position.options__1.label"
+        },
+        {
+          "value": "right-top",
+          "label": "t:sections.shoppable-image.settings.text_position.options__2.label"
+        },
+        {
+          "value": "left",
+          "label": "t:sections.shoppable-image.settings.text_position.options__3.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.shoppable-image.settings.text_position.options__4.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.shoppable-image.settings.text_position.options__5.label"
+        },
+        {
+          "value": "left-bottom",
+          "label": "t:sections.shoppable-image.settings.text_position.options__6.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.shoppable-image.settings.text_position.options__7.label"
+        },
+        {
+          "value": "right-bottom",
+          "label": "t:sections.shoppable-image.settings.text_position.options__8.label"
+        }
+      ]
+    },
+    {
+      "id": "text_color",
+      "label": "t:sections.shoppable-image.settings.text_color.label",
+      "type": "color",
+      "default": "#FFFFFF"
+    },
+    {
+      "id": "button_text_color",
+      "label": "t:sections.shoppable-image.settings.button_text_color.label",
+      "type": "color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "category_index": 2,
+      "category": "t:sections.shoppable-image.presets.presets__0.category",
+      "name": "t:sections.shoppable-image.presets.presets__0.name",
+      "settings": {
+        "image_pc": null,
+        "image_mobile": null,
+        "image_full": true,
+        "text_title": "Shop the look",
+        "description": "Make an image shoppable by adding hotspots that link to various products.",
+        "button_text": "Button",
+        "jump_link": "",
+        "text_align": "left",
+        "text_position": "left-bottom",
+        "text_color": "#FFFFFF",
+        "button_text_color": "#FFFFFF"
+      },
+      "blocks": [
+        {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "horizontal_axis_position_pc": 50,
+            "vertical_axis_position_pc": 20,
+            "horizontal_axis_position_mobile": 50,
+            "vertical_axis_position_mobile": 20
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "horizontal_axis_position_pc": 60,
+            "vertical_axis_position_pc": 40,
+            "horizontal_axis_position_mobile": 60,
+            "vertical_axis_position_mobile": 40
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "horizontal_axis_position_pc": 48,
+            "vertical_axis_position_pc": 60,
+            "horizontal_axis_position_mobile": 48,
+            "vertical_axis_position_mobile": 80
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}
